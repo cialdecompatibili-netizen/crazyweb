@@ -4,7 +4,7 @@ permalink: /people/
 title: peoplex
 description: members of the lab or group
 nav: true
-nav_order: 5
+nav_order: 4
 dropdown: true
 
 profiles:
