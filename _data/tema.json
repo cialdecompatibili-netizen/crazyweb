@@ -1,0 +1,13 @@
+{
+    "link":  "#6c63ff",
+    "accent":  "#6c63ff",
+    "text":  "#3a3a3a",
+    "nav_hover":  "#555555",
+    "nav_bg":  "#ffffff",
+    "accent_dark":  "#5a52e0",
+    "body_bg":  "#ffffff",
+    "nav_text":  "#111111",
+    "font_scale":  "1",
+    "radius":  "10px",
+    "font":  "\u0027Inter\u0027, -apple-system, sans-serif"
+}
