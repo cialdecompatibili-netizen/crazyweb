@@ -1127,10 +1127,13 @@ function renderMenu(){
       <input type="text" value="${v.url}" ${v.isHome?'disabled':''} onchange="_menuVoci[${i}].url=this.value" placeholder="/url/" style="font-size:12px;color:#555">
       ${v.isHome?'':`<button class="btn btn-danger btn-sm" onclick="_menuVoci.splice(${i},1);renderMenu()">🗑</button>`}
     </div>`;
-    // Sottomenu (dropdown): mostra i children come righe editabili indentate, sotto la voce padre
+    // Sottomenu (dropdown): ogni voce (tranne Home) può avere sottovoci — se la pagina non è
+    // ancora un dropdown, v.children parte vuoto qui e "+ Sottovoce" lo inizializza al volo.
+    // Al salvataggio (salvaMenu) se children.length>0 il file riceve dropdown:true automaticamente.
     let childrenHtml='';
-    if(v.isDropdown&&v.children){
-      childrenHtml=v.children.map((c,ci)=>`
+    if(!v.isHome){
+      const kids=v.children||[];
+      childrenHtml=kids.map((c,ci)=>`
       <div class="menu-row" style="margin-left:32px;background:#f0f4ff;border-color:#d0d8ff">
         <span style="font-size:11px;color:#999;width:16px">↳</span>
         <input type="text" value="${c.title}" onchange="_menuVoci[${i}].children[${ci}].title=this.value" placeholder="Nome sottovoce">
@@ -1138,7 +1141,7 @@ function renderMenu(){
         <button class="btn btn-danger btn-sm" onclick="_menuVoci[${i}].children.splice(${ci},1);renderMenu()">🗑</button>
       </div>`).join('')+`
       <div style="margin-left:32px;margin-bottom:8px">
-        <button class="btn btn-secondary btn-sm" onclick="_menuVoci[${i}].children.push({title:'nuova voce',permalink:'/'});renderMenu()">+ Sottovoce</button>
+        <button class="btn btn-secondary btn-sm" onclick="if(!_menuVoci[${i}].children)_menuVoci[${i}].children=[];_menuVoci[${i}].isDropdown=true;_menuVoci[${i}].children.push({title:'nuova voce',permalink:'/'});renderMenu()">+ Sottovoce</button>
       </div>`;
     }
     return riga+childrenHtml;
@@ -1175,18 +1178,23 @@ async function salvaMenu(){
       content=content.replace(/^title:\s*"?[^"\n]+"?/m,'title: '+v.title);
       // Home (permalink: /) non ha nav_order — non toccarlo. Le altre voci sì.
       if(!v.isHome) content=content.replace(/^nav_order:\s*\d+/m,'nav_order: '+(i+1));
-      // Dropdown (children): riscrive l'intero blocco children: dal form, stesso formato
-      // di dropdown.md (title + permalink). Il divider (separatore visivo) NON è mai nel
-      // form/v.children — viene reinserito automaticamente qui, a metà lista, solo se ci
-      // sono almeno 2 voci (con 0 o 1 voce non serve nulla da separare).
-      if(v.isDropdown&&v.children){
+      // Dropdown (children): se la voce ha almeno 1 sottovoce dal form, la pagina DEVE avere
+      // dropdown:true nel frontmatter (al-folio lo richiede — vedi header.liquid: {% if p.dropdown %}).
+      // Se il campo non esiste ancora (pagina mai stata dropdown, es. people.md) lo si inserisce
+      // subito dopo nav_order:; se esiste già lo si aggiorna. Il divider (separatore visivo) NON
+      // è mai nel form/v.children — viene reinserito automaticamente qui, a metà lista, solo se
+      // ci sono almeno 2 voci (con 0 o 1 voce non serve nulla da separare).
+      if(v.children&&v.children.length>0){
+        if(/^dropdown:\s*(true|false)/m.test(content)) content=content.replace(/^dropdown:\s*(true|false)/m,'dropdown: true');
+        else content=content.replace(/^(nav_order:\s*\d+)/m,'$1\ndropdown: true');
         const items=v.children.map(c=>'  - title: '+c.title+'\n    permalink: '+c.permalink);
         if(items.length>=2){
           const mid=Math.ceil(items.length/2);
           items.splice(mid,0,'  - title: divider');
         }
         const childrenYaml='children:\n'+items.join('\n');
-        content=content.replace(/^children:\s*\n(?:[\s\S]*?)(?=\n---)/m,childrenYaml+'\n');
+        if(/^children:\s*\n(?:\s+.*\n?)*/m.test(content)) content=content.replace(/^children:\s*\n(?:\s+.*\n?)*/m,childrenYaml+'\n');
+        else content=content.replace(/(\n---\n)/,'\n'+childrenYaml+'$1');
       }
       const put=await ghPut(v.path,'Aggiorna menu: '+v.title,content,d.sha);
       const j=await put.json();
