@@ -305,12 +305,34 @@ body > #header .header-bar {
   transition: 200ms ease !important;
 }
 
+.btn-group > .btn:first-child {
+  margin-left: 3px;
+}
 
-.btn-sm {
+
+.btn-sm,
+.btn-group {
   font-size: inherit;
   font-weight: normal;
   height: inherit;
   line-height: inherit;
+}
+
+.btn-group > .btn:first-child {
+  margin-left: 3px;
+}
+
+.btn-group .btn + .btn,
+.btn-group .btn + .btn-group,
+.btn-group .btn-group + .btn,
+.btn-group .btn-group + .btn-group {
+  margin-left: -2px;
+}
+
+.btn-group > .btn:first-child:not(:last-child):not(.dropdown-toggle) {
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+  z-index: 2;
 }
 
 button.close {
@@ -331,6 +353,32 @@ button.close {
   color: #de143d;
   opacity: 1;
   font-weight: normal;
+}
+
+.btn-group > .btn + .dropdown-toggle {
+  padding-left: 8px;
+  padding-right: 8px;
+  height: 100%;
+}
+
+.btn-group > .btn + .dropdown-toggle:hover {
+  background: #e0e0e0 !important;
+}
+
+div.modal .btn-group > .btn:first-child {
+  background: #e4e4e4;
+  background-color: #e4e4e4;
+  border: 1px solid #e1e1e1;
+  margin-top: 0px !important;
+  margin-left: 0px;
+  margin-bottom: 2px;
+}
+
+div.modal .btn-group > .btn:first-child:hover {
+  background: #dfdfdf;
+  background-color: #dfdfdf;
+  border: 1px solid #dfdfdf;
+  transition: 200ms ease;
 }
 
 div.modal > button,
@@ -507,6 +555,26 @@ div.cell.selected:before {
   left: 0px;
   width: 0px;
   height: 100%;
+}
+
+div.prompt,
+.prompt {
+  font-family: monospace, monospace;
+  font-size: 9pt !important;
+  font-weight: normal;
+  color: #828892;
+  line-height: 170%;
+  padding: 0px;
+  padding-top: 4px;
+  padding-left: 0px;
+  padding-right: 1px;
+  text-align: right !important;
+  min-width: 11.5ex !important;
+  width: 11.5ex !important;
+}
+
+div.cell.selected .prompt {
+  top: 0;
 }
 
 pre,
