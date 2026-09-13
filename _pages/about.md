@@ -13,7 +13,7 @@ permalink: /
 profile: false
 selected_papers: false
 social: true
-title: home
+title: Home
 ---
 
 Scrivi qui la tua biografia. Racconta al mondo qualcosa di te. Inserisci un link al tuo subreddit preferito [subreddit](https://www.reddit.com). Puoi anche mettere una foto. Il codice è già pronto, basta chiamare la tua immagine `prof_pic.jpg` e inserirla nella cartella `img/`.
