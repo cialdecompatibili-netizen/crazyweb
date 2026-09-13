@@ -1077,16 +1077,36 @@ async function caricaMenu(){
     _menuPagineSha[f.path]=d.sha;
     const content=dec(d.content);
     const fm=(content.match(/^---\n([\s\S]*?)\n---/)||[])[1]||'';
+    const permM0=fm.match(/^permalink:\s*"?([^"\n]+)"?/m);
+    // HOME: permalink: / — sempre nel navbar al-folio, anche senza nav:true.
+    // Editabile (titolo) ma non eliminabile (isHome blocca il tasto 🗑 in renderMenu).
+    if(permM0&&permM0[1].trim()==='/'){
+      const titleM0=fm.match(/^title:\s*"?([^"\n]+)"?/m);
+      navPages.push({path:f.path,title:titleM0?titleM0[1].trim():'home',url:'/',order:-1,isHome:true});
+      continue;
+    }
     const navM=fm.match(/^nav:\s*(true|false)/m);
     if(!navM||navM[1]!=='true')continue;
     const titleM=fm.match(/^title:\s*"?([^"\n]+)"?/m);
     const orderM=fm.match(/^nav_order:\s*(\d+)/m);
-    const permM=fm.match(/^permalink:\s*"?([^"\n]+)"?/m);
+    const permM=permM0;
+    const isDropdown=/^dropdown:\s*true/m.test(fm);
+    let children=null;
+    if(isDropdown){
+      const childBlock=(fm.match(/^children:\s*\n([\s\S]*?)(?=\n\w|$)/m)||[])[1]||'';
+      children=[];
+      const re=/-\s*title:\s*([^\n]+)(?:\n\s*permalink:\s*([^\n]+))?/g;
+      let m;
+      while((m=re.exec(childBlock))){
+        children.push({title:m[1].trim(),permalink:m[2]?m[2].trim():''});
+      }
+    }
     navPages.push({
       path:f.path,
       title:titleM?titleM[1].trim():f.name.replace('.md',''),
       url:permM?permM[1].trim():'/'+f.name.replace('.md','')+'/',
-      order:orderM?parseInt(orderM[1],10):999
+      order:orderM?parseInt(orderM[1],10):999,
+      isDropdown,children
     });
   }
   navPages.sort((a,b)=>a.order-b.order);
@@ -1094,16 +1114,33 @@ async function caricaMenu(){
   renderMenu();
 }
 function renderMenu(){
-  document.getElementById('lista-menu').innerHTML=_menuVoci.map((v,i)=>`
+  document.getElementById('lista-menu').innerHTML=_menuVoci.map((v,i)=>{
+    const riga=`
     <div class="menu-row">
       <div style="display:flex;flex-direction:column;gap:2px">
-        <button class="btn btn-secondary btn-sm" style="padding:1px 7px;font-size:11px;line-height:1" onclick="menuSu(${i})" ${i===0?'disabled':''}>▲</button>
-        <button class="btn btn-secondary btn-sm" style="padding:1px 7px;font-size:11px;line-height:1" onclick="menuGiu(${i})" ${i===_menuVoci.length-1?'disabled':''}>▼</button>
+        <button class="btn btn-secondary btn-sm" style="padding:1px 7px;font-size:11px;line-height:1" onclick="menuSu(${i})" ${i===0||v.isHome?'disabled':''}>▲</button>
+        <button class="btn btn-secondary btn-sm" style="padding:1px 7px;font-size:11px;line-height:1" onclick="menuGiu(${i})" ${i===_menuVoci.length-1||v.isHome?'disabled':''}>▼</button>
       </div>
-      <input type="text" value="${v.title}" onchange="_menuVoci[${i}].title=this.value" placeholder="Nome">
-      <input type="text" value="${v.url}" onchange="_menuVoci[${i}].url=this.value" placeholder="/url/" style="font-size:12px;color:#555">
-      <button class="btn btn-danger btn-sm" onclick="_menuVoci.splice(${i},1);renderMenu()">🗑</button>
-    </div>`).join('');
+      <input type="text" value="${v.isHome?'🏠 ':''}${v.title}" onchange="_menuVoci[${i}].title=this.value.replace('🏠 ','')" placeholder="Nome">
+      <input type="text" value="${v.url}" ${v.isHome?'disabled':''} onchange="_menuVoci[${i}].url=this.value" placeholder="/url/" style="font-size:12px;color:#555">
+      ${v.isHome?'':`<button class="btn btn-danger btn-sm" onclick="_menuVoci.splice(${i},1);renderMenu()">🗑</button>`}
+    </div>`;
+    // Sottomenu (dropdown): mostra i children come righe editabili indentate, sotto la voce padre
+    let childrenHtml='';
+    if(v.isDropdown&&v.children){
+      childrenHtml=v.children.map((c,ci)=>`
+      <div class="menu-row" style="margin-left:32px;background:#f0f4ff;border-color:#d0d8ff">
+        <span style="font-size:11px;color:#999;width:16px">↳</span>
+        <input type="text" value="${c.title}" onchange="_menuVoci[${i}].children[${ci}].title=this.value" placeholder="Nome sottovoce">
+        <input type="text" value="${c.permalink}" onchange="_menuVoci[${i}].children[${ci}].permalink=this.value" placeholder="/url/ (vuoto = divisore)" style="font-size:12px;color:#555">
+        <button class="btn btn-danger btn-sm" onclick="_menuVoci[${i}].children.splice(${ci},1);renderMenu()">🗑</button>
+      </div>`).join('')+`
+      <div style="margin-left:32px;margin-bottom:8px">
+        <button class="btn btn-secondary btn-sm" onclick="_menuVoci[${i}].children.push({title:'nuova voce',permalink:'/'});renderMenu()">+ Sottovoce</button>
+      </div>`;
+    }
+    return riga+childrenHtml;
+  }).join('');
 }
 function menuSu(i){if(i===0)return;var t=_menuVoci.splice(i,1)[0];_menuVoci.splice(i-1,0,t);renderMenu();}
 function menuGiu(i){if(i===_menuVoci.length-1)return;var t=_menuVoci.splice(i,1)[0];_menuVoci.splice(i+1,0,t);renderMenu();}
@@ -1133,8 +1170,19 @@ async function salvaMenu(){
       if(!r.ok)continue;
       const d=await r.json();
       let content=dec(d.content);
-      content=content.replace(/^nav_order:\s*\d+/m,'nav_order: '+(i+1));
       content=content.replace(/^title:\s*"?[^"\n]+"?/m,'title: '+v.title);
+      // Home (permalink: /) non ha nav_order — non toccarlo. Le altre voci sì.
+      if(!v.isHome) content=content.replace(/^nav_order:\s*\d+/m,'nav_order: '+(i+1));
+      // Dropdown (children): riscrive l'intero blocco children: dal form, stesso formato
+      // di dropdown.md (title + permalink, oppure solo title:divider per i separatori).
+      // Solo le pagine con dropdown:true nel frontmatter arrivano qui con v.children valorizzato.
+      if(v.isDropdown&&v.children){
+        const childrenYaml='children:\n'+v.children.map(c=>{
+          if(c.title==='divider')return '  - title: divider';
+          return '  - title: '+c.title+'\n    permalink: '+c.permalink;
+        }).join('\n');
+        content=content.replace(/^children:\s*\n(?:[\s\S]*?)(?=\n---)/m,childrenYaml+'\n');
+      }
       const put=await ghPut(v.path,'Aggiorna menu: '+v.title,content,d.sha);
       const j=await put.json();
       if(put.ok)_menuPagineSha[v.path]=j.content.sha;
