@@ -1060,20 +1060,37 @@ async function salvaCategorie(){
   else showMsg('msg-cat','❌ '+j.message,'err');
 }
 
-// MENU
-// MENU
+// MENU — sincronizzato con le pagine reali di al-folio (_pages/*.md, campo nav/nav_order)
+// Non usa piu' _data/navigation.yml: al-folio non lo legge mai (vedi _includes/header.liquid,
+// che cicla su site.pages con nav:true ordinate per nav_order). Ogni voce del menu qui sotto
+// e' una pagina reale in _pages/ — modificarla aggiorna nav_order/title sul file .md stesso.
+let _menuPagineSha={};   // path pagina -> sha (serve per il PUT in salvaMenu)
 async function caricaMenu(){
-  const res=await ghGet('_data/navigation.yml');
-  if(!res.ok)return showMsg('msg-menu','❌ Errore caricamento.','err');
-  const d=await res.json();_menuSha=d.sha;
-  const yaml=dec(d.content);_menuVoci=[];
-  let titolo='';
-  for(const line of yaml.split('\n')){
-    const t=line.match(/^\s+-\s+title:\s+"?([^"]+)"?/);
-    const u=line.match(/^\s+url:\s+(.+)/);
-    if(t)titolo=t[1].trim();
-    if(u&&titolo){_menuVoci.push({title:titolo,url:u[1].trim()});titolo='';}
+  const res=await ghGet('_pages');
+  if(!res.ok)return showMsg('msg-menu','❌ Errore caricamento _pages.','err');
+  const files=(await res.json()).filter(f=>f.name.endsWith('.md'));
+  const navPages=[];
+  for(const f of files){
+    const r=await ghGet(f.path);
+    if(!r.ok)continue;
+    const d=await r.json();
+    _menuPagineSha[f.path]=d.sha;
+    const content=dec(d.content);
+    const fm=(content.match(/^---\n([\s\S]*?)\n---/)||[])[1]||'';
+    const navM=fm.match(/^nav:\s*(true|false)/m);
+    if(!navM||navM[1]!=='true')continue;
+    const titleM=fm.match(/^title:\s*"?([^"\n]+)"?/m);
+    const orderM=fm.match(/^nav_order:\s*(\d+)/m);
+    const permM=fm.match(/^permalink:\s*"?([^"\n]+)"?/m);
+    navPages.push({
+      path:f.path,
+      title:titleM?titleM[1].trim():f.name.replace('.md',''),
+      url:permM?permM[1].trim():'/'+f.name.replace('.md','')+'/',
+      order:orderM?parseInt(orderM[1],10):999
+    });
   }
+  navPages.sort((a,b)=>a.order-b.order);
+  _menuVoci=navPages;
   renderMenu();
 }
 function renderMenu(){
@@ -1100,14 +1117,31 @@ function aggiungiVoce(){
   document.getElementById('menu-nome').value='';document.getElementById('menu-url').value='';
   renderMenu();
 }
+// ⚠️ CRITICO: scrive nav_order+title sui frontmatter delle pagine in _pages/, MAI su
+// _data/navigation.yml (al-folio lo ignora, vedi nota su caricaMenu()). Voci senza sha
+// in _menuPagineSha (aggiunte a mano senza corrispondere a una pagina reale) vengono
+// saltate: qui si puo' solo riordinare/rinominare pagine esistenti, non crearne di nuove.
 async function salvaMenu(){
   if(!tok())return showMsg('msg-menu','⚠️ Token mancante.','err');
   showMsg('msg-menu','⏳ Salvataggio...','');
-  let yaml='main:\n';_menuVoci.forEach(v=>{yaml+=`  - title: "${v.title}"\n    url: ${v.url}\n`;});
-  const res=await ghPut('_data/navigation.yml','Aggiorna menu',yaml,_menuSha);
-  const j=await res.json();
-  if(res.ok){_menuSha=j.content.sha;showMsg('msg-menu','✅ Menu salvato! Live in ~60s.','ok');}
-  else showMsg('msg-menu','❌ '+j.message,'err');
+  try{
+    for(let i=0;i<_menuVoci.length;i++){
+      const v=_menuVoci[i];
+      const sha=_menuPagineSha[v.path];
+      if(!sha)continue;
+      const r=await ghGet(v.path);
+      if(!r.ok)continue;
+      const d=await r.json();
+      let content=dec(d.content);
+      content=content.replace(/^nav_order:\s*\d+/m,'nav_order: '+(i+1));
+      content=content.replace(/^title:\s*"?[^"\n]+"?/m,'title: '+v.title);
+      const put=await ghPut(v.path,'Aggiorna menu: '+v.title,content,d.sha);
+      const j=await put.json();
+      if(put.ok)_menuPagineSha[v.path]=j.content.sha;
+    }
+    showMsg('msg-menu','✅ Menu salvato! Live in ~60s.','ok');
+    startDeployPolling();
+  }catch(e){showMsg('msg-menu','❌ Errore: '+e.message,'err');}
 }
 
 // EDITOR PAGINE
