@@ -1098,7 +1098,9 @@ async function caricaMenu(){
       const re=/-\s*title:\s*([^\n]+)(?:\n\s*permalink:\s*([^\n]+))?/g;
       let m;
       while((m=re.exec(childBlock))){
-        children.push({title:m[1].trim(),permalink:m[2]?m[2].trim():''});
+        const t=m[1].trim();
+        if(t==='divider')continue; // separatore visivo, gestito automaticamente — mai mostrato/editabile
+        children.push({title:t,permalink:m[2]?m[2].trim():''});
       }
     }
     navPages.push({
@@ -1132,7 +1134,7 @@ function renderMenu(){
       <div class="menu-row" style="margin-left:32px;background:#f0f4ff;border-color:#d0d8ff">
         <span style="font-size:11px;color:#999;width:16px">↳</span>
         <input type="text" value="${c.title}" onchange="_menuVoci[${i}].children[${ci}].title=this.value" placeholder="Nome sottovoce">
-        <input type="text" value="${c.permalink}" onchange="_menuVoci[${i}].children[${ci}].permalink=this.value" placeholder="/url/ (vuoto = divisore)" style="font-size:12px;color:#555">
+        <input type="text" value="${c.permalink}" onchange="_menuVoci[${i}].children[${ci}].permalink=this.value" placeholder="/url/" style="font-size:12px;color:#555">
         <button class="btn btn-danger btn-sm" onclick="_menuVoci[${i}].children.splice(${ci},1);renderMenu()">🗑</button>
       </div>`).join('')+`
       <div style="margin-left:32px;margin-bottom:8px">
@@ -1174,13 +1176,16 @@ async function salvaMenu(){
       // Home (permalink: /) non ha nav_order — non toccarlo. Le altre voci sì.
       if(!v.isHome) content=content.replace(/^nav_order:\s*\d+/m,'nav_order: '+(i+1));
       // Dropdown (children): riscrive l'intero blocco children: dal form, stesso formato
-      // di dropdown.md (title + permalink, oppure solo title:divider per i separatori).
-      // Solo le pagine con dropdown:true nel frontmatter arrivano qui con v.children valorizzato.
+      // di dropdown.md (title + permalink). Il divider (separatore visivo) NON è mai nel
+      // form/v.children — viene reinserito automaticamente qui, a metà lista, solo se ci
+      // sono almeno 2 voci (con 0 o 1 voce non serve nulla da separare).
       if(v.isDropdown&&v.children){
-        const childrenYaml='children:\n'+v.children.map(c=>{
-          if(c.title==='divider')return '  - title: divider';
-          return '  - title: '+c.title+'\n    permalink: '+c.permalink;
-        }).join('\n');
+        const items=v.children.map(c=>'  - title: '+c.title+'\n    permalink: '+c.permalink);
+        if(items.length>=2){
+          const mid=Math.ceil(items.length/2);
+          items.splice(mid,0,'  - title: divider');
+        }
+        const childrenYaml='children:\n'+items.join('\n');
         content=content.replace(/^children:\s*\n(?:[\s\S]*?)(?=\n---)/m,childrenYaml+'\n');
       }
       const put=await ghPut(v.path,'Aggiorna menu: '+v.title,content,d.sha);
