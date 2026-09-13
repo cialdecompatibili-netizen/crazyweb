@@ -29,7 +29,9 @@ profiles:
 children:
   - title: marceloplex
     permalink: /marcelo
-  - title: divider
   - title: nuova voce
     permalink: /sara
+  - title: divider
+  - title: nuova voce
+    permalink: /
 ---
