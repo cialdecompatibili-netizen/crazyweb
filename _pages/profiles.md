@@ -29,7 +29,4 @@ profiles:
 children:
   - title: marceloplex
     permalink: /marcelo
-  - title: divider
-  - title: fabbri
-    permalink: /#/
 ---

@@ -8,7 +8,4 @@ dropdown: true
 children:
   - title: nuova vocexx
     permalink: /x/
-  - title: divider
-  - title: nuova voce
-    permalink: /
 ---
