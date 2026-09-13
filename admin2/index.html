@@ -1413,10 +1413,12 @@ function buildContent(){
   const teaser=document.getElementById('teaser').value.trim();
   const corpo=getCorpo();
   let fm=`---\nlayout: post\ntitle: "${titolo}"\ndate: ${data}\n`;
-  if(excerpt)fm+=`excerpt: "${excerpt}"\n`;
-  if(teaser)fm+=`header:\n  teaser: "${teaser}"\n`;
-  if(cat)fm+=`categories:\n  - ${cat}\n`;
-  if(tags.length)fm+=`tags:\n${tags.map(t=>`  - ${t}`).join('\n')}\n`;
+  // al-folio: description (non excerpt), thumbnail (non header.teaser),
+  // categories/tags stringa spazio-separata (non lista YAML) - vedi _posts esistenti
+  if(excerpt)fm+=`description: "${excerpt}"\n`;
+  if(teaser)fm+=`thumbnail: ${teaser}\n`;
+  if(cat)fm+=`categories: ${cat}\n`;
+  if(tags.length)fm+=`tags: ${tags.join(' ')}\n`;
   // ⚠️ NOTA: gli articoli usano HTML nel corpo (non Markdown) — scelta deliberata.
   // L'editor visuale (contenteditable) produce HTML. Jekyll lo renderizza senza problemi.
   // NON cambiare questo in Markdown senza aggiornare anche l'editor e setCorpo().
