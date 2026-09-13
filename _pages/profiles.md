@@ -34,4 +34,6 @@ children:
   - title: divider
   - title: nuova voce
     permalink: /
+  - title: nuova vocex
+    permalink: /
 ---
