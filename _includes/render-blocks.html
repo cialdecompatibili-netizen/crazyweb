@@ -1,0 +1,8 @@
+{% assign blocks_data = site.data[include.data] %}
+{% if blocks_data %}
+  {% for block in blocks_data %}
+    {% if block.enabled %}
+{{ block.html }}
+    {% endif %}
+  {% endfor %}
+{% endif %}
