@@ -1,23 +1,19 @@
 ---
-layout: about
-title: home
-permalink: /
-subtitle: <a href='#'>Affiliazioni</a>. Indirizzo. Contatti. Motto. Ecc.
-
-profile: false # disattivato: sostituito dallo slider hero in cima alla home
-
-selected_papers: false # includes a list of papers marked as "selected={true}"
-social: true # includes social icons at the bottom of the page
-
+subtitle: <a href='#'>Crazy</a>. Indirizzo. Contatti. Motto. Ecc.
 announcements:
-  enabled: true # includes a list of news items
-  scrollable: true # adds a vertical scroll bar if there are more than 3 news items
-  limit: 5 # leave blank to include all the news in the `_news` folder
-
+  enabled: true
+  limit: 5
+  scrollable: true
 latest_posts:
   enabled: true
-  scrollable: true # adds a vertical scroll bar if there are more than 3 new posts items
-  limit: 3 # leave blank to include all the blog posts
+  limit: 3
+  scrollable: true
+layout: about
+permalink: /
+profile: false
+selected_papers: false
+social: true
+title: home
 ---
 
 Scrivi qui la tua biografia. Racconta al mondo qualcosa di te. Inserisci un link al tuo subreddit preferito [subreddit](https://www.reddit.com). Puoi anche mettere una foto. Il codice è già pronto, basta chiamare la tua immagine `prof_pic.jpg` e inserirla nella cartella `img/`.
