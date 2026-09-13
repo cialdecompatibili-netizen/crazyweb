@@ -77,6 +77,49 @@ site.verify_live()                 # solo verifica 200, senza push
 il push va comunque a buon fine, basta verificare con `verify_live()` o controllare
 lo stato della build su Actions (vedi link sopra) subito dopo.
 
+### ⚠️ Pattern fix: pannello admin che genera commit multipli / Actions "che non ripartono" (batch commit via Git Trees API)
+
+**Sintomo:** un pulsante tipo "Salva menu" nel pannello admin (`admin/index.html`,
+`admin2_index.html`) che scrive su GitHub tramite Contents API (`PUT /repos/.../contents/...`)
+fa **un commit separato per ogni singola voce/file**, anche quando non è cambiato nulla.
+Risultato: 5+ commit ad ogni click, coda di GitHub Actions che sembra "bloccata" o "non
+ripartire" (in realtà sono solo run accodati dietro i tanti trigger inutili).
+
+**Causa tipica:** un ciclo tipo `for (voce of voci) { ghPut(voce) }` che scrive sempre,
+senza controllare se il contenuto è realmente diverso da quello già su GitHub. A volte
+il ricalcolo di campi derivati (es. `nav_order` calcolato come `i+1` sulla posizione in
+un array locale non riallineato con lo stato reale remoto) fa sembrare "cambiato" anche
+un contenuto che in sostanza è identico.
+
+**Fix stabile adottato (pattern riusabile per altri progetti):**
+
+1. Calcolare in memoria il contenuto finale che ogni file dovrebbe avere, senza scrivere nulla.
+2. Confrontare con il contenuto attuale letto da GitHub (via `get_file_contents` / Contents API)
+   e tenere in una lista solo i file **davvero cambiati**.
+3. Se la lista è vuota → **zero chiamate di scrittura, zero commit, zero deploy** (mostrare
+   tipo "✅ Nessuna modifica da salvare").
+4. Se ci sono modifiche → un **solo commit atomico** con tutti i file cambiati insieme, usando
+   la **Git Database API** (non la Contents API):
+   - `GET /repos/{owner}/{repo}/git/ref/heads/{branch}` → sha del branch
+   - `POST /repos/{owner}/{repo}/git/blobs` → un blob per ogni file cambiato
+   - `POST /repos/{owner}/{repo}/git/trees` → un tree unico che referenzia i blob (con `base_tree`)
+   - `POST /repos/{owner}/{repo}/git/commits` → un commit unico sul tree
+   - `PATCH /repos/{owner}/{repo}/git/refs/heads/{branch}` → sposta il branch sul nuovo commit
+
+Questo è il pattern raccomandato dalla community GitHub per commit multi-file atomici,
+al posto di N `PUT` separati via Contents API (che genera N commit e N trigger di Actions).
+
+**Dove si trova l'implementazione di riferimento:** `admin/index.html` di questo repo,
+funzione `salvaMenu()`, sezione commentata `⚠️ APPROCCIO BATCH (Git Trees API)`. Copiare
+da lì lo schema `ghGetRef` → `ghCreateBlob` → `ghCreateTree` → `ghCreateCommit` → `ghUpdateRef`
+per riusarlo in altri pannelli/progetti con lo stesso problema (es. altri cloni al-folio,
+altri pannelli JS che scrivono su GitHub via API dal browser).
+
+**Prima di dichiarare "risolto":** verificare sempre online (non solo il file locale) con
+`get_file_contents` che il codice pubblicato contenga davvero il fix — in questo progetto
+un ripristino via API con contenuto placeholder ha rotto il pannello due volte prima del
+fix definitivo, perché si è scritto un file segnaposto invece del contenuto reale.
+
 ### ⚠️ NON toccare senza motivo
 
 `AGENTS.md` e tutto il resto di questo `CLAUDE.md` sotto questa sezione sono
