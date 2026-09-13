@@ -91,6 +91,32 @@ jobs:
           valueFile: "_config.yml"
           propertyPath: "giscus.repo"
           value: ${{ github.repository }}
+      - name: Verifica titoli post ⚠️
+        run: |
+          python3 - <<'EOF'
+          import re, sys, glob
+
+          errori = []
+          for path in sorted(glob.glob('_posts/*.md') + glob.glob('_posts/*.html')):
+              with open(path, encoding='utf-8') as f:
+                  content = f.read()
+              m = re.match(r'^---\n(.*?)\n---', content, re.DOTALL)
+              if not m:
+                  errori.append(f"{path}: frontmatter mancante")
+                  continue
+              fm = m.group(1)
+              t = re.search(r'^title:\s*"?(.*?)"?\s*$', fm, re.MULTILINE)
+              titolo = t.group(1).strip() if t else ''
+              if not titolo:
+                  errori.append(f"{path}: title vuoto o mancante")
+
+          if errori:
+              print("❌ Post con titolo vuoto trovati — build bloccata:")
+              for e in errori:
+                  print(f"  - {e}")
+              sys.exit(1)
+          print("✅ Tutti i post hanno un titolo valido.")
+          EOF
       - name: Install and Build 🔧
         run: |
           sudo apt-get update && sudo apt-get install -y imagemagick
