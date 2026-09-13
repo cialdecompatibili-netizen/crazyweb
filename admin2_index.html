@@ -1163,15 +1163,44 @@ function aggiungiVoce(){
 // _data/navigation.yml (al-folio lo ignora, vedi nota su caricaMenu()). Voci senza .path
 // (aggiunte da "+ Aggiungi voce") vengono create come nuove pagine _pages/<slug>.md con
 // nav:true — al-folio richiede una pagina fisica per mostrare la voce nel menu.
+//
+// ⚠️ APPROCCIO BATCH (Git Trees API) — sostituisce il vecchio ciclo di ghPut() uno per voce.
+// Prima: ogni "Salva menu" faceva fino a 5+ commit separati (uno per pagina toccata), anche
+// quando i dati non erano davvero cambiati — causava code di GitHub Actions che sembravano
+// bloccate. Ora: si calcola il contenuto finale di TUTTE le pagine in memoria, si confronta
+// con quello letto da GitHub, e si fa UN SOLO commit con blob+tree+commit+ref-update che
+// contiene SOLO i file realmente cambiati. Se nessun file è cambiato: zero commit, zero
+// deploy. Pattern standard GitHub Git Database API per commit multi-file atomici.
+async function ghGetRef(branch){
+  return fetch(`https://api.github.com/repos/${REPO}/git/ref/heads/${branch}`,{headers:{'Authorization':`token ${tok()}`}});
+}
+async function ghCreateBlob(content){
+  return fetch(`https://api.github.com/repos/${REPO}/git/blobs`,{method:'POST',headers:{'Authorization':`token ${tok()}`,'Content-Type':'application/json'},body:JSON.stringify({content:enc(content),encoding:'base64'})});
+}
+async function ghCreateTree(baseTreeSha,tree){
+  return fetch(`https://api.github.com/repos/${REPO}/git/trees`,{method:'POST',headers:{'Authorization':`token ${tok()}`,'Content-Type':'application/json'},body:JSON.stringify({base_tree:baseTreeSha,tree})});
+}
+async function ghCreateCommit(message,treeSha,parentSha){
+  return fetch(`https://api.github.com/repos/${REPO}/git/commits`,{method:'POST',headers:{'Authorization':`token ${tok()}`,'Content-Type':'application/json'},body:JSON.stringify({message,tree:treeSha,parents:[parentSha]})});
+}
+async function ghUpdateRef(branch,commitSha){
+  return fetch(`https://api.github.com/repos/${REPO}/git/refs/heads/${branch}`,{method:'PATCH',headers:{'Authorization':`token ${tok()}`,'Content-Type':'application/json'},body:JSON.stringify({sha:commitSha})});
+}
 async function salvaMenu(){
   if(!tok())return showMsg('msg-menu','⚠️ Token mancante.','err');
-  showMsg('msg-menu','⏳ Salvataggio...','');
+  showMsg('msg-menu','⏳ Calcolo modifiche...','');
   try{
+    // FASE 1 — calcola in memoria il contenuto finale di ogni pagina, senza scrivere nulla.
+    // filesToWrite: solo le pagine il cui contenuto finale differisce da quello letto ora da GitHub.
+    const filesToWrite=[]; // {path, content}
+    let branchName=null;
+
     for(let i=0;i<_menuVoci.length;i++){
       const v=_menuVoci[i];
+
       // Voce nuova aggiunta da "+ Aggiungi voce": non ha ancora un file _pages/ associato.
-      // Le si crea qui una pagina .md reale (slug derivato dal titolo), altrimenti al-folio
-      // non la mostrerebbe mai nel menu (richiede nav:true su una pagina fisica).
+      // Si crea qui il contenuto della nuova pagina .md (slug derivato dal titolo) — sempre
+      // da scrivere, perché il file non esiste ancora su GitHub.
       if(!v.path){
         const slug=v.title.toLowerCase().trim()
           .replace(/[àáâ]/g,'a').replace(/[èéê]/g,'e').replace(/[ìí]/g,'i')
@@ -1182,26 +1211,20 @@ async function salvaMenu(){
         if(!perm.startsWith('/'))perm='/'+perm;
         if(!perm.endsWith('/'))perm+='/';
         const newContent='---\nlayout: page\ntitle: '+v.title+'\npermalink: '+perm+'\nnav: true\nnav_order: '+(i+1)+'\n---\n';
-        const putNew=await ghPut(v.path,'Crea voce menu: '+v.title,newContent,undefined);
-        const jNew=await putNew.json();
-        if(putNew.ok){_menuPagineSha[v.path]=jNew.content.sha;}
+        filesToWrite.push({path:v.path,content:newContent});
         continue;
       }
-      const sha=_menuPagineSha[v.path];
-      if(!sha)continue;
+
       const r=await ghGet(v.path);
       if(!r.ok)continue;
       const d=await r.json();
-      let content=dec(d.content);
+      const contentBefore=dec(d.content);
+      let content=contentBefore;
       content=content.replace(/^title:\s*"?[^"\n]+"?/m,'title: '+v.title);
       // Home (permalink: /) non ha nav_order — non toccarlo. Le altre voci sì.
       if(!v.isHome) content=content.replace(/^nav_order:\s*\d+/m,'nav_order: '+(i+1));
       // Dropdown (children): se la voce ha almeno 1 sottovoce dal form, la pagina DEVE avere
       // dropdown:true nel frontmatter (al-folio lo richiede — vedi header.liquid: {% if p.dropdown %}).
-      // Se il campo non esiste ancora (pagina mai stata dropdown, es. people.md) lo si inserisce
-      // subito dopo nav_order:; se esiste già lo si aggiorna. Il divider (separatore visivo) NON
-      // è mai nel form/v.children — viene reinserito automaticamente qui, a metà lista, solo se
-      // ci sono almeno 2 voci (con 0 o 1 voce non serve nulla da separare).
       if(v.children&&v.children.length>0){
         if(/^dropdown:\s*(true|false)/m.test(content)) content=content.replace(/^dropdown:\s*(true|false)/m,'dropdown: true');
         else content=content.replace(/^(nav_order:\s*\d+)/m,'$1\ndropdown: true');
@@ -1214,11 +1237,49 @@ async function salvaMenu(){
         if(/^children:\s*\n(?:\s+.*\n?)*/m.test(content)) content=content.replace(/^children:\s*\n(?:\s+.*\n?)*/m,childrenYaml+'\n');
         else content=content.replace(/(\n---\n)/,'\n'+childrenYaml+'$1');
       }
-      const put=await ghPut(v.path,'Aggiorna menu: '+v.title,content,d.sha);
-      const j=await put.json();
-      if(put.ok)_menuPagineSha[v.path]=j.content.sha;
+      // Solo se il contenuto finale differisce davvero da quello attuale su GitHub va scritto.
+      if(content!==contentBefore) filesToWrite.push({path:v.path,content});
     }
-    showMsg('msg-menu','✅ Menu salvato! Live in ~60s.','ok');
+
+    // FASE 2 — nessuna modifica reale: non tocca GitHub, zero commit, zero deploy.
+    if(filesToWrite.length===0){
+      showMsg('msg-menu','✅ Nessuna modifica da salvare.','ok');
+      return;
+    }
+
+    // FASE 3 — un solo commit batch con tutte le pagine cambiate (Git Trees API).
+    showMsg('msg-menu','⏳ Salvataggio ('+filesToWrite.length+' pagina/e)...','');
+    let refRes=await ghGetRef('main');
+    if(refRes.ok){branchName='main';}
+    else{branchName='master';refRes=await ghGetRef('master');}
+    if(!refRes.ok)throw new Error('Impossibile trovare il branch main/master');
+    const refJson=await refRes.json();
+    const parentCommitSha=refJson.object.sha;
+
+    const commitRes=await fetch(`https://api.github.com/repos/${REPO}/git/commits/${parentCommitSha}`,{headers:{'Authorization':`token ${tok()}`}});
+    const commitJson=await commitRes.json();
+    const baseTreeSha=commitJson.tree.sha;
+
+    const tree=[];
+    for(const f of filesToWrite){
+      const blobRes=await ghCreateBlob(f.content);
+      const blobJson=await blobRes.json();
+      if(!blobRes.ok)throw new Error(blobJson.message||'Errore creazione blob per '+f.path);
+      tree.push({path:f.path,mode:'100644',type:'blob',sha:blobJson.sha});
+    }
+    const treeRes=await ghCreateTree(baseTreeSha,tree);
+    const treeJson=await treeRes.json();
+    if(!treeRes.ok)throw new Error(treeJson.message||'Errore creazione tree');
+
+    const msg=filesToWrite.length===1?'Aggiorna menu: '+filesToWrite[0].path.replace('_pages/','').replace('.md',''):'Aggiorna menu ('+filesToWrite.length+' pagine)';
+    const newCommitRes=await ghCreateCommit(msg,treeJson.sha,parentCommitSha);
+    const newCommitJson=await newCommitRes.json();
+    if(!newCommitRes.ok)throw new Error(newCommitJson.message||'Errore creazione commit');
+
+    const updateRefRes=await ghUpdateRef(branchName,newCommitJson.sha);
+    if(!updateRefRes.ok){const j=await updateRefRes.json();throw new Error(j.message||'Errore aggiornamento branch');}
+
+    showMsg('msg-menu','✅ Menu salvato (1 commit)! Live in ~60s.','ok');
     startDeployPolling();
   }catch(e){showMsg('msg-menu','❌ Errore: '+e.message,'err');}
 }
