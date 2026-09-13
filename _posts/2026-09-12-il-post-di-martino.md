@@ -1,5 +1,5 @@
 ---
-layout: single
+layout: post
 title: "il post di martino"
 date: 2026-09-12
 categories:
