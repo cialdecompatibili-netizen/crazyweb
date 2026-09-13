@@ -93,8 +93,9 @@ jobs:
           value: ${{ github.repository }}
       - name: Verifica titoli post ⚠️
         run: |
+          pip3 install --quiet pyyaml
           python3 - <<'EOF'
-          import re, sys, glob
+          import re, sys, glob, yaml
 
           errori = []
           for path in sorted(glob.glob('_posts/*.md') + glob.glob('_posts/*.html')):
@@ -104,18 +105,28 @@ jobs:
               if not m:
                   errori.append(f"{path}: frontmatter mancante")
                   continue
-              fm = m.group(1)
-              t = re.search(r'^title:\s*"?(.*?)"?\s*$', fm, re.MULTILINE)
-              titolo = t.group(1).strip() if t else ''
-              if not titolo:
-                  errori.append(f"{path}: title vuoto o mancante")
+              try:
+                  fm = yaml.safe_load(m.group(1))
+              except yaml.YAMLError as e:
+                  errori.append(f"{path}: frontmatter YAML non valido ({e})")
+                  continue
+              if not isinstance(fm, dict):
+                  errori.append(f"{path}: frontmatter non è un oggetto YAML valido")
+                  continue
+              titolo = str(fm.get('title', '')).strip()
+              # rimuove caratteri invisibili/zero-width che passano il .strip() normale
+              titolo_pulito = re.sub(r'[\u200b\u200c\u200d\ufeff\xa0]', '', titolo).strip()
+              if not titolo_pulito:
+                  errori.append(f"{path}: title vuoto, mancante o con soli caratteri invisibili")
+              if not fm.get('date'):
+                  errori.append(f"{path}: date mancante")
 
           if errori:
-              print("❌ Post con titolo vuoto trovati — build bloccata:")
+              print("❌ Post non validi trovati — build bloccata:")
               for e in errori:
                   print(f"  - {e}")
               sys.exit(1)
-          print("✅ Tutti i post hanno un titolo valido.")
+          print("✅ Tutti i post hanno frontmatter e titolo validi.")
           EOF
       - name: Install and Build 🔧
         run: |
