@@ -1,10 +1,9 @@
 ---
-layout: post
-title: il post di martino
-date: 2026-09-12 22:14:00
-description: il post di martino
-tags: []
-categories: auto
+layout: single
+title: "il post di martino"
+date: 2026-09-12
+categories:
+  - generale
 ---
 
-il post di martino
+il post di martino bella<br>
