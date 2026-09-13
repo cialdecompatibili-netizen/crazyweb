@@ -1412,7 +1412,7 @@ function buildContent(){
   const excerpt=document.getElementById('excerpt').value.trim();
   const teaser=document.getElementById('teaser').value.trim();
   const corpo=getCorpo();
-  let fm=`---\nlayout: single\ntitle: "${titolo}"\ndate: ${data}\n`;
+  let fm=`---\nlayout: post\ntitle: "${titolo}"\ndate: ${data}\n`;
   if(excerpt)fm+=`excerpt: "${excerpt}"\n`;
   if(teaser)fm+=`header:\n  teaser: "${teaser}"\n`;
   if(cat)fm+=`categories:\n  - ${cat}\n`;
