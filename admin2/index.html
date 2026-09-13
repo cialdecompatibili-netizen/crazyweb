@@ -1456,14 +1456,16 @@ async function modificaArticolo(path){
   const fm=content.match(/^---\n([\s\S]*?)\n---/);
   const body=content.replace(/^---[\s\S]*?---\n\n?/,'');
   const get=(k)=>{const m=(fm?fm[1]:'').match(new RegExp(`${k}:\\s*"?([^"\\n]+)"?`));return m?m[1].trim():'';}
+  // al-folio: description (non excerpt), thumbnail (non teaser), categories/tags
+  // stringa spazio-separata su una riga (non lista YAML) - stesso formato di buildContent()
   document.getElementById('titolo').value=get('title');
   document.getElementById('data').value=get('date');
-  document.getElementById('excerpt').value=get('excerpt');
-  document.getElementById('teaser').value=get('teaser')||'';
-  const catM=(fm?fm[1]:'').match(/categories:\n\s*-\s*(.+)/);
+  document.getElementById('excerpt').value=get('description');
+  document.getElementById('teaser').value=get('thumbnail')||'';
+  const catM=(fm?fm[1]:'').match(/^categories:\s*(.+)$/m);
   if(catM)document.getElementById('categorie').value=catM[1].trim();
-  const tagsM=(fm?fm[1]:'').match(/tags:\n([\s\S]*?)(?=\n\w|\n---)/);
-  if(tagsM)document.getElementById('tags').value=tagsM[1].replace(/\s*-\s*/g,'').trim().split('\n').join(', ');
+  const tagsM=(fm?fm[1]:'').match(/^tags:\s*(.+)$/m);
+  if(tagsM)document.getElementById('tags').value=tagsM[1].trim().split(/\s+/).join(', ');
   // Carica corpo: HTML diretto, niente conversioni
   setCorpo(body);
   // _editSha e _editPath tengono traccia dell'articolo in modifica.
