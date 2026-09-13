@@ -1093,7 +1093,7 @@ async function caricaMenu(){
     const isDropdown=/^dropdown:\s*true/m.test(fm);
     let children=null;
     if(isDropdown){
-      const childBlock=(fm.match(/^children:\s*\n([\s\S]*?)(?=\n\w|$)/m)||[])[1]||'';
+      const childBlock=(fm.match(/^children:\s*\n((?:\s+.*\n?)*)/m)||[])[1]||'';
       children=[];
       const re=/-\s*title:\s*([^\n]+)(?:\n\s*permalink:\s*([^\n]+))?/g;
       let m;
