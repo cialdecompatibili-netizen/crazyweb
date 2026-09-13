@@ -1241,6 +1241,12 @@ async function salvaMenu(){
         const childrenYaml='children:\n'+items.join('\n');
         if(/^children:\s*\n(?:\s+.*\n?)*/m.test(content)) content=content.replace(/^children:\s*\n(?:\s+.*\n?)*/m,childrenYaml+'\n');
         else content=content.replace(/(\n---\n)/,'\n'+childrenYaml+'$1');
+      } else if(v.children&&v.children.length===0&&/^dropdown:\s*true/m.test(content)){
+        // Ultima sottovoce appena rimossa dal pannello: il dropdown non ha più children.
+        // Bisogna togliere sia il blocco children: sia dropdown:true, altrimenti al-folio
+        // continuerebbe a mostrare le vecchie sottovoci lette dal frontmatter (mai svuotato).
+        content=content.replace(/^dropdown:\s*true\n?/m,'');
+        content=content.replace(/^children:\s*\n(?:\s+.*\n?)*/m,'');
       }
       // Solo se il contenuto finale differisce davvero da quello attuale su GitHub va scritto.
       if(content!==contentBefore) filesToWrite.push({path:v.path,content});
