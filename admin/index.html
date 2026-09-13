@@ -1065,6 +1065,7 @@ async function salvaCategorie(){
 // che cicla su site.pages con nav:true ordinate per nav_order). Ogni voce del menu qui sotto
 // e' una pagina reale in _pages/ — modificarla aggiorna nav_order/title sul file .md stesso.
 let _menuPagineSha={};   // path pagina -> sha (serve per il PUT in salvaMenu)
+let _menuPathsOriginali=[];   // path presenti al momento di caricaMenu() — per rilevare cancellazioni
 async function caricaMenu(){
   const res=await ghGet('_pages');
   if(!res.ok)return showMsg('msg-menu','❌ Errore caricamento _pages.','err');
@@ -1113,6 +1114,10 @@ async function caricaMenu(){
   }
   navPages.sort((a,b)=>a.order-b.order);
   _menuVoci=navPages;
+  // Snapshot dei path presenti al caricamento — serve a salvaMenu() per capire quali
+  // pagine sono state tolte dal pannello (bottone 🗑 su una voce) e vanno cancellate
+  // fisicamente da _pages/ al salvataggio, invece di restare orfane sul repo.
+  _menuPathsOriginali=navPages.filter(v=>v.path).map(v=>v.path);
   renderMenu();
 }
 function renderMenu(){
@@ -1241,14 +1246,21 @@ async function salvaMenu(){
       if(content!==contentBefore) filesToWrite.push({path:v.path,content});
     }
 
-    // FASE 2 — nessuna modifica reale: non tocca GitHub, zero commit, zero deploy.
-    if(filesToWrite.length===0){
+    // FASE 1b — pagine tolte dal pannello (bottone 🗑 su una voce, poi Salva): il path era
+    // presente in _menuPathsOriginali (snapshot fatto da caricaMenu()) ma non è più in
+    // _menuVoci ora. Vanno cancellate fisicamente, altrimenti restano orfane in _pages/
+    // e il workflow parte (per il riallineamento dei nav_order) senza eliminare nulla.
+    const pathsAttuali=new Set(_menuVoci.filter(v=>v.path).map(v=>v.path));
+    const pathsDaCancellare=_menuPathsOriginali.filter(p=>!pathsAttuali.has(p));
+
+    // FASE 2 — nessuna modifica reale (né scrittura né cancellazione): zero commit, zero deploy.
+    if(filesToWrite.length===0 && pathsDaCancellare.length===0){
       showMsg('msg-menu','✅ Nessuna modifica da salvare.','ok');
       return;
     }
 
-    // FASE 3 — un solo commit batch con tutte le pagine cambiate (Git Trees API).
-    showMsg('msg-menu','⏳ Salvataggio ('+filesToWrite.length+' pagina/e)...','');
+    // FASE 3 — un solo commit batch con tutte le pagine cambiate/cancellate (Git Trees API).
+    showMsg('msg-menu','⏳ Salvataggio ('+filesToWrite.length+' pagina/e, '+pathsDaCancellare.length+' da eliminare)...','');
     let refRes=await ghGetRef('main');
     if(refRes.ok){branchName='main';}
     else{branchName='master';refRes=await ghGetRef('master');}
@@ -1267,17 +1279,31 @@ async function salvaMenu(){
       if(!blobRes.ok)throw new Error(blobJson.message||'Errore creazione blob per '+f.path);
       tree.push({path:f.path,mode:'100644',type:'blob',sha:blobJson.sha});
     }
+    // Cancellazioni: nella Git Trees API, sha:null su un path esistente lo rimuove dal tree
+    // (equivalente a un git rm), tutto nello stesso commit atomico delle altre modifiche —
+    // nessuna DELETE separata via Contents API necessaria.
+    for(const p of pathsDaCancellare){
+      tree.push({path:p,mode:'100644',type:'blob',sha:null});
+    }
     const treeRes=await ghCreateTree(baseTreeSha,tree);
     const treeJson=await treeRes.json();
     if(!treeRes.ok)throw new Error(treeJson.message||'Errore creazione tree');
 
-    const msg=filesToWrite.length===1?'Aggiorna menu: '+filesToWrite[0].path.replace('_pages/','').replace('.md',''):'Aggiorna menu ('+filesToWrite.length+' pagine)';
+    const parti=[];
+    if(filesToWrite.length===1) parti.push('Aggiorna menu: '+filesToWrite[0].path.replace('_pages/','').replace('.md',''));
+    else if(filesToWrite.length>1) parti.push('Aggiorna menu ('+filesToWrite.length+' pagine)');
+    if(pathsDaCancellare.length>0) parti.push('Elimina '+pathsDaCancellare.map(p=>p.replace('_pages/','').replace('.md','')).join(', '));
+    const msg=parti.join(' — ')||'Aggiorna menu';
     const newCommitRes=await ghCreateCommit(msg,treeJson.sha,parentCommitSha);
     const newCommitJson=await newCommitRes.json();
     if(!newCommitRes.ok)throw new Error(newCommitJson.message||'Errore creazione commit');
 
     const updateRefRes=await ghUpdateRef(branchName,newCommitJson.sha);
     if(!updateRefRes.ok){const j=await updateRefRes.json();throw new Error(j.message||'Errore aggiornamento branch');}
+
+    // Aggiorna lo snapshot: al prossimo salvataggio consecutivo (senza ricaricare la pagina)
+    // le voci appena cancellate non risultino più "da eliminare" (già eliminate ora).
+    _menuPathsOriginali=Array.from(pathsAttuali);
 
     showMsg('msg-menu','✅ Menu salvato (1 commit)! Live in ~60s.','ok');
     startDeployPolling();
