@@ -1,5 +1,5 @@
 ---
-subtitle: <a href='#'>Crazy</a>. Indirizzo. Contatti. Motto. Ecc.
+subtitle: Web Agency Roma · dal 2013
 announcements:
   enabled: true
   limit: 5
@@ -16,8 +16,12 @@ social: true
 title: Home
 ---
 
-Scrivi qui la tua biografia. Racconta al mondo qualcosa di te. Inserisci un link al tuo subreddit preferito [subreddit](https://www.reddit.com). Puoi anche mettere una foto. Il codice è già pronto, basta chiamare la tua immagine `prof_pic.jpg` e inserirla nella cartella `img/`.
+<div style="text-align:center; max-width:760px; margin:0 auto;">
 
-Metti il tuo indirizzo / casella postale / altre info subito sotto la foto. Puoi anche disabilitare ciascuno di questi elementi modificando la proprietà `profile` nell'intestazione YAML del tuo `_pages/about.md`. Modifica `_bibliography/papers.bib` e Jekyll renderizzerà automaticamente la tua [pagina delle pubblicazioni](/al-folio/publications/).
+Siamo una Web Agency con sede a Roma, nata nel 2013 con un solo scopo: aiutare a far crescere il business di imprenditori, start up e grandi aziende, operando sia nel settore privato che con la Pubblica Amministrazione.
 
-Metti anche i link ai tuoi social media. Questo tema è predisposto per usare le icone [Font Awesome](https://fontawesome.com/) e [Academicons](https://jpswalsh.github.io/academicons/), come quelle qui sotto. Aggiungi Facebook, Twitter, LinkedIn, Google Scholar, oppure disabilitali tutti.
+Come Agenzia Marketing offriamo alle aziende un servizio completo nell'ambito della comunicazione, del web marketing e dello sviluppo di piattaforme digitali. Il nostro team di professionisti guida e affianca le aziende, proponendo strategie efficaci e personalizzate, combinando creatività, passione e aggiornamento continuo sulle tendenze di mercato.
+
+Lavoriamo per il raggiungimento di obiettivi concreti: le nostre consulenze di Web Marketing sono progettate per generare un ritorno sull'investimento (ROI) misurabile e una crescita costante di fatturato e utili. Coordiniamo ogni fase del progetto, mantenendo sempre il focus sulla qualità, sulla soddisfazione del cliente e sull'efficacia delle soluzioni implementate.
+
+</div>
