@@ -13,6 +13,8 @@ children:
   - title: divider
   - title: sottmenutesting
     permalink: /testingsottomenu/
+  - title: sub2
+    permalink: /sub/
 ---
 
 test-api-put-20260914165348
