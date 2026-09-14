@@ -1829,7 +1829,10 @@ async function caricaImpostazioni(){
   const d=await res.json();
   _configShaImp=d.sha;
   const y=dec(d.content);
-  const get=(k,def='')=>{const m=y.match(new RegExp(`^${k}:\\s*(.+)$`,'m'));return m?m[1].replace(/\s*#.*$/,'').trim().replace(/^["']|["']$/g,''):def;};
+  // ⚠️ CRITICO: [^\S\r\n]* (non \s*) tra ":" e il valore — \s* scavalca anche i newline,
+  // quindi su una chiave vuota (es. "last_name:" senza nulla dopo) risucchierebbe l'intera
+  // riga successiva come valore (bug reale: last_name diventava "contact_note: >-").
+  const get=(k,def='')=>{const m=y.match(new RegExp(`^${k}:[^\\S\\r\\n]*(.*)$`,'m'));return m&&m[1].trim()?m[1].replace(/\s*#.*$/,'').trim().replace(/^["']|["']$/g,''):def;};
   document.getElementById('cfg-title').value=get('title');
   document.getElementById('cfg-author-name').value=[get('first_name'),get('last_name')].filter(Boolean).join(' ');
   document.getElementById('cfg-baseurl').value=get('baseurl');
@@ -1849,7 +1852,8 @@ async function caricaImpostazioni(){
     const dS=await resS.json();
     _socialsShaImp=dS.sha;
     const ys=dec(dS.content);
-    const getS=(k,def='')=>{const m=ys.match(new RegExp(`^${k}:\\s*(.+)$`,'m'));return m?m[1].replace(/\s*#.*$/,'').trim().replace(/^["']|["']$/g,''):def;};
+    // stesso fix di get() sopra: [^\S\r\n]* non scavalca newline su chiavi vuote
+    const getS=(k,def='')=>{const m=ys.match(new RegExp(`^${k}:[^\\S\\r\\n]*(.*)$`,'m'));return m&&m[1].trim()?m[1].replace(/\s*#.*$/,'').trim().replace(/^["']|["']$/g,''):def;};
     document.getElementById('cfg-email').value=getS('email');
     document.getElementById('cfg-twitter').value=getS('x_username');
     document.getElementById('cfg-instagram').value=getS('instagram_id');
