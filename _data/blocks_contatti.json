@@ -1,0 +1,8 @@
+[
+  {
+    "id": "box1789410147974",
+    "nome": "Nuovo box",
+    "enabled": true,
+    "html": "<section style=\"padding:40px;text-align:center\">\n  <h2>Nuovo box</h2>\n  <p>Scrivi qui il tuo HTML. contatti</p>\n</section>"
+  }
+]
