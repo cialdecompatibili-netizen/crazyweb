@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="it">
 <head>
 <meta charset="UTF-8">
@@ -78,7 +78,7 @@ textarea.sm{min-height:180px;font-family:'Courier New',monospace;font-size:13px;
 .onboarding-eye{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:16px;color:#aaa}
 .onboarding-link{font-size:12px;color:#6c63ff;text-decoration:none;display:inline-block;margin-bottom:20px}
 
-/* SELETTORE IMMAGINI ? modal riutilizzabile */
+/* SELETTORE IMMAGINI — modal riutilizzabile */
 .img-picker-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;z-index:99999;padding:1em}
 .img-picker-box{background:#fff;border-radius:16px;padding:1.5em;max-width:640px;width:100%;max-height:85vh;display:flex;flex-direction:column}
 .img-picker-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:1em}
@@ -120,11 +120,11 @@ textarea.sm{min-height:180px;font-family:'Courier New',monospace;font-size:13px;
     <button class="btn btn-primary" style="width:100%;justify-content:center;padding:12px" onclick="salvaTokenOnboarding()">Inizia a usare il CMS</button>
   </div>
 </div><div class="topbar" style="position:fixed;overflow:hidden">
-  <a id="topbar-admin-link" href="#" target="_self" class="topbar-title" style="text-decoration:none;color:white;cursor:pointer">?? cmspush Admin</a>
+  <a id="topbar-admin-link" href="#" target="_self" class="topbar-title" style="text-decoration:none;color:white;cursor:pointer">✍️ cmspush Admin</a>
   <div style="display:flex;align-items:center;gap:14px">
-    <span id="deploy-live" class="deploy-live">? Live</span>
-    <a id="topbar-deploy-link" href="#" target="_blank" class="topbar-link" title="Vedi deploy su GitHub Actions">?? Deploy ?</a>
-    <a id="topbar-site-link" href="#" target="_blank" class="topbar-link">?? Vai al sito ?</a>
+    <span id="deploy-live" class="deploy-live">✅ Live</span>
+    <a id="topbar-deploy-link" href="#" target="_blank" class="topbar-link" title="Vedi deploy su GitHub Actions">🚀 Deploy ↗</a>
+    <a id="topbar-site-link" href="#" target="_blank" class="topbar-link">🌐 Vai al sito ↗</a>
   </div>
   <div id="deploy-bar" class="deploy-bar"></div>
 </div>
@@ -132,38 +132,38 @@ textarea.sm{min-height:180px;font-family:'Courier New',monospace;font-size:13px;
 <div class="layout">
   <nav class="sidebar">
     <div class="nav-label">Contenuti</div>
-    <button class="nav-item active" onclick="showPage('articoli',this)"><span class="icon">??</span>Articoli</button>
-    <button class="nav-item" onclick="showPage('pagine',this)"><span class="icon">??</span>Pagine</button>
-    <button class="nav-item" onclick="showPage('categorie',this)"><span class="icon">??</span>Categorie</button>
+    <button class="nav-item active" onclick="showPage('articoli',this)"><span class="icon">📝</span>Articoli</button>
+    <button class="nav-item" onclick="showPage('pagine',this)"><span class="icon">📄</span>Pagine</button>
+    <button class="nav-item" onclick="showPage('categorie',this)"><span class="icon">🗂</span>Categorie</button>
     <div class="nav-label">Impostazioni</div>
-    <button class="nav-item" onclick="showPage('menu',this)"><span class="icon">??</span>Menu</button>
-    <button class="nav-item" onclick="showPage('token',this)"><span class="icon">??</span>Token</button>
-    <button class="nav-item" onclick="showPage('tema',this)"><span class="icon">??</span>Tema</button>
-    <button class="nav-item" onclick="showPage('impostazioni',this)"><span class="icon">??</span>Impostazioni</button>
+    <button class="nav-item" onclick="showPage('menu',this)"><span class="icon">🧭</span>Menu</button>
+    <button class="nav-item" onclick="showPage('token',this)"><span class="icon">🔑</span>Token</button>
+    <button class="nav-item" onclick="showPage('tema',this)"><span class="icon">🎨</span>Tema</button>
+    <button class="nav-item" onclick="showPage('impostazioni',this)"><span class="icon">⚙️</span>Impostazioni</button>
     <div class="nav-label">Shop</div>
-    <button class="nav-item" onclick="showPage('prodotti',this)"><span class="icon">??</span>Prodotti</button>
-    <button class="nav-item" onclick="showPage('cat-prodotti',this)"><span class="icon">??</span>Categorie Shop</button>
+    <button class="nav-item" onclick="showPage('prodotti',this)"><span class="icon">🛒</span>Prodotti</button>
+    <button class="nav-item" onclick="showPage('cat-prodotti',this)"><span class="icon">📦</span>Categorie Shop</button>
     <div class="nav-label">Sistema</div>
-    <button class="nav-item" onclick="showPage('integrazioni',this);caricaIntegrazioni()"><span class="icon">??</span>Integrazioni</button>
-    <button class="nav-item" id="nav-aggiornamenti" onclick="showPage('aggiornamenti',this)"><span class="icon">??</span>Aggiornamenti<span id="update-badge" style="display:none;margin-left:auto;background:#e74c3c;color:white;font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px">!</span></button>
+    <button class="nav-item" onclick="showPage('integrazioni',this);caricaIntegrazioni()"><span class="icon">🔌</span>Integrazioni</button>
+    <button class="nav-item" id="nav-aggiornamenti" onclick="showPage('aggiornamenti',this)"><span class="icon">🔄</span>Aggiornamenti<span id="update-badge" style="display:none;margin-left:auto;background:#e74c3c;color:white;font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px">!</span></button>
   </nav>
 
   <main class="main">
 
     <!-- ARTICOLI -->
     <div class="page active" id="page-articoli">
-      <div class="page-title">?? Articoli</div>
+      <div class="page-title">📝 Articoli</div>
       <!-- VISTA LISTA -->
       <div id="art-lista-view">
-        <div style="margin-bottom:16px"><button class="btn btn-primary" onclick="apriNuovoArticolo()">? Nuovo articolo</button></div>
+        <div style="margin-bottom:16px"><button class="btn btn-primary" onclick="apriNuovoArticolo()">✚ Nuovo articolo</button></div>
         <div class="card">
-          <div class="card-title" style="display:flex;justify-content:space-between">Pubblicati <button class="btn btn-secondary btn-sm" onclick="caricaLista()">? Aggiorna</button></div>
-          <div id="lista-articoli"><span style="color:#bbb;font-size:13px">Clicca ? per caricare</span></div>
+          <div class="card-title" style="display:flex;justify-content:space-between">Pubblicati <button class="btn btn-secondary btn-sm" onclick="caricaLista()">↻ Aggiorna</button></div>
+          <div id="lista-articoli"><span style="color:#bbb;font-size:13px">Clicca ↻ per caricare</span></div>
         </div>
       </div>
       <!-- VISTA EDITOR -->
       <div id="art-editor-view" style="display:none">
-        <div style="margin-bottom:16px"><button class="btn btn-secondary" onclick="tornaListaArticoli()">? Torna alla lista</button></div>
+        <div style="margin-bottom:16px"><button class="btn btn-secondary" onclick="tornaListaArticoli()">← Torna alla lista</button></div>
       <div class="card">
         <div class="card-title" id="art-editor-title">Nuovo articolo</div>
         <div class="field"><label>Titolo *</label><input type="text" id="titolo" placeholder="Titolo dell'articolo"></div>
@@ -171,7 +171,7 @@ textarea.sm{min-height:180px;font-family:'Courier New',monospace;font-size:13px;
           <div class="field"><label>Data</label><input type="date" id="data"></div>
           <div class="field">
             <label>Categoria *</label>
-            <select id="categorie"><option value="">? Seleziona ?</option></select>
+            <select id="categorie"><option value="">— Seleziona —</option></select>
           </div>
         </div>
         <div class="grid2">
@@ -179,7 +179,7 @@ textarea.sm{min-height:180px;font-family:'Courier New',monospace;font-size:13px;
           <div class="field"><label>Immagine teaser (URL)</label>
             <div style="display:flex;gap:.5em">
               <input type="text" id="teaser" placeholder="https://..." style="flex:1">
-              <button type="button" class="btn btn-secondary" style="flex-shrink:0" onclick="apriSelettoreImmagini('teaser','posts')" title="Sfoglia galleria immagini">??</button>
+              <button type="button" class="btn btn-secondary" style="flex-shrink:0" onclick="apriSelettoreImmagini('teaser','posts')" title="Sfoglia galleria immagini">📁</button>
             </div>
           </div>
         </div>
@@ -187,8 +187,8 @@ textarea.sm{min-height:180px;font-family:'Courier New',monospace;font-size:13px;
         <div class="field">
           <label>Contenuto</label>
           <div class="editor-toggle">
-            <button class="active" id="btn-visuale" onclick="setEditor('visuale')">?? Visuale</button>
-            <button id="btn-markdown" onclick="setEditor('markdown')">?? HTML grezzo</button>
+            <button class="active" id="btn-visuale" onclick="setEditor('visuale')">✏️ Visuale</button>
+            <button id="btn-markdown" onclick="setEditor('markdown')">🔣 HTML grezzo</button>
           </div>
           <div id="quill-box">
             <div class="vis-toolbar">
@@ -202,19 +202,19 @@ textarea.sm{min-height:180px;font-family:'Courier New',monospace;font-size:13px;
               <button onclick="fmt('bold')" title="Grassetto"><b>B</b></button>
               <button onclick="fmt('italic')" title="Corsivo"><i>I</i></button>
               <button onclick="fmt('strikeThrough')" title="Barrato"><s>S</s></button>
-              <button onclick="fmt('insertUnorderedList')" title="Lista">=</button>
+              <button onclick="fmt('insertUnorderedList')" title="Lista">≡</button>
               <button onclick="fmt('insertOrderedList')" title="Lista numerata">1.</button>
-              <button onclick="insertLink()" title="Link">??</button>
-              <button onclick="fmt('removeFormat')" title="Rimuovi formato">?</button>
+              <button onclick="insertLink()" title="Link">🔗</button>
+              <button onclick="fmt('removeFormat')" title="Rimuovi formato">✕</button>
             </div>
             <div id="vis-editor" contenteditable="true"></div>
           </div>
           <textarea class="md" id="corpo" placeholder="HTML grezzo..." style="display:none"></textarea>
         </div>
         <div class="btn-group">
-          <button class="btn btn-primary" onclick="pubblica()">?? Pubblica</button>
-          <button class="btn btn-secondary btn-sm" onclick="anteprima()">?? Anteprima</button>
-          <button class="btn btn-secondary" onclick="tornaListaArticoli()">? Annulla</button>
+          <button class="btn btn-primary" onclick="pubblica()">🚀 Pubblica</button>
+          <button class="btn btn-secondary btn-sm" onclick="anteprima()">👁 Anteprima</button>
+          <button class="btn btn-secondary" onclick="tornaListaArticoli()">✕ Annulla</button>
         </div>
         <div class="msg" id="msg-art"></div>
       </div>
@@ -227,18 +227,18 @@ textarea.sm{min-height:180px;font-family:'Courier New',monospace;font-size:13px;
 
     <!-- PAGINE -->
     <div class="page" id="page-pagine">
-      <div class="page-title">?? Pagine</div>
+      <div class="page-title">📄 Pagine</div>
       <!-- VISTA LISTA -->
       <div id="pag-lista-view">
-        <div style="margin-bottom:16px"><button class="btn btn-primary" onclick="apriNuovaPagina()">? Nuova pagina</button></div>
+        <div style="margin-bottom:16px"><button class="btn btn-primary" onclick="apriNuovaPagina()">✚ Nuova pagina</button></div>
         <div class="card">
-          <div class="card-title" style="display:flex;justify-content:space-between">Pagine del sito <button class="btn btn-secondary btn-sm" onclick="caricaPagine()">? Aggiorna</button></div>
-          <div id="lista-pagine"><span style="color:#bbb;font-size:13px">Clicca ? per caricare</span></div>
+          <div class="card-title" style="display:flex;justify-content:space-between">Pagine del sito <button class="btn btn-secondary btn-sm" onclick="caricaPagine()">↻ Aggiorna</button></div>
+          <div id="lista-pagine"><span style="color:#bbb;font-size:13px">Clicca ↻ per caricare</span></div>
         </div>
       </div>
       <!-- VISTA EDITOR -->
       <div id="pag-editor-view" style="display:none">
-        <div style="margin-bottom:16px"><button class="btn btn-secondary" onclick="tornaPagine()">? Torna alla lista</button></div>
+        <div style="margin-bottom:16px"><button class="btn btn-secondary" onclick="tornaPagine()">← Torna alla lista</button></div>
       <div class="card" id="editor-pagina">
         <div class="card-title">Modifica: <span id="nome-pagina" style="color:#6c63ff;text-transform:none"></span></div>
         <div class="field" id="pag-permalink-field" style="display:none">
@@ -246,32 +246,32 @@ textarea.sm{min-height:180px;font-family:'Courier New',monospace;font-size:13px;
           <input type="text" id="pag-permalink" placeholder="/nome-pagina/">
         </div>
         <div class="field"><label>Titolo</label><input type="text" id="pag-titolo"></div>
-        <div class="field"><label>Descrizione SEO <span style="font-weight:400;color:#bbb">(opzionale ? appare nei risultati Google)</span></label><input type="text" id="pag-description" placeholder="Breve descrizione della pagina..."></div>
+        <div class="field"><label>Descrizione SEO <span style="font-weight:400;color:#bbb">(opzionale — appare nei risultati Google)</span></label><input type="text" id="pag-description" placeholder="Breve descrizione della pagina..."></div>
         <div class="field">
           <label>Sezioni della pagina</label>
           <div id="lista-pag-blocchi"><span style="color:#bbb;font-size:13px">Caricamento...</span></div>
           <div style="margin-top:10px">
-            <button class="btn btn-secondary btn-sm" onclick="aggiungiPagBlocco()">? Nuovo box HTML</button>
+            <button class="btn btn-secondary btn-sm" onclick="aggiungiPagBlocco()">✚ Nuovo box HTML</button>
           </div>
         </div>
         <div class="field">
           <label>URL pagina <span style="font-weight:400;color:#bbb">(usalo per il Menu o altri link)</span></label>
           <div style="display:flex;gap:8px">
             <input type="text" id="pag-url-pubblico" readonly style="flex:1;background:#f5f5f5;color:#555;font-size:12px">
-            <button class="btn btn-secondary btn-sm" onclick="copiaUrlPagina()">?? Copia</button>
+            <button class="btn btn-secondary btn-sm" onclick="copiaUrlPagina()">📋 Copia</button>
           </div>
         </div>
         <div class="btn-group">
-          <button class="btn btn-primary" onclick="salvaPagina()">?? Salva</button>
-          <button class="btn btn-secondary" onclick="anteprimaPagina()">?? Anteprima live</button>
-          <button class="btn btn-secondary" onclick="apriPaginaSulSito()">?? Apri sul sito ?</button>
-          <button class="btn btn-secondary" onclick="tornaPagine()">? Annulla</button>
+          <button class="btn btn-primary" onclick="salvaPagina()">💾 Salva</button>
+          <button class="btn btn-secondary" onclick="anteprimaPagina()">👁 Anteprima live</button>
+          <button class="btn btn-secondary" onclick="apriPaginaSulSito()">🔗 Apri sul sito ↗</button>
+          <button class="btn btn-secondary" onclick="tornaPagine()">✕ Annulla</button>
         </div>
         <div class="msg" id="msg-pag"></div>
       </div>
       <div class="card" id="preview-pagina-box" style="display:none">
         <div class="card-title" style="display:flex;justify-content:space-between">
-          Anteprima live <button class="btn btn-secondary btn-sm" onclick="document.getElementById('preview-pagina-box').style.display='none'">?</button>
+          Anteprima live <button class="btn btn-secondary btn-sm" onclick="document.getElementById('preview-pagina-box').style.display='none'">✕</button>
         </div>
         <iframe id="preview-pagina-frame" src="" style="width:100%;height:500px;border:none;border-radius:7px;background:#f5f6fa"></iframe>
       </div>
@@ -280,10 +280,10 @@ textarea.sm{min-height:180px;font-family:'Courier New',monospace;font-size:13px;
 
     <!-- MENU -->
     <div class="page" id="page-menu">
-      <div class="page-title">?? Menu</div>
+      <div class="page-title">🧭 Menu</div>
       <div class="card">
-        <div class="card-title" style="display:flex;justify-content:space-between">Voci menu <button class="btn btn-secondary btn-sm" onclick="caricaMenu()">? Aggiorna</button></div>
-        <div id="lista-menu"><span style="color:#bbb;font-size:13px">Clicca ? per caricare</span></div>
+        <div class="card-title" style="display:flex;justify-content:space-between">Voci menu <button class="btn btn-secondary btn-sm" onclick="caricaMenu()">↻ Aggiorna</button></div>
+        <div id="lista-menu"><span style="color:#bbb;font-size:13px">Clicca ↻ per caricare</span></div>
         <div style="margin-top:16px;padding-top:14px;border-top:1px solid #f0f0f0">
           <div class="grid2">
             <div class="field"><label>Nome</label><input type="text" id="menu-nome" placeholder="es. Contatti"></div>
@@ -292,7 +292,7 @@ textarea.sm{min-height:180px;font-family:'Courier New',monospace;font-size:13px;
           <button class="btn btn-secondary btn-sm" onclick="aggiungiVoce()">+ Aggiungi voce</button>
         </div>
         <div class="btn-group" style="margin-top:12px">
-          <button class="btn btn-primary" onclick="salvaMenu()">?? Salva menu</button>
+          <button class="btn btn-primary" onclick="salvaMenu()">💾 Salva menu</button>
         </div>
         <div class="msg" id="msg-menu"></div>
       </div>
@@ -300,7 +300,7 @@ textarea.sm{min-height:180px;font-family:'Courier New',monospace;font-size:13px;
 
     <!-- CATEGORIE -->
     <div class="page" id="page-categorie">
-      <div class="page-title">?? Categorie</div>
+      <div class="page-title">🗂 Categorie</div>
       <div class="card">
         <div id="lista-categorie"></div>
         <div style="margin-top:16px;padding-top:14px;border-top:1px solid #f0f0f0">
@@ -308,7 +308,7 @@ textarea.sm{min-height:180px;font-family:'Courier New',monospace;font-size:13px;
           <button class="btn btn-secondary btn-sm" onclick="aggiungiCategoria()">+ Aggiungi</button>
         </div>
         <div class="btn-group" style="margin-top:12px">
-          <button class="btn btn-primary" onclick="salvaCategorie()">?? Salva categorie</button>
+          <button class="btn btn-primary" onclick="salvaCategorie()">💾 Salva categorie</button>
         </div>
         <div class="msg" id="msg-cat"></div>
       </div>
@@ -316,39 +316,39 @@ textarea.sm{min-height:180px;font-family:'Courier New',monospace;font-size:13px;
 
     <!-- TOKEN -->
     <div class="page" id="page-token">
-      <div class="page-title">?? Token GitHub</div>
+      <div class="page-title">🔑 Token GitHub</div>
       <div class="card">
         <div class="field">
           <label>Token (ghp_...)</label>
           <div style="display:flex;gap:8px">
             <input type="password" id="token-input" placeholder="Incolla il tuo token GitHub" style="flex:1">
-            <button class="btn btn-secondary btn-sm" onclick="toggleToken()">??</button>
+            <button class="btn btn-secondary btn-sm" onclick="toggleToken()">👁</button>
           </div>
         </div>
         <div class="btn-group">
-          <button class="btn btn-primary" onclick="salvaToken()">?? Salva</button>
-          <button class="btn btn-secondary" onclick="cancellaToken()">?? Dimentica</button>
+          <button class="btn btn-primary" onclick="salvaToken()">💾 Salva</button>
+          <button class="btn btn-secondary" onclick="cancellaToken()">🗑 Dimentica</button>
         </div>
         <div class="msg" id="msg-token"></div>
-        <div style="margin-top:14px;font-size:12px;color:#aaa">Il token ? salvato solo nel tuo browser. <a href="https://github.com/settings/tokens/new?scopes=repo&description=CMS+Jekyll" target="_blank" style="color:#6c63ff">Crea nuovo token ?</a></div>
+        <div style="margin-top:14px;font-size:12px;color:#aaa">Il token è salvato solo nel tuo browser. <a href="https://github.com/settings/tokens/new?scopes=repo&description=CMS+Jekyll" target="_blank" style="color:#6c63ff">Crea nuovo token ↗</a></div>
       </div>
     </div>
 
     <!-- TEMA -->
     <div class="page" id="page-tema">
-      <div class="page-title">?? Tema</div>
+      <div class="page-title">🎨 Tema</div>
       <div class="card">
         <div class="card-title">Palette preset</div>
         <div id="palette-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin-bottom:4px"></div>
       </div>
       <div class="card">
-        <div class="card-title">?? Personalizza colori</div>
+        <div class="card-title">🖌 Personalizza colori</div>
         <div class="grid2">
           <div class="field"><label>Colore principale (bottoni, link)</label><input type="color" id="t-accent" value="#6c63ff"></div>
-          <div class="field"><label>Nav ? sfondo</label><input type="color" id="t-nav-bg" value="#ffffff"></div>
+          <div class="field"><label>Nav — sfondo</label><input type="color" id="t-nav-bg" value="#ffffff"></div>
         </div>
         <div class="grid2">
-          <div class="field"><label>Nav ? testo</label><input type="color" id="t-nav-text" value="#111111"></div>
+          <div class="field"><label>Nav — testo</label><input type="color" id="t-nav-text" value="#111111"></div>
           <div class="field"><label>Sfondo pagina</label><input type="color" id="t-body-bg" value="#ffffff"></div>
         </div>
         <div class="grid2">
@@ -357,13 +357,13 @@ textarea.sm{min-height:180px;font-family:'Courier New',monospace;font-size:13px;
         </div>
       </div>
       <div class="card">
-        <div class="card-title">?? Tipografia</div>
+        <div class="card-title">🔤 Tipografia</div>
         <div id="font-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px"></div>
       </div>
       <div class="card">
-        <div class="card-title">?? Stile bottoni e angoli</div>
+        <div class="card-title">◻️ Stile bottoni e angoli</div>
         <div class="field">
-          <label>Angoli: squadrato ?? arrotondato</label>
+          <label>Angoli: squadrato ←→ arrotondato</label>
           <input type="range" id="t-radius" min="0" max="24" value="10" style="width:100%" oninput="document.getElementById('radius-preview').style.borderRadius=this.value+'px';document.getElementById('radius-val').textContent=this.value+'px'">
           <div style="display:flex;align-items:center;gap:10px;margin-top:8px">
             <div id="radius-preview" style="width:60px;height:32px;background:var(--t-accent,#6c63ff);border-radius:10px;background:#6c63ff"></div>
@@ -372,9 +372,9 @@ textarea.sm{min-height:180px;font-family:'Courier New',monospace;font-size:13px;
         </div>
       </div>
       <div class="card">
-        <div class="card-title">?? Dimensione testo</div>
+        <div class="card-title">🔎 Dimensione testo</div>
         <div class="field">
-          <label>Piccolo ?? Grande</label>
+          <label>Piccolo ←→ Grande</label>
           <input type="range" id="t-font-scale" min="0.85" max="1.25" step="0.05" value="1" style="width:100%" oninput="document.getElementById('fontscale-preview').style.fontSize=(this.value*16)+'px';document.getElementById('fontscale-val').textContent=Math.round(this.value*100)+'%'">
           <div style="display:flex;align-items:center;gap:10px;margin-top:8px">
             <span id="fontscale-preview" style="font-size:16px;color:#333">Aa Esempio testo</span>
@@ -383,28 +383,28 @@ textarea.sm{min-height:180px;font-family:'Courier New',monospace;font-size:13px;
         </div>
       </div>
       <div class="btn-group">
-        <button class="btn btn-primary" onclick="salvaTema()">?? Applica tema</button>
+        <button class="btn btn-primary" onclick="salvaTema()">🚀 Applica tema</button>
       </div>
       <div class="msg" id="msg-tema"></div>
     </div>
 
     <!-- IMPOSTAZIONI SITO -->
     <div class="page" id="page-impostazioni">
-      <div class="page-title">?? Impostazioni sito</div>
+      <div class="page-title">⚙️ Impostazioni sito</div>
 
       <div class="card">
-        <div class="card-title">Identit? sito</div>
+        <div class="card-title">Identità sito</div>
         <div class="grid2">
           <div class="field"><label>Titolo sito</label><input type="text" id="cfg-title" placeholder="Il mio blog"></div>
           <div class="field"><label>Email</label><input type="text" id="cfg-email" placeholder="tu@email.com"></div>
         </div>
         <div class="field"><label>Descrizione</label><input type="text" id="cfg-description" placeholder="Una breve descrizione del sito..."></div>
         <div class="field"><label>Testo footer</label><input type="text" id="cfg-footer-text" placeholder="&amp;copy; 2026 Il mio sito"><div class="hint" style="display:block;margin-top:3px">Testo mostrato in fondo al sito. Supporta HTML (es. <code>&amp;copy; 2026 Nome</code>). Lascia vuoto per il default.</div></div>
-        <div class="field"><label>Favicon (icona sito)</label><input type="text" id="cfg-favicon" placeholder="?? oppure nome-immagine.png"><div class="hint" style="display:block;margin-top:3px">Puoi usare un'emoji o il nome di un'immagine gi? caricata nel sito.</div></div>
+        <div class="field"><label>Favicon (icona sito)</label><input type="text" id="cfg-favicon" placeholder="⚛️ oppure nome-immagine.png"><div class="hint" style="display:block;margin-top:3px">Puoi usare un'emoji o il nome di un'immagine già caricata nel sito.</div></div>
         <div class="field">
           <label>Base URL</label>
-          <input type="text" id="cfg-baseurl" placeholder='Lascia vuoto per sito principale (es. nome.github.io) ? oppure /nome-repo per sottocartella'>
-          <div class="hint" style="display:block;margin-top:3px">?? Se il sito ? su <strong>nome.github.io</strong> lascia vuoto. Se ? su <strong>nome.github.io/repo</strong> scrivi <code>/repo</code>.</div>
+          <input type="text" id="cfg-baseurl" placeholder='Lascia vuoto per sito principale (es. nome.github.io) — oppure /nome-repo per sottocartella'>
+          <div class="hint" style="display:block;margin-top:3px">⚠️ Se il sito è su <strong>nome.github.io</strong> lascia vuoto. Se è su <strong>nome.github.io/repo</strong> scrivi <code>/repo</code>.</div>
         </div>
       </div>
 
@@ -426,9 +426,9 @@ textarea.sm{min-height:180px;font-family:'Courier New',monospace;font-size:13px;
         <div class="field">
           <label>Pagina usata come Home</label>
           <select id="cfg-homepage">
-            <option value="">? Caricamento pagine...</option>
+            <option value="">⏳ Caricamento pagine...</option>
           </select>
-          <div class="hint" style="display:block;margin-top:5px">La pagina selezionata sar? quella mostrata all'indirizzo /. Modificala dal tab Pagine.</div>
+          <div class="hint" style="display:block;margin-top:5px">La pagina selezionata sarà quella mostrata all'indirizzo /. Modificala dal tab Pagine.</div>
         </div>
       </div>
 
@@ -437,45 +437,45 @@ textarea.sm{min-height:180px;font-family:'Courier New',monospace;font-size:13px;
         <div class="field">
           <label>Prodotti per pagina <span style="font-weight:400;color:#bbb">(lista nella tab Prodotti)</span></label>
           <input type="number" id="cfg-limite-prodotti" min="1" placeholder="50" onchange="setLimiteProdotti(this.value)">
-          <div class="hint">Quante righe mostrare prima di far comparire le frecce ? Precedente / Successiva ?. Salvato solo su questo browser (non sincronizzato tra dispositivi).</div>
+          <div class="hint">Quante righe mostrare prima di far comparire le frecce ← Precedente / Successiva →. Salvato solo su questo browser (non sincronizzato tra dispositivi).</div>
         </div>
       </div>
 
       <div class="btn-group">
-        <button class="btn btn-primary" onclick="salvaImpostazioni()">?? Salva impostazioni</button>
+        <button class="btn btn-primary" onclick="salvaImpostazioni()">💾 Salva impostazioni</button>
       </div>
       <div class="msg" id="msg-cfg"></div>
     </div>
 
     <!-- AGGIORNAMENTI -->
     <div class="page" id="page-aggiornamenti">
-      <div class="page-title">?? Aggiornamenti</div>
+      <div class="page-title">🔄 Aggiornamenti</div>
       <div class="card" id="update-card-check">
         <div class="card-title">Versione CMS</div>
         <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
           <div>
-            <div style="font-size:13px;color:#555">Versione installata: <strong id="ver-locale">?</strong></div>
-            <div style="font-size:13px;color:#555;margin-top:4px">Versione disponibile: <strong id="ver-remota">?</strong></div>
+            <div style="font-size:13px;color:#555">Versione installata: <strong id="ver-locale">–</strong></div>
+            <div style="font-size:13px;color:#555;margin-top:4px">Versione disponibile: <strong id="ver-remota">–</strong></div>
           </div>
-          <button class="btn btn-secondary btn-sm" onclick="controllaAggiornamenti()">? Controlla</button>
+          <button class="btn btn-secondary btn-sm" onclick="controllaAggiornamenti()">↻ Controlla</button>
         </div>
         <div class="msg" id="msg-update" style="margin-top:12px"></div>
       </div>
       <div class="card" id="update-card-new" style="display:none;border:2px solid #6c63ff">
-        <div class="card-title" style="color:#6c63ff">? Aggiornamento disponibile</div>
+        <div class="card-title" style="color:#6c63ff">✨ Aggiornamento disponibile</div>
         <div id="update-notes" style="font-size:13px;color:#444;line-height:1.7;margin-bottom:16px"></div>
-        <button class="btn btn-primary" onclick="eseguiAggiornamento()" id="btn-aggiorna">?? Aggiorna ora</button>
+        <button class="btn btn-primary" onclick="eseguiAggiornamento()" id="btn-aggiorna">⬆️ Aggiorna ora</button>
         <div class="msg" id="msg-update2" style="margin-top:12px"></div>
       </div>
     </div>
 
     <!-- INTEGRAZIONI -->
     <div class="page" id="page-integrazioni">
-      <div class="page-title">?? Integrazioni</div>
+      <div class="page-title">🔌 Integrazioni</div>
 
       <!-- GA4 -->
       <div class="card">
-        <div class="card-title">?? Google Analytics 4</div>
+        <div class="card-title">📊 Google Analytics 4</div>
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
           <div>
             <div style="font-size:13px;font-weight:600;color:#222">Google Analytics 4</div>
@@ -493,18 +493,18 @@ textarea.sm{min-height:180px;font-family:'Courier New',monospace;font-size:13px;
         <div class="field">
           <label>Measurement ID <span style="font-weight:400;color:#bbb">(es. G-XXXXXXXXXX)</span></label>
           <input type="text" id="ga4-id" placeholder="G-XXXXXXXXXX">
-          <div class="hint">Trovalo su Google Analytics ? Admin ? Data Streams ? seleziona stream ? Measurement ID</div>
+          <div class="hint">Trovalo su Google Analytics → Admin → Data Streams → seleziona stream → Measurement ID</div>
         </div>
         <div class="btn-group">
-          <button class="btn btn-primary" onclick="salvaIntegrazione('ga4')">?? Salva</button>
-          <a href="https://analytics.google.com" target="_blank" class="btn btn-secondary">? Apri Analytics</a>
+          <button class="btn btn-primary" onclick="salvaIntegrazione('ga4')">💾 Salva</button>
+          <a href="https://analytics.google.com" target="_blank" class="btn btn-secondary">↗ Apri Analytics</a>
         </div>
         <div class="msg" id="msg-ga4"></div>
       </div>
 
       <!-- SEARCH CONSOLE -->
       <div class="card">
-        <div class="card-title">?? Google Search Console</div>
+        <div class="card-title">🔍 Google Search Console</div>
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
           <div>
             <div style="font-size:13px;font-weight:600;color:#222">Google Search Console</div>
@@ -522,18 +522,18 @@ textarea.sm{min-height:180px;font-family:'Courier New',monospace;font-size:13px;
         <div class="field">
           <label>Codice di verifica <span style="font-weight:400;color:#bbb">(solo il contenuto del meta tag)</span></label>
           <input type="text" id="gsc-verification" placeholder="abcdef1234567890abcdef1234567890abcdef12">
-          <div class="hint">Su Search Console ? Impostazioni ? Verifica propriet? ? Tag HTML ? copia solo il valore di content="..."</div>
+          <div class="hint">Su Search Console → Impostazioni → Verifica proprietà → Tag HTML → copia solo il valore di content="..."</div>
         </div>
         <div class="btn-group">
-          <button class="btn btn-primary" onclick="salvaIntegrazione('gsc')">?? Salva</button>
-          <a href="https://search.google.com/search-console" target="_blank" class="btn btn-secondary">? Apri Search Console</a>
+          <button class="btn btn-primary" onclick="salvaIntegrazione('gsc')">💾 Salva</button>
+          <a href="https://search.google.com/search-console" target="_blank" class="btn btn-secondary">↗ Apri Search Console</a>
         </div>
         <div class="msg" id="msg-gsc"></div>
       </div>
 
       <!-- META PIXEL -->
       <div class="card">
-        <div class="card-title">?? Meta Pixel (Facebook)</div>
+        <div class="card-title">📘 Meta Pixel (Facebook)</div>
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
           <div>
             <div style="font-size:13px;font-weight:600;color:#222">Meta Pixel</div>
@@ -551,21 +551,21 @@ textarea.sm{min-height:180px;font-family:'Courier New',monospace;font-size:13px;
         <div class="field">
           <label>Pixel ID <span style="font-weight:400;color:#bbb">(es. 123456789012345)</span></label>
           <input type="text" id="pixel-id" placeholder="123456789012345">
-          <div class="hint">Trovalo su Meta Business Suite ? Events Manager ? Pixel ? Il tuo Pixel ID</div>
+          <div class="hint">Trovalo su Meta Business Suite → Events Manager → Pixel → Il tuo Pixel ID</div>
         </div>
         <div class="btn-group">
-          <button class="btn btn-primary" onclick="salvaIntegrazione('pixel')">?? Salva</button>
+          <button class="btn btn-primary" onclick="salvaIntegrazione('pixel')">💾 Salva</button>
         </div>
         <div class="msg" id="msg-pixel"></div>
       </div>
 
       <!-- HOTJAR -->
       <div class="card">
-        <div class="card-title">?? Hotjar</div>
+        <div class="card-title">🔥 Hotjar</div>
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
           <div>
             <div style="font-size:13px;font-weight:600;color:#222">Hotjar</div>
-            <div style="font-size:12px;color:#888;margin-top:2px">Heatmap e registrazioni sessioni ? vedi dove cliccano gli utenti</div>
+            <div style="font-size:12px;color:#888;margin-top:2px">Heatmap e registrazioni sessioni — vedi dove cliccano gli utenti</div>
           </div>
           <label style="display:flex;align-items:center;gap:8px;cursor:pointer;margin-bottom:0">
             <span style="font-size:12px;color:#888" id="hotjar-stato-label">Disattivo</span>
@@ -579,10 +579,10 @@ textarea.sm{min-height:180px;font-family:'Courier New',monospace;font-size:13px;
         <div class="field">
           <label>Site ID <span style="font-weight:400;color:#bbb">(es. 1234567)</span></label>
           <input type="text" id="hotjar-id" placeholder="1234567">
-          <div class="hint">Trovalo su Hotjar ? Settings ? Sites ? il numero nel tuo snippet</div>
+          <div class="hint">Trovalo su Hotjar → Settings → Sites → il numero nel tuo snippet</div>
         </div>
         <div class="btn-group">
-          <button class="btn btn-primary" onclick="salvaIntegrazione('hotjar')">?? Salva</button>
+          <button class="btn btn-primary" onclick="salvaIntegrazione('hotjar')">💾 Salva</button>
         </div>
         <div class="msg" id="msg-hotjar"></div>
       </div>
@@ -591,41 +591,41 @@ textarea.sm{min-height:180px;font-family:'Courier New',monospace;font-size:13px;
 
     <!-- PRODOTTI -->
     <div class="page" id="page-prodotti">
-      <div class="page-title">?? Prodotti</div>
+      <div class="page-title">🛒 Prodotti</div>
       <!-- VISTA LISTA -->
       <div id="prod-lista-view">
-        <div style="margin-bottom:16px"><button class="btn btn-primary" onclick="apriNuovoProdotto()">? Nuovo prodotto</button></div>
+        <div style="margin-bottom:16px"><button class="btn btn-primary" onclick="apriNuovoProdotto()">✚ Nuovo prodotto</button></div>
         <div class="card">
-          <div class="card-title" style="display:flex;justify-content:space-between">Prodotti pubblicati <button class="btn btn-secondary btn-sm" onclick="caricaProdotti()">? Aggiorna</button></div>
+          <div class="card-title" style="display:flex;justify-content:space-between">Prodotti pubblicati <button class="btn btn-secondary btn-sm" onclick="caricaProdotti()">↻ Aggiorna</button></div>
           <div id="lista-prodotti"><em style="color:#bbb;font-size:13px">Caricamento...</em></div>
           <div id="prod-paginazione" style="display:flex;justify-content:center;align-items:center;gap:1em;margin-top:1em"></div>
         </div>
       </div>
       <!-- VISTA EDITOR -->
       <div id="prod-editor-view" style="display:none">
-        <div style="margin-bottom:16px"><button class="btn btn-secondary" onclick="tornaListaProdotti()">? Torna ai prodotti</button></div>
+        <div style="margin-bottom:16px"><button class="btn btn-secondary" onclick="tornaListaProdotti()">← Torna ai prodotti</button></div>
       <div class="card">
         <div class="card-title" id="prod-editor-title">Nuovo prodotto</div>
         <div class="field"><label>Titolo *</label><input type="text" id="prod-titolo" placeholder="Nome del prodotto"></div>
         <div class="grid2">
-          <div class="field"><label>Prezzo (?) *</label><input type="text" id="prod-prezzo" placeholder="19.90"></div>
+          <div class="field"><label>Prezzo (€) *</label><input type="text" id="prod-prezzo" placeholder="19.90"></div>
           <div class="field"><label>Stock</label><input type="text" id="prod-stock" placeholder="50"></div>
         </div>
         <div class="grid2">
-          <div class="field"><label>Categoria</label><select id="prod-categoria"><option value="">? Seleziona ?</option></select></div>
+          <div class="field"><label>Categoria</label><select id="prod-categoria"><option value="">— Seleziona —</option></select></div>
           <div class="field"><label>SKU</label><input type="text" id="prod-sku" placeholder="PROD-001"></div>
         </div>
-        <div class="field"><label>Tipo prodotto</label><select id="prod-tipo"><option value="fisico">?? Fisico (richiede indirizzo di spedizione)</option><option value="digitale">?? Digitale (richiede solo email)</option></select></div>
+        <div class="field"><label>Tipo prodotto</label><select id="prod-tipo"><option value="fisico">📦 Fisico (richiede indirizzo di spedizione)</option><option value="digitale">💾 Digitale (richiede solo email)</option></select></div>
         <div class="field"><label>Immagine (URL)</label>
           <div style="display:flex;gap:.5em">
             <input type="text" id="prod-immagine" placeholder="https://..." style="flex:1">
-            <button type="button" class="btn btn-secondary" style="flex-shrink:0" onclick="apriSelettoreImmagini('prod-immagine','products')" title="Sfoglia galleria immagini">??</button>
+            <button type="button" class="btn btn-secondary" style="flex-shrink:0" onclick="apriSelettoreImmagini('prod-immagine','products')" title="Sfoglia galleria immagini">📁</button>
           </div>
         </div>
-        <div class="field"><label>Descrizione breve <span class="hint" style="display:inline">max 160 caratteri ? mostrata nella lista categoria</span></label><input type="text" id="prod-description" placeholder="Breve descrizione del prodotto..."></div>
+        <div class="field"><label>Descrizione breve <span class="hint" style="display:inline">max 160 caratteri — mostrata nella lista categoria</span></label><input type="text" id="prod-description" placeholder="Breve descrizione del prodotto..."></div>
         <div class="field"><label>Descrizione completa</label><textarea class="sm" id="prod-corpo" placeholder="Descrizione lunga del prodotto..."></textarea></div>
         <div class="btn-group">
-          <button class="btn btn-primary" onclick="pubblicaProdotto()">?? Salva prodotto</button>
+          <button class="btn btn-primary" onclick="pubblicaProdotto()">🚀 Salva prodotto</button>
         </div>
         <div class="msg" id="msg-prod"></div>
       </div>
@@ -634,7 +634,7 @@ textarea.sm{min-height:180px;font-family:'Courier New',monospace;font-size:13px;
 
     <!-- CATEGORIE SHOP -->
     <div class="page" id="page-cat-prodotti">
-      <div class="page-title">?? Categorie Shop</div>
+      <div class="page-title">📦 Categorie Shop</div>
       <div class="card">
         <div class="card-title">Aggiungi categoria</div>
         <div class="grid2">
@@ -642,7 +642,7 @@ textarea.sm{min-height:180px;font-family:'Courier New',monospace;font-size:13px;
           <div class="field"><label>Slug *</label><input type="text" id="shopcat-slug" placeholder="es. abbigliamento"></div>
         </div>
         <div class="btn-group">
-          <button class="btn btn-primary" onclick="aggiungiCatShop()">? Aggiungi</button>
+          <button class="btn btn-primary" onclick="aggiungiCatShop()">✚ Aggiungi</button>
         </div>
         <div class="msg" id="msg-shopcat"></div>
       </div>
@@ -655,16 +655,16 @@ textarea.sm{min-height:180px;font-family:'Courier New',monospace;font-size:13px;
   </main>
 </div>
 
-<!-- SELETTORE IMMAGINI ? modal riutilizzabile, vedi apriSelettoreImmagini() -->
+<!-- SELETTORE IMMAGINI — modal riutilizzabile, vedi apriSelettoreImmagini() -->
 <div id="img-picker-overlay" class="img-picker-overlay" style="display:none">
   <div class="img-picker-box">
     <div class="img-picker-head">
       <span id="img-picker-title">Seleziona immagine</span>
-      <button class="img-picker-close" onclick="chiudiSelettoreImmagini()">?</button>
+      <button class="img-picker-close" onclick="chiudiSelettoreImmagini()">✕</button>
     </div>
     <div class="img-picker-upload">
       <label class="img-picker-upload-btn">
-        ?? Carica nuova immagine
+        ⬆️ Carica nuova immagine
         <input type="file" id="img-picker-file" accept="image/*" style="display:none" onchange="caricaImmagineGalleria(this)">
       </label>
       <span id="img-picker-upload-msg" class="img-picker-upload-msg"></span>
@@ -676,35 +676,35 @@ textarea.sm{min-height:180px;font-family:'Courier New',monospace;font-size:13px;
 </div>
 
 <script>
-// -----------------------------------------------------------------------
-// INDICE DEL FILE ? numeri di riga indicativi, cercare con Ctrl+F il testo
+// ═══════════════════════════════════════════════════════════════════════
+// INDICE DEL FILE — numeri di riga indicativi, cercare con Ctrl+F il testo
 // tra parentesi se il file e' stato modificato e i numeri sono slittati.
-// -----------------------------------------------------------------------
-// ~664  detectRepo()            ? rileva REPO da URL, MAI hardcodare (funziona su repo clienti)
-// ~767  startDeployPolling()    ? barra progresso + polling reale GitHub Actions dopo ogni salvataggio
-// ~840  tok()/enc()/dec()       ? token localStorage + base64 UTF-8 safe (MAI btoa/atob diretti)
-// ~844  ghGet()/ghPut()         ? helper GitHub API contenuti (sha obbligatorio per update, mai '')
-// ~886  SELETTORE IMMAGINI      ? apriSelettoreImmagini(), galleria+upload+elimina, riutilizzabile
-// ~977  caricaCategorie()       ? legge _data/categorie.json (articoli)
-// ~1343 ARTICOLI                ? pubblicaArticolo(), editor visuale/HTML, TOC, teaser image
-// ~1806 SHOP CATEGORIE          ? _data/shop-categorie.json, aggiungiCatShop()/eliminaCatShop()
-// ~1873 SHOP PRODOTTI           ? nuovoProdotto(), caricaProdotti(), lista con modifica/elimina
-// ~1934 pubblicaProdotto()      ? salva _products/*.md, campo tipo fisico/digitale nel frontmatter
-// ~1991 caricaIntegrazioni()    ? tab Integrazioni (GA4, Search Console, ecc.)
+// ═══════════════════════════════════════════════════════════════════════
+// ~664  detectRepo()            — rileva REPO da URL, MAI hardcodare (funziona su repo clienti)
+// ~767  startDeployPolling()    — barra progresso + polling reale GitHub Actions dopo ogni salvataggio
+// ~840  tok()/enc()/dec()       — token localStorage + base64 UTF-8 safe (MAI btoa/atob diretti)
+// ~844  ghGet()/ghPut()         — helper GitHub API contenuti (sha obbligatorio per update, mai '')
+// ~886  SELETTORE IMMAGINI      — apriSelettoreImmagini(), galleria+upload+elimina, riutilizzabile
+// ~977  caricaCategorie()       — legge _data/categorie.json (articoli)
+// ~1343 ARTICOLI                — pubblicaArticolo(), editor visuale/HTML, TOC, teaser image
+// ~1806 SHOP CATEGORIE          — _data/shop-categorie.json, aggiungiCatShop()/eliminaCatShop()
+// ~1873 SHOP PRODOTTI           — nuovoProdotto(), caricaProdotti(), lista con modifica/elimina
+// ~1934 pubblicaProdotto()      — salva _products/*.md, campo tipo fisico/digitale nel frontmatter
+// ~1991 caricaIntegrazioni()    — tab Integrazioni (GA4, Search Console, ecc.)
 //
-// ?? PUNTI CRITICI DA NON ROMPERE (dettagli nel commento sopra ogni funzione):
+// ⚠️ PUNTI CRITICI DA NON ROMPERE (dettagli nel commento sopra ogni funzione):
 // - detectRepo(): zero hardcode, deve restare dinamico o si rompe per ogni cliente
-// - enc()/dec(): usare SEMPRE queste, mai btoa/atob diretti ? crashano su ????? ed emoji
-// - ghPut(): sha=undefined per file nuovi, sha reale per update ? mai stringa vuota
+// - enc()/dec(): usare SEMPRE queste, mai btoa/atob diretti — crashano su àèìòù ed emoji
+// - ghPut(): sha=undefined per file nuovi, sha reale per update — mai stringa vuota
 // - p.path vs p.name in Liquid (vedi ..\.claude.md sezione bug carrello): usare SEMPRE
 //   {{ p.path | split: '/' | last | remove: '.md' }} per generare slug prodotto, mai p.name
-// - Editor pagine: setPagCorpo() NON deve mai scrivere in pag-vis-editor (corrompe MD?HTML)
+// - Editor pagine: setPagCorpo() NON deve mai scrivere in pag-vis-editor (corrompe MD→HTML)
 // - Prima di pushare: verificare sempre JS con `node -e` (vedi ..\.claude.md, sezione push)
-// -----------------------------------------------------------------------
+// ═══════════════════════════════════════════════════════════════════════
 
 // Rileva REPO dinamicamente dall'URL della pagina (funziona su qualsiasi repo cliente)
 // URL formato: https://USERNAME.github.io/REPO/admin/ oppure https://USERNAME.github.io/admin/
-// ?? CRITICO: non toccare detectRepo() ? funziona su qualsiasi repo cliente.
+// ⚠️ CRITICO: non toccare detectRepo() — funziona su qualsiasi repo cliente.
 // Legge hostname e pathname per ricavare USERNAME/REPO dinamicamente.
 // Se si hardcoda il repo qui, il CMS smette di funzionare sui repo dei clienti.
 function detectRepo(){
@@ -714,7 +714,7 @@ function detectRepo(){
   if(!match)return localStorage.getItem('cms_repo')||'';
   const user=match[1];
   const parts=p.split('/').filter(Boolean); // ['miosito','admin','index.html']
-  // Se il primo segmento NON ? 'admin' ? il nome del repo
+  // Se il primo segmento NON è 'admin' è il nome del repo
   const repo=(parts.length>1 && parts[0]!=='admin')?parts[0]:'';
   return repo?`${user}/${repo}`:`${user}/${user}.github.io`;
 }
@@ -764,14 +764,14 @@ function setEditor(mode){
 }
 function formatHtmlForKramdown(html){
   // Aggiunge una riga vuota prima e dopo ogni tag block-level
-  // cos? kramdown li riconosce come HTML vero invece di escaparli come testo
+  // così kramdown li riconosce come HTML vero invece di escaparli come testo
   const blockTags=['div','p','ul','ol','li','h1','h2','h3','h4','h5','h6','blockquote','pre','table','tr','thead','tbody'];
   const openRe=new RegExp('<('+blockTags.join('|')+')(\\s[^>]*)?>','gi');
   const closeRe=new RegExp('<\\/('+blockTags.join('|')+')>','gi');
   let out=html
     .replace(openRe, '\n\n$&')
     .replace(closeRe, '$&\n\n');
-  // Compatta pi? di 2 newline consecutive in 2
+  // Compatta più di 2 newline consecutive in 2
   out=out.replace(/\n{3,}/g,'\n\n').trim();
   return out;
 }
@@ -780,13 +780,13 @@ function getCorpo(){
   return document.getElementById('corpo').value;
 }
 function setCorpo(html){
-  // html pu? essere HTML puro (nuovi articoli) o Markdown legacy ? gestiamo entrambi
+  // html può essere HTML puro (nuovi articoli) o Markdown legacy — gestiamo entrambi
   const isLegacyMd = html && !html.trim().startsWith('<') && html.includes('\n');
   const content = isLegacyMd ? legacyMdToHtml(html) : html;
   document.getElementById('corpo').value=content;
   document.getElementById('vis-editor').innerHTML=content;
 }
-// Converter minimale solo per leggere articoli vecchi in Markdown ? NON usare per scrivere
+// Converter minimale solo per leggere articoli vecchi in Markdown — NON usare per scrivere
 function legacyMdToHtml(md){
   return md
     .replace(/^### (.+)$/gm,'<h3>$1</h3>')
@@ -799,10 +799,10 @@ function legacyMdToHtml(md){
     .replace(/\n\n/g,'</p><p>')
     .replace(/\n/g,'<br>');
 }
-// DEPLOY BAR ? polling GitHub Actions dopo ogni salvataggio
+// DEPLOY BAR — polling GitHub Actions dopo ogni salvataggio
 // _deployFakeTimer/_deployPollTimer globali: se una nuova azione (salva/elimina) parte
-// mentre il deploy precedente ? ancora in polling, cancelliamo i timer vecchi prima di
-// crearne di nuovi ? evita 2 animazioni/poll sovrapposti se si fanno 2 azioni vicine.
+// mentre il deploy precedente è ancora in polling, cancelliamo i timer vecchi prima di
+// crearne di nuovi — evita 2 animazioni/poll sovrapposti se si fanno 2 azioni vicine.
 let _deployFakeTimer=null,_deployPollTimer=null;
 function startDeployPolling(){
   const bar=document.getElementById('deploy-bar');
@@ -812,7 +812,7 @@ function startDeployPolling(){
   if(_deployPollTimer)clearInterval(_deployPollTimer);
   live.classList.remove('show');
   bar.style.transition='none';bar.style.width='0%';
-  // Animazione simulata: 0?85% in 50s, poi aspetta il deploy reale
+  // Animazione simulata: 0→85% in 50s, poi aspetta il deploy reale
   let pct=0;
   _deployFakeTimer=setInterval(()=>{
     if(pct<85){pct+=pct<30?3:pct<60?1.5:.5;}
@@ -866,23 +866,23 @@ function salvaToken(){
   const t=document.getElementById('token-input').value.trim();
   if(!t)return;
   localStorage.setItem('gh_token',t);
-  showMsg('msg-token','? Token salvato!','ok');
+  showMsg('msg-token','✅ Token salvato!','ok');
   document.getElementById('token-input').value='';
 }
-function cancellaToken(){localStorage.removeItem('gh_token');showMsg('msg-token','?? Token rimosso.','ok');}
+function cancellaToken(){localStorage.removeItem('gh_token');showMsg('msg-token','🗑 Token rimosso.','ok');}
 function toggleToken(){const i=document.getElementById('token-input');i.type=i.type==='password'?'text':'password';}
 
 // UTILS
 // UTILS
-// ?? CRITICO: enc() e dec() usano unescape/escape per gestire UTF-8 in btoa/atob.
-// NON usare btoa(string) diretto ? crasha su caratteri italiani (?????) e emoji.
+// ⚠️ CRITICO: enc() e dec() usano unescape/escape per gestire UTF-8 in btoa/atob.
+// NON usare btoa(string) diretto — crasha su caratteri italiani (àèìòù) e emoji.
 // Formula corretta: btoa(unescape(encodeURIComponent(s))) e inverso per dec().
 function tok(){return localStorage.getItem('gh_token');}
 function enc(s){return btoa(unescape(encodeURIComponent(s)));}
 function dec(s){return decodeURIComponent(escape(atob(s.replace(/\n/g,''))));}
 function showMsg(id,txt,cls){const m=document.getElementById(id);m.textContent=txt;m.className='msg '+cls;}
 async function ghGet(path){return fetch(`https://api.github.com/repos/${REPO}/contents/${path}`,{headers:{'Authorization':`token ${tok()}`}});}
-// ?? CRITICO: sha e' obbligatorio per aggiornare file esistenti su GitHub API.
+// ⚠️ CRITICO: sha e' obbligatorio per aggiornare file esistenti su GitHub API.
 // Se sha e' stringa vuota ('') GitHub risponde 422. Passare sempre sha||undefined.
 // Se sha e' undefined GitHub crea un nuovo file (ok solo per file nuovi).
 async function ghPut(path,msg,content,sha){
@@ -890,28 +890,28 @@ async function ghPut(path,msg,content,sha){
   return fetch(`https://api.github.com/repos/${REPO}/contents/${path}`,{method:'PUT',headers:{'Authorization':`token ${tok()}`,'Content-Type':'application/json'},body:JSON.stringify(body)});
 }
 
-// ============ SELETTORE IMMAGINI ? modulo riutilizzabile ============
-// COSA FA: bottone ?? accanto a un campo "Immagine (URL)" ? apre un modal con galleria
-// (vedi immagini gia' caricate, upload nuova, elimina) ? click su un'immagine riempie
+// ============ SELETTORE IMMAGINI — modulo riutilizzabile ============
+// COSA FA: bottone 📁 accanto a un campo "Immagine (URL)" → apre un modal con galleria
+// (vedi immagini gia' caricate, upload nuova, elimina) → click su un'immagine riempie
 // automaticamente il campo URL indicato e chiude il modal.
 //
 // COME SI COLLEGA A UN NUOVO CAMPO (1 riga, ovunque nell'HTML):
-//   <button onclick="apriSelettoreImmagini('id-del-tuo-input','nome-cartella')">??</button>
+//   <button onclick="apriSelettoreImmagini('id-del-tuo-input','nome-cartella')">📁</button>
 // - 'id-del-tuo-input' = id dell'<input type="text"> che deve ricevere l'URL
 // - 'nome-cartella' = sottocartella dentro assets/images/ (es. 'products', 'posts', o una nuova
-//   a scelta come 'avatar' ? si crea da sola al primo upload, zero configurazione)
-// Esempi gia' collegati: prod-immagine ? 'products' (tab Prodotti), teaser ? 'posts' (tab Articoli)
+//   a scelta come 'avatar' — si crea da sola al primo upload, zero configurazione)
+// Esempi gia' collegati: prod-immagine → 'products' (tab Prodotti), teaser → 'posts' (tab Articoli)
 //
 // COME FUNZIONA INTERNAMENTE:
 // 1. apriSelettoreImmagini salva target+cartella in 2 variabili globali (_imgPickerTarget/_imgPickerFolder)
 //    e chiama caricaGalleriaImmagini() che fa ghGet sulla cartella e mostra le immagini trovate
-// 2. Click su un'immagine ? selezionaImmagineGalleria(url) scrive l'url nel campo target e chiude
-// 3. Upload ? caricaImmagineGalleria() legge il file con FileReader.readAsDataURL (da' base64 con
+// 2. Click su un'immagine → selezionaImmagineGalleria(url) scrive l'url nel campo target e chiude
+// 3. Upload → caricaImmagineGalleria() legge il file con FileReader.readAsDataURL (da' base64 con
 //    prefisso "data:image/...;base64," che va tagliato via .split(',')[1] prima di mandarlo a GitHub),
 //    rinomina il file con timestamp davanti (Date.now()) per evitare collisioni di nome, poi PUT diretto
 //    (non uso ghPut() perche' quella e' per testo/enc(), qui serve base64 binario grezzo)
-// 4. Elimina ? DELETE diretto all'API, serve lo sha del file (GitHub lo richiede sempre per cancellare)
-// 5. Ogni upload/cancellazione chiama startDeployPolling() ? stessa barra di progresso usata per
+// 4. Elimina → DELETE diretto all'API, serve lo sha del file (GitHub lo richiede sempre per cancellare)
+// 5. Ogni upload/cancellazione chiama startDeployPolling() — stessa barra di progresso usata per
 //    salvataggio prodotti/articoli, perche' anche qui serve un vero deploy Jekyll prima che l'immagine
 //    sia visibile sul sito pubblico (non e' istantaneo, vedi nota su startDeployPolling piu' sotto)
 //
@@ -955,7 +955,7 @@ async function caricaGalleriaImmagini(){
   grid.innerHTML=files.map(f=>`
     <div class="img-picker-item" onclick="selezionaImmagineGalleria('${f.download_url}')">
       <img src="${f.download_url}" alt="${f.name}" loading="lazy">
-      <button class="img-picker-del" onclick="event.stopPropagation();eliminaImmagineGalleria('${f.path}','${f.sha}','${f.name}')">?</button>
+      <button class="img-picker-del" onclick="event.stopPropagation();eliminaImmagineGalleria('${f.path}','${f.sha}','${f.name}')">✕</button>
     </div>
   `).join('');
 }
@@ -971,7 +971,7 @@ async function caricaImmagineGalleria(inputEl){
   const file=inputEl.files[0];
   if(!file)return;
   const msgEl=document.getElementById('img-picker-upload-msg');
-  msgEl.textContent='? Caricamento...';
+  msgEl.textContent='⏳ Caricamento...';
   const reader=new FileReader();
   reader.onload=async function(e){
     const base64=e.target.result.split(',')[1]; // FileReader.readAsDataURL da' gia' base64 puro dopo la virgola
@@ -986,16 +986,16 @@ async function caricaImmagineGalleria(inputEl){
         body:JSON.stringify({message:`Upload immagine: ${fname}`,content:base64})
       });
       if(res.ok){
-        msgEl.textContent='? Caricata!';
+        msgEl.textContent='✅ Caricata!';
         inputEl.value='';
         startDeployPolling();
         setTimeout(()=>caricaGalleriaImmagini(),1200);
       }else{
         const j=await res.json();
-        msgEl.textContent='? '+(j.message||'Errore upload');
+        msgEl.textContent='❌ '+(j.message||'Errore upload');
       }
     }catch(err){
-      msgEl.textContent='? Errore di rete';
+      msgEl.textContent='❌ Errore di rete';
     }
   };
   reader.readAsDataURL(file);
@@ -1026,11 +1026,11 @@ function renderCategorie(){
     <div class="cat-row">
       <div style="display:flex;gap:8px;margin-bottom:6px;align-items:center">
         <div style="display:flex;flex-direction:column;gap:2px">
-          <button class="btn btn-secondary btn-sm" style="padding:1px 7px;font-size:11px;line-height:1" onclick="catSu(${i})" ${i===0?"disabled":""}>?</button>
-          <button class="btn btn-secondary btn-sm" style="padding:1px 7px;font-size:11px;line-height:1" onclick="catGiu(${i})" ${i===_categorie.length-1?"disabled":""}>?</button>
+          <button class="btn btn-secondary btn-sm" style="padding:1px 7px;font-size:11px;line-height:1" onclick="catSu(${i})" ${i===0?"disabled":""}>▲</button>
+          <button class="btn btn-secondary btn-sm" style="padding:1px 7px;font-size:11px;line-height:1" onclick="catGiu(${i})" ${i===_categorie.length-1?"disabled":""}>▼</button>
         </div>
         <input type="text" value="${c.nome}" onchange="_categorie[${i}].nome=this.value;renderSelect()" style="font-weight:600;flex:1">
-        <button class="btn btn-danger btn-sm" onclick="_categorie.splice(${i},1);renderCategorie();renderSelect()">??</button>
+        <button class="btn btn-danger btn-sm" onclick="_categorie.splice(${i},1);renderCategorie();renderSelect()">🗑</button>
       </div>
       <div style="font-size:11px;color:#aaa;margin-bottom:4px">Descrizione (supporta HTML)</div>
       <div contenteditable="true" data-cat-idx="${i}"
@@ -1040,7 +1040,7 @@ function renderCategorie(){
 }
 function renderSelect(){
   const sel=document.getElementById('categorie');const cur=sel.value;
-  sel.innerHTML='<option value="">? Seleziona ?</option>';
+  sel.innerHTML='<option value="">— Seleziona —</option>';
   _categorie.forEach(c=>{const o=document.createElement('option');o.value=c.nome;o.textContent=c.nome;if(c.nome===cur)o.selected=true;sel.appendChild(o);});
 }
 function aggiungiCategoria(){
@@ -1049,23 +1049,23 @@ function aggiungiCategoria(){
   document.getElementById('cat-nome').value='';renderCategorie();renderSelect();
 }
 async function salvaCategorie(){
-  if(!tok())return showMsg('msg-cat','?? Token mancante.','err');
-  showMsg('msg-cat','? Salvataggio...','');
+  if(!tok())return showMsg('msg-cat','⚠️ Token mancante.','err');
+  showMsg('msg-cat','⏳ Salvataggio...','');
   const res=await ghPut('_data/categorie.json','Aggiorna categorie',JSON.stringify(_categorie,null,2),_catSha);
   const j=await res.json();
-  if(res.ok){_catSha=j.content.sha;showMsg('msg-cat','? Categorie salvate!','ok');}
-  else showMsg('msg-cat','? '+j.message,'err');
+  if(res.ok){_catSha=j.content.sha;showMsg('msg-cat','✅ Categorie salvate!','ok');}
+  else showMsg('msg-cat','❌ '+j.message,'err');
 }
 
-// MENU ? sincronizzato con le pagine reali di al-folio (_pages/*.md, campo nav/nav_order)
+// MENU — sincronizzato con le pagine reali di al-folio (_pages/*.md, campo nav/nav_order)
 // Non usa piu' _data/navigation.yml: al-folio non lo legge mai (vedi _includes/header.liquid,
 // che cicla su site.pages con nav:true ordinate per nav_order). Ogni voce del menu qui sotto
-// e' una pagina reale in _pages/ ? modificarla aggiorna nav_order/title sul file .md stesso.
+// e' una pagina reale in _pages/ — modificarla aggiorna nav_order/title sul file .md stesso.
 let _menuPagineSha={};   // path pagina -> sha (serve per il PUT in salvaMenu)
-let _menuVociRimosse=[]; // path delle voci principali eliminate col ?? ? vanno disattivate (nav:false) al salvataggio
+let _menuVociRimosse=[]; // path delle voci principali eliminate col 🗑 — vanno disattivate (nav:false) al salvataggio
 async function caricaMenu(){
   const res=await ghGet('_pages');
-  if(!res.ok)return showMsg('msg-menu','? Errore caricamento _pages.','err');
+  if(!res.ok)return showMsg('msg-menu','❌ Errore caricamento _pages.','err');
   const files=(await res.json()).filter(f=>f.name.endsWith('.md'));
   const navPages=[];
   for(const f of files){
@@ -1076,8 +1076,8 @@ async function caricaMenu(){
     const content=dec(d.content);
     const fm=(content.match(/^---\n([\s\S]*?)\n---/)||[])[1]||'';
     const permM0=fm.match(/^permalink:\s*"?([^"\n]+)"?/m);
-    // HOME: permalink: / ? sempre nel navbar al-folio, anche senza nav:true.
-    // Editabile (titolo) ma non eliminabile (isHome blocca il tasto ?? in renderMenu).
+    // HOME: permalink: / — sempre nel navbar al-folio, anche senza nav:true.
+    // Editabile (titolo) ma non eliminabile (isHome blocca il tasto 🗑 in renderMenu).
     if(permM0&&permM0[1].trim()==='/'){
       const titleM0=fm.match(/^title:\s*"?([^"\n]+)"?/m);
       navPages.push({path:f.path,title:titleM0?titleM0[1].trim():'home',url:'/',order:-1,isHome:true});
@@ -1097,7 +1097,7 @@ async function caricaMenu(){
       let m;
       while((m=re.exec(childBlock))){
         const t=m[1].trim();
-        if(t==='divider')continue; // separatore visivo, gestito automaticamente ? mai mostrato/editabile
+        if(t==='divider')continue; // separatore visivo, gestito automaticamente — mai mostrato/editabile
         children.push({title:t,permalink:m[2]?m[2].trim():''});
       }
     }
@@ -1118,14 +1118,14 @@ function renderMenu(){
     const riga=`
     <div class="menu-row">
       <div style="display:flex;flex-direction:column;gap:2px">
-        <button class="btn btn-secondary btn-sm" style="padding:1px 7px;font-size:11px;line-height:1" onclick="menuSu(${i})" ${i===0||v.isHome?'disabled':''}>?</button>
-        <button class="btn btn-secondary btn-sm" style="padding:1px 7px;font-size:11px;line-height:1" onclick="menuGiu(${i})" ${i===_menuVoci.length-1||v.isHome?'disabled':''}>?</button>
+        <button class="btn btn-secondary btn-sm" style="padding:1px 7px;font-size:11px;line-height:1" onclick="menuSu(${i})" ${i===0||v.isHome?'disabled':''}>▲</button>
+        <button class="btn btn-secondary btn-sm" style="padding:1px 7px;font-size:11px;line-height:1" onclick="menuGiu(${i})" ${i===_menuVoci.length-1||v.isHome?'disabled':''}>▼</button>
       </div>
-      <input type="text" value="${v.isHome?'?? ':''}${v.title}" oninput="_menuVoci[${i}].title=this.value.replace('?? ','')" placeholder="Nome">
+      <input type="text" value="${v.isHome?'🏠 ':''}${v.title}" oninput="_menuVoci[${i}].title=this.value.replace('🏠 ','')" placeholder="Nome">
       <input type="text" value="${v.url}" ${v.isHome?'disabled':''} oninput="_menuVoci[${i}].url=this.value" placeholder="/url/" style="font-size:12px;color:#555">
-      ${v.isHome?'':`<button class="btn btn-danger btn-sm" onclick="_menuVociRimosse.push(_menuVoci[${i}].path);_menuVoci.splice(${i},1);renderMenu()">??</button>`}
+      ${v.isHome?'':`<button class="btn btn-danger btn-sm" onclick="_menuVociRimosse.push(_menuVoci[${i}].path);_menuVoci.splice(${i},1);renderMenu()">🗑</button>`}
     </div>`;
-    // Sottomenu (dropdown): ogni voce (tranne Home) pu? avere sottovoci ? se la pagina non ?
+    // Sottomenu (dropdown): ogni voce (tranne Home) può avere sottovoci — se la pagina non è
     // ancora un dropdown, v.children parte vuoto qui e "+ Sottovoce" lo inizializza al volo.
     // Al salvataggio (salvaMenu) se children.length>0 il file riceve dropdown:true automaticamente.
     let childrenHtml='';
@@ -1133,10 +1133,10 @@ function renderMenu(){
       const kids=v.children||[];
       childrenHtml=kids.map((c,ci)=>`
       <div class="menu-row" style="margin-left:32px;background:#f0f4ff;border-color:#d0d8ff">
-        <span style="font-size:11px;color:#999;width:16px">?</span>
+        <span style="font-size:11px;color:#999;width:16px">↳</span>
         <input type="text" value="${c.title}" oninput="_menuVoci[${i}].children[${ci}].title=this.value" placeholder="Nome sottovoce">
         <input type="text" value="${c.permalink}" oninput="_menuVoci[${i}].children[${ci}].permalink=this.value" placeholder="/url/" style="font-size:12px;color:#555">
-        <button class="btn btn-danger btn-sm" onclick="_menuVoci[${i}].children.splice(${ci},1);renderMenu()">??</button>
+        <button class="btn btn-danger btn-sm" onclick="_menuVoci[${i}].children.splice(${ci},1);renderMenu()">🗑</button>
       </div>`).join('')+`
       <div style="margin-left:32px;margin-bottom:8px">
         <button class="btn btn-secondary btn-sm" onclick="if(!_menuVoci[${i}].children)_menuVoci[${i}].children=[];_menuVoci[${i}].isDropdown=true;_menuVoci[${i}].children.push({title:'nuova voce',permalink:'/'});renderMenu()">+ Sottovoce</button>
@@ -1189,13 +1189,13 @@ async function aggiungiVoce(){
     startDeployPolling();
   }catch(e){showMsg('msg-menu','Errore: '+e.message,'err');}
 }
-// ?? CRITICO: scrive nav_order+title sui frontmatter delle pagine in _pages/, MAI su
+// ⚠️ CRITICO: scrive nav_order+title sui frontmatter delle pagine in _pages/, MAI su
 // _data/navigation.yml (al-folio lo ignora, vedi nota su caricaMenu()). Voci senza sha
 // in _menuPagineSha (aggiunte a mano senza corrispondere a una pagina reale) vengono
 // saltate: qui si puo' solo riordinare/rinominare pagine esistenti, non crearne di nuove.
 async function salvaMenu(){
-  if(!tok())return showMsg('msg-menu','?? Token mancante.','err');
-  showMsg('msg-menu','? Salvataggio...','');
+  if(!tok())return showMsg('msg-menu','⚠️ Token mancante.','err');
+  showMsg('msg-menu','⏳ Salvataggio...','');
   try{
     for(let i=0;i<_menuVoci.length;i++){
       const v=_menuVoci[i];
@@ -1206,13 +1206,13 @@ async function salvaMenu(){
       const d=await r.json();
       let content=dec(d.content);
       content=content.replace(/^title:\s*"?[^"\n]+"?/m,'title: '+v.title);
-      // Home (permalink: /) non ha nav_order ? non toccarlo. Le altre voci s?.
+      // Home (permalink: /) non ha nav_order — non toccarlo. Le altre voci sì.
       if(!v.isHome) content=content.replace(/^nav_order:\s*\d+/m,'nav_order: '+(i+1));
       // Dropdown (children): se la voce ha almeno 1 sottovoce dal form, la pagina DEVE avere
-      // dropdown:true nel frontmatter (al-folio lo richiede ? vedi header.liquid: {% if p.dropdown %}).
+      // dropdown:true nel frontmatter (al-folio lo richiede — vedi header.liquid: {% if p.dropdown %}).
       // Se il campo non esiste ancora (pagina mai stata dropdown, es. people.md) lo si inserisce
-      // subito dopo nav_order:; se esiste gi? lo si aggiorna. Il divider (separatore visivo) NON
-      // ? mai nel form/v.children ? viene reinserito automaticamente qui, a met? lista, solo se
+      // subito dopo nav_order:; se esiste già lo si aggiorna. Il divider (separatore visivo) NON
+      // è mai nel form/v.children — viene reinserito automaticamente qui, a metà lista, solo se
       // ci sono almeno 2 voci (con 0 o 1 voce non serve nulla da separare).
       if(v.children&&v.children.length>0){
         if(/^dropdown:\s*(true|false)/m.test(content)) content=content.replace(/^dropdown:\s*(true|false)/m,'dropdown: true');
@@ -1231,7 +1231,7 @@ async function salvaMenu(){
       const j=await put.json();
       if(put.ok)_menuPagineSha[v.path]=j.content.sha;
     }
-    // Voci principali eliminate col ??: togliendole da _menuVoci il loop sopra non le tocca
+    // Voci principali eliminate col 🗑: togliendole da _menuVoci il loop sopra non le tocca
     // piu', quindi il file .md restava con nav:true e ricompariva nel menu live. Qui si
     // disattiva davvero la pagina (nav:false) cosi' sparisce sul serio dopo il salvataggio.
     for(const path of _menuVociRimosse){
@@ -1248,13 +1248,13 @@ async function salvaMenu(){
       if(put.ok)_menuPagineSha[path]=j.content.sha;
     }
     _menuVociRimosse=[];
-    showMsg('msg-menu','? Menu salvato! Live in ~60s.','ok');
+    showMsg('msg-menu','✅ Menu salvato! Live in ~60s.','ok');
     startDeployPolling();
-  }catch(e){showMsg('msg-menu','? Errore: '+e.message,'err');}
+  }catch(e){showMsg('msg-menu','❌ Errore: '+e.message,'err');}
 }
 
 // EDITOR PAGINE
-// EDITOR PAGINE ? 3 modalit?: visuale (default) / html / markdown
+// EDITOR PAGINE — 3 modalità: visuale (default) / html / markdown
 let _pagEditorMode='visuale';
 function setPagEditor(mode){
   _pagEditorMode=mode;
@@ -1264,27 +1264,27 @@ function setPagEditor(mode){
   document.getElementById('pag-quill-box').style.display=mode==='visuale'?'block':'none';
   document.getElementById('pag-corpo').style.display=mode==='html'?'block':'none';
   document.getElementById('pag-md-box').style.display=mode==='markdown'?'block':'none';
-  // Sincronizza da pag-md ? vis-editor SOLO quando l'utente clicca Visuale.
-  // NON fare il contrario (vis-editor ? pag-md) perche' il contenteditable produce HTML spuri.
+  // Sincronizza da pag-md → vis-editor SOLO quando l'utente clicca Visuale.
+  // NON fare il contrario (vis-editor → pag-md) perche' il contenteditable produce HTML spuri.
   if(mode==='visuale'){
     const md=document.getElementById('pag-md').value;
     document.getElementById('pag-vis-editor').innerHTML=md;
   }
 }
-// ?? CRITICO: legge sempre da pag-md in modalita' markdown.
-// Non leggere da pag-vis-editor per le pagine ? contiene HTML che rompe il Markdown.
+// ⚠️ CRITICO: legge sempre da pag-md in modalita' markdown.
+// Non leggere da pag-vis-editor per le pagine — contiene HTML che rompe il Markdown.
 function getPagCorpo(){
   if(_pagEditorMode==='visuale') return document.getElementById('pag-vis-editor').innerHTML;
   if(_pagEditorMode==='markdown') return document.getElementById('pag-md').value;
   return document.getElementById('pag-corpo').value;
 }
-// ?? CRITICO: caricare content SOLO in pag-md e pag-corpo ? MAI in pag-vis-editor qui.
+// ⚠️ CRITICO: caricare content SOLO in pag-md e pag-corpo — MAI in pag-vis-editor qui.
 // pag-vis-editor viene sincronizzato SOLO quando l'utente clicca tab Visuale (vedi setPagEditor).
 // Se si carica qui nel vis-editor, il contenteditable converte MD in HTML e al salvataggio
-// il file sul repo diventa HTML invece di Markdown ? pagina rotta su Jekyll.
+// il file sul repo diventa HTML invece di Markdown — pagina rotta su Jekyll.
 function setPagCorpo(content){
   // Imposta il contenuto grezzo (Markdown) in textarea e pag-md
-  // NON caricare in pag-vis-editor ? evita che HTML spuri sovrascriva il MD
+  // NON caricare in pag-vis-editor — evita che HTML spuri sovrascriva il MD
   document.getElementById('pag-corpo').value=content;
   document.getElementById('pag-md').value=content;
   // vis-editor solo se si e' in modalita' visuale
@@ -1313,21 +1313,21 @@ function insertLinkPag(){
   document.execCommand('createLink',false,url);
 }
 
-// BLOCCHI (box system, generico per pagina) ? stato dell'editor pagina corrente
+// BLOCCHI (box system, generico per pagina) — stato dell'editor pagina corrente
 let _pagBlocchi=[],_pagBlocchiSha=null,_pagBlocchiFile=null;
 function renderPagBlocchi(){
   document.getElementById('lista-pag-blocchi').innerHTML=_pagBlocchi.map((b,i)=>`
     <div class="menu-row" style="align-items:flex-start;flex-direction:column;gap:8px">
       <div style="display:flex;gap:8px;align-items:center;width:100%">
         <div style="display:flex;flex-direction:column;gap:2px">
-          <button class="btn btn-secondary btn-sm" style="padding:1px 7px;font-size:11px;line-height:1" onclick="pagBlockSu(${i})" ${i===0?'disabled':''}>?</button>
-          <button class="btn btn-secondary btn-sm" style="padding:1px 7px;font-size:11px;line-height:1" onclick="pagBlockGiu(${i})" ${i===_pagBlocchi.length-1?'disabled':''}>?</button>
+          <button class="btn btn-secondary btn-sm" style="padding:1px 7px;font-size:11px;line-height:1" onclick="pagBlockSu(${i})" ${i===0?'disabled':''}>▲</button>
+          <button class="btn btn-secondary btn-sm" style="padding:1px 7px;font-size:11px;line-height:1" onclick="pagBlockGiu(${i})" ${i===_pagBlocchi.length-1?'disabled':''}>▼</button>
         </div>
         <input type="text" value="${(b.nome||b.id||'').replace(/"/g,'&quot;')}" onchange="_pagBlocchi[${i}].nome=this.value" placeholder="Nome sezione" style="flex:1;font-weight:600">
         <label style="display:flex;align-items:center;gap:5px;font-size:12px;color:#555;white-space:nowrap">
           <input type="checkbox" ${b.enabled?'checked':''} onchange="_pagBlocchi[${i}].enabled=this.checked" style="width:auto">Attivo
         </label>
-        <button class="btn btn-danger btn-sm" onclick="if(confirm('Eliminare questo box?')){_pagBlocchi.splice(${i},1);renderPagBlocchi();}">???</button>
+        <button class="btn btn-danger btn-sm" onclick="if(confirm('Eliminare questo box?')){_pagBlocchi.splice(${i},1);renderPagBlocchi();}">🗑️</button>
       </div>
       <textarea class="sm" style="width:100%;min-height:120px;font-size:12px" onchange="_pagBlocchi[${i}].html=this.value" placeholder="HTML del box...">${(b.html||'').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</textarea>
     </div>`).join('')||'<span style="color:#bbb;font-size:13px">Nessun box. Aggiungine uno qui sotto.</span>';
@@ -1340,16 +1340,16 @@ function aggiungiPagBlocco(){
 }
 
 // PAGINE
-// PAGINE ? gestite col box system (blocchi). Le pagine di sistema (template Liquid dinamici)
-// sono escluse perch? contengono logica del sito, non contenuto editabile a blocchi statici.
+// PAGINE — gestite col box system (blocchi). Le pagine di sistema (template Liquid dinamici)
+// sono escluse perché contengono logica del sito, non contenuto editabile a blocchi statici.
 const PAGINE_SISTEMA=['404.md','blog.md','cat-list.md','categoria.md','category-archive.md','novita.md','shop-carrello.md','shop-cat-abbigliamento.md','shop-prodotto.md','shop.md','tag-archive.md','year-archive.md'];
 async function caricaPagine(){
   if(!tok())return;
   const res=await ghGet('_pages');if(!res.ok)return;
   const files=await res.json();
   const homeRow=`<div class="list-row" style="background:#fffbeb;border-radius:7px;padding:10px;margin-bottom:8px">
-    <span>?? <strong>Home</strong> <span style="font-size:11px;color:#aaa">? pagina principale del sito</span></span>
-    <button class="btn btn-secondary btn-sm" onclick="modificaPaginaBox('home',null)">?? Modifica</button>
+    <span>🏠 <strong>Home</strong> <span style="font-size:11px;color:#aaa">— pagina principale del sito</span></span>
+    <button class="btn btn-secondary btn-sm" onclick="modificaPaginaBox('home',null)">🧩 Modifica</button>
   </div>`;
   const visibili=files.filter(f=>!PAGINE_SISTEMA.includes(f.name));
   document.getElementById('lista-pagine').innerHTML=homeRow+visibili.map(f=>{
@@ -1358,8 +1358,8 @@ async function caricaPagine(){
     <div class="list-row">
       <span>${slug}</span>
       <div style="display:flex;gap:6px">
-        <button class="btn btn-secondary btn-sm" onclick="modificaPaginaBox('${slug}','${f.path}')">?? Modifica</button>
-        <button class="btn btn-danger btn-sm" onclick="eliminaPagina('${f.path}','${f.sha}','${f.name}')">??? Elimina</button>
+        <button class="btn btn-secondary btn-sm" onclick="modificaPaginaBox('${slug}','${f.path}')">🧩 Modifica</button>
+        <button class="btn btn-danger btn-sm" onclick="eliminaPagina('${f.path}','${f.sha}','${f.name}')">🗑️ Elimina</button>
       </div>
     </div>`;
   }).join('');
@@ -1367,8 +1367,8 @@ async function caricaPagine(){
 
 async function eliminaPagina(path,sha,nome){
   if(!tok())return;
-  if(!confirm('Eliminare definitivamente "'+nome+'"?\n\nQuesta azione non ? reversibile.'))return;
-  showMsg('msg-pag','? Eliminazione in corso...','');
+  if(!confirm('Eliminare definitivamente "'+nome+'"?\n\nQuesta azione non è reversibile.'))return;
+  showMsg('msg-pag','⏳ Eliminazione in corso...','');
   try{
     const res=await fetch('https://api.github.com/repos/'+REPO+'/contents/'+path,{
       method:'DELETE',
@@ -1376,9 +1376,9 @@ async function eliminaPagina(path,sha,nome){
       body:JSON.stringify({message:'Elimina pagina: '+nome,sha:sha})
     });
     const json=await res.json();
-    if(res.ok){showMsg('msg-pag','? Pagina eliminata!','ok');caricaPagine();startDeployPolling();}
-    else showMsg('msg-pag','? '+json.message,'err');
-  }catch(e){showMsg('msg-pag','? Errore: '+e.message,'err');}
+    if(res.ok){showMsg('msg-pag','✅ Pagina eliminata!','ok');caricaPagine();startDeployPolling();}
+    else showMsg('msg-pag','❌ '+json.message,'err');
+  }catch(e){showMsg('msg-pag','❌ Errore: '+e.message,'err');}
 }
 
 // Apre l'editor a box per qualsiasi pagina (Home o pagina normale).
@@ -1495,7 +1495,7 @@ function copiaUrlPagina(){
   const input=document.getElementById('pag-url-pubblico');
   if(!input.value||input.value.startsWith('Salva'))return;
   navigator.clipboard.writeText(input.value).then(()=>{
-    showMsg('msg-pag','? URL copiato negli appunti!','ok');
+    showMsg('msg-pag','✅ URL copiato negli appunti!','ok');
     setTimeout(()=>document.getElementById('msg-pag').style.display='none',2000);
   });
 }
@@ -1527,7 +1527,7 @@ function apriNuovaPagina(){
 }
 // ARTICOLI
 // ARTICOLI
-function slugify(s){return s.toLowerCase().replace(/[???]/g,'a').replace(/[???]/g,'e').replace(/[??]/g,'i').replace(/[??]/g,'o').replace(/[??]/g,'u').replace(/[^a-z0-9\s-]/g,'').trim().replace(/\s+/g,'-');}
+function slugify(s){return s.toLowerCase().replace(/[àáâ]/g,'a').replace(/[èéê]/g,'e').replace(/[ìí]/g,'i').replace(/[òó]/g,'o').replace(/[ùú]/g,'u').replace(/[^a-z0-9\s-]/g,'').trim().replace(/\s+/g,'-');}
 function tornaListaArticoli(){
   document.getElementById('art-editor-view').style.display='none';
   document.getElementById('art-lista-view').style.display='block';
@@ -1562,10 +1562,10 @@ function buildContent(){
   if(teaser)fm+=`thumbnail: ${teaser}\n`;
   if(cat)fm+=`categories: ${cat}\n`;
   if(tags.length)fm+=`tags: ${tags.join(' ')}\n`;
-  // ?? NOTA: gli articoli usano HTML nel corpo (non Markdown) ? scelta deliberata.
+  // ⚠️ NOTA: gli articoli usano HTML nel corpo (non Markdown) — scelta deliberata.
   // L'editor visuale (contenteditable) produce HTML. Jekyll lo renderizza senza problemi.
   // NON cambiare questo in Markdown senza aggiornare anche l'editor e setCorpo().
-  // Corpo in HTML puro ? Jekyll lo renderizza direttamente senza conversioni
+  // Corpo in HTML puro — Jekyll lo renderizza direttamente senza conversioni
   return fm+`---\n\n${corpo}`;
 }
 function anteprima(){
@@ -1578,8 +1578,8 @@ function _renderListaArt(files){
     <div class="list-row">
       <span>${f.name.replace(/\.md$/,'')}</span>
       <div style="display:flex;gap:6px">
-        <button class="btn btn-secondary btn-sm" onclick="modificaArticolo('${f.path}')">?? Modifica</button>
-        <button class="btn btn-danger btn-sm" onclick="eliminaArticolo('${f.path}','${f.sha}','${f.name}')">??? Elimina</button>
+        <button class="btn btn-secondary btn-sm" onclick="modificaArticolo('${f.path}')">✏️ Modifica</button>
+        <button class="btn btn-danger btn-sm" onclick="eliminaArticolo('${f.path}','${f.sha}','${f.name}')">🗑️ Elimina</button>
       </div>
     </div>`).join('');
 }
@@ -1587,7 +1587,7 @@ async function caricaLista(){
   if(!tok())return;
   const cached=JSON.parse(localStorage.getItem('cms_cache_posts')||'null');
   if(cached)_renderListaArt(cached);
-  else document.getElementById('lista-articoli').innerHTML='<span style="color:#bbb;font-size:13px">? Caricamento...</span>';
+  else document.getElementById('lista-articoli').innerHTML='<span style="color:#bbb;font-size:13px">⏳ Caricamento...</span>';
   const res=await ghGet('_posts');if(!res.ok)return;
   const files=await res.json();
   localStorage.setItem('cms_cache_posts',JSON.stringify(files));
@@ -1612,10 +1612,10 @@ async function modificaArticolo(path){
   // Carica corpo: HTML diretto, niente conversioni
   setCorpo(body);
   // _editSha e _editPath tengono traccia dell'articolo in modifica.
-  // ?? Vengono azzerati a null dopo ogni pubblicazione ? non riusare senza ricaricare.
+  // ⚠️ Vengono azzerati a null dopo ogni pubblicazione — non riusare senza ricaricare.
   window._editSha=data.sha;window._editPath=path;
   document.getElementById('art-editor-title').textContent='Modifica articolo';
-  showMsg('msg-art','?? Articolo caricato ? modifica e pubblica.','ok');
+  showMsg('msg-art','✏️ Articolo caricato — modifica e pubblica.','ok');
   document.getElementById('art-lista-view').style.display='none';
   document.getElementById('art-editor-view').style.display='block';
   window.scrollTo({top:0,behavior:'smooth'});
@@ -1623,44 +1623,44 @@ async function modificaArticolo(path){
 // AVVISO: cat deve essere let, non const
 async function pubblica(){
   try{
-    showMsg('msg-art','? Controllo campi...','ok');
-    if(!tok())return showMsg('msg-art','?? Token mancante!','err');
+    showMsg('msg-art','⏳ Controllo campi...','ok');
+    if(!tok())return showMsg('msg-art','⚠️ Token mancante!','err');
     const titolo=document.getElementById('titolo').value.trim();
-    // ?? CRITICO: cat deve essere let (non const) ? viene riassegnata se vuota.
+    // ⚠️ CRITICO: cat deve essere let (non const) — viene riassegnata se vuota.
     // Se si cambia in const, il fallback categoria default crasha silenziosamente.
     let cat=document.getElementById('categorie').value;
     const corpo=getCorpo().replace(/<br\s*\/?>/gi,'').replace(/<div>(\s|&nbsp;)*<\/div>/gi,'').trim();
-    if(!titolo)return showMsg('msg-art','?? Inserisci un titolo!','err');
+    if(!titolo)return showMsg('msg-art','⚠️ Inserisci un titolo!','err');
     if(!cat){const defOpt=document.querySelector('#categorie option:not([value=""])');cat=defOpt?defOpt.value:'generale';document.getElementById('categorie').value=cat;}
-    if(!corpo)return showMsg('msg-art','?? Scrivi il contenuto!','err');
+    if(!corpo)return showMsg('msg-art','⚠️ Scrivi il contenuto!','err');
     const data=document.getElementById('data').value;
-    if(!data)return showMsg('msg-art','?? Data mancante!','err');
+    if(!data)return showMsg('msg-art','⚠️ Data mancante!','err');
     const filename=window._editPath||`_posts/${data}-${slugify(titolo)}.html`;
-    showMsg('msg-art','? Pubblicazione in corso...','ok');
+    showMsg('msg-art','⏳ Pubblicazione in corso...','ok');
     const contenuto=buildContent();
     const body={message:`${window._editSha?'Aggiorna':'Nuovo'} articolo: ${titolo}`,content:enc(contenuto)};
     if(window._editSha)body.sha=window._editSha;
     // Progressione visiva reale
     let dots=0;
-    const timer=setInterval(()=>{dots=(dots+1)%4;showMsg('msg-art','? Invio a GitHub'+'.'.repeat(dots),'ok');},400);
+    const timer=setInterval(()=>{dots=(dots+1)%4;showMsg('msg-art','⏳ Invio a GitHub'+'.'.repeat(dots),'ok');},400);
     const res=await fetch(`https://api.github.com/repos/${REPO}/contents/${filename}`,{method:'PUT',headers:{'Authorization':`token ${tok()}`,'Content-Type':'application/json'},body:JSON.stringify(body)});
     clearInterval(timer);
     const json=await res.json();
     if(res.ok){
       window._editSha=null;window._editPath=null;
-      showMsg('msg-art','? Pubblicato! Torno alla lista...','ok');
+      showMsg('msg-art','✅ Pubblicato! Torno alla lista...','ok');
       startDeployPolling();
       setTimeout(()=>tornaListaArticoli(),1200);
     }
-    else showMsg('msg-art','? '+json.message,'err');
-  }catch(e){showMsg('msg-art','? Errore: '+e.message,'err');}
+    else showMsg('msg-art','❌ '+json.message,'err');
+  }catch(e){showMsg('msg-art','❌ Errore: '+e.message,'err');}
 }
 
 // ELIMINA ARTICOLO
 async function eliminaArticolo(path, sha, nome){
-  if(!tok())return showMsg('msg-art','?? Token mancante!','err');
-  if(!confirm(`Eliminare definitivamente "${nome}"?\n\nQuesta azione non ? reversibile.`))return;
-  showMsg('msg-art','? Eliminazione in corso...','');
+  if(!tok())return showMsg('msg-art','⚠️ Token mancante!','err');
+  if(!confirm(`Eliminare definitivamente "${nome}"?\n\nQuesta azione non è reversibile.`))return;
+  showMsg('msg-art','⏳ Eliminazione in corso...','');
   try{
     const res=await fetch(`https://api.github.com/repos/${REPO}/contents/${path}`,{
       method:'DELETE',
@@ -1668,9 +1668,9 @@ async function eliminaArticolo(path, sha, nome){
       body:JSON.stringify({message:`Elimina articolo: ${nome}`,sha:sha})
     });
     const json=await res.json();
-    if(res.ok){showMsg('msg-art','? Articolo eliminato! Aggiornamento lista...','ok');caricaLista();startDeployPolling();}
-    else showMsg('msg-art','? '+json.message,'err');
-  }catch(e){showMsg('msg-art','? Errore di rete.','err');}
+    if(res.ok){showMsg('msg-art','✅ Articolo eliminato! Aggiornamento lista...','ok');caricaLista();startDeployPolling();}
+    else showMsg('msg-art','❌ '+json.message,'err');
+  }catch(e){showMsg('msg-art','❌ Errore di rete.','err');}
 }
 
 // TEMA
@@ -1682,7 +1682,7 @@ const PALETTES=[
   {id:'rosso',   label:'Rosso',    accent:'#e74c3c',accent_dark:'#c0392b',nav_bg:'#fff5f5',nav_text:'#7b1a1a',nav_hover:'#c0392b',body_bg:'#ffffff',text:'#3a1a1a',link:'#c0392b'},
   {id:'viola',   label:'Viola',    accent:'#9b59b6',accent_dark:'#8e44ad',nav_bg:'#2d1b4e',nav_text:'#e0d0ff',nav_hover:'#ffffff',body_bg:'#ffffff',text:'#3a2a4a',link:'#9b59b6'},
   {id:'scuro',   label:'Dark',     accent:'#a89fff',accent_dark:'#8a7fe0',nav_bg:'#1a1a2e',nav_text:'#e0e0ff',nav_hover:'#ffffff',body_bg:'#111827',text:'#e0e0e0',link:'#a89fff'},
-  {id:'custom',  label:'Custom ??', accent:'#6c63ff',accent_dark:'#5a52e0',nav_bg:'#ffffff',nav_text:'#111111',nav_hover:'#555555',body_bg:'#ffffff',text:'#3a3a3a',link:'#6c63ff'},
+  {id:'custom',  label:'Custom ✏️', accent:'#6c63ff',accent_dark:'#5a52e0',nav_bg:'#ffffff',nav_text:'#111111',nav_hover:'#555555',body_bg:'#ffffff',text:'#3a3a3a',link:'#6c63ff'},
 ];
 let _paletteCorrente='pulito';
 let _temaSha=null;
@@ -1699,7 +1699,7 @@ function renderFontGrid(){
     <div onclick="selezionaFont('${f.id}')" style="cursor:pointer;border-radius:10px;padding:14px 8px;text-align:center;border:3px solid ${_fontCorrente===f.id?'#6c63ff':'#e0e0e0'};background:#fff;transition:border .15s">
       <div style="font-family:${f.value};font-size:18px;font-weight:600;color:#333;margin-bottom:4px">Aa</div>
       <div style="font-size:11px;font-weight:700;color:#444">${f.label}</div>
-      ${_fontCorrente===f.id?'<div style="font-size:9px;color:#6c63ff;font-weight:700;margin-top:2px">? Attivo</div>':''}
+      ${_fontCorrente===f.id?'<div style="font-size:9px;color:#6c63ff;font-weight:700;margin-top:2px">✓ Attivo</div>':''}
     </div>`).join('');
 }
 function selezionaFont(id){_fontCorrente=id;renderFontGrid();}
@@ -1713,7 +1713,7 @@ function renderPalette(){
         <div style="width:16px;height:16px;border-radius:50%;background:${p.text};border:1.5px solid #ccc"></div>
       </div>
       <div style="font-size:11px;font-weight:700;color:#444">${p.label}</div>
-      ${_paletteCorrente===p.id?`<div style="font-size:9px;color:${p.accent};font-weight:700;margin-top:2px">? Attivo</div>`:''}
+      ${_paletteCorrente===p.id?`<div style="font-size:9px;color:${p.accent};font-weight:700;margin-top:2px">✓ Attivo</div>`:''}
     </div>`).join('');
 }
 function selezionaPalette(id){
@@ -1760,7 +1760,7 @@ async function caricaTema(){
   renderPalette();renderFontGrid();
 }
 async function salvaTema(){
-  if(!tok())return showMsg('msg-tema','?? Token mancante.','err');
+  if(!tok())return showMsg('msg-tema','⚠️ Token mancante.','err');
   const accent=document.getElementById('t-accent').value;
   const navText=document.getElementById('t-nav-text').value;
   const fontObj=FONTS.find(f=>f.id===_fontCorrente)||FONTS[0];
@@ -1777,11 +1777,11 @@ async function salvaTema(){
     radius:document.getElementById('t-radius').value+'px',
     font_scale:document.getElementById('t-font-scale').value
   };
-  showMsg('msg-tema','? Salvataggio...','');
+  showMsg('msg-tema','⏳ Salvataggio...','');
   const res=await ghPut('_data/tema.json','Aggiorna tema sito',JSON.stringify(tema,null,2),_temaSha||undefined);
   const j=await res.json();
-  if(res.ok){_temaSha=j.content.sha;showMsg('msg-tema','? Tema applicato! Live in ~60s.','ok');startDeployPolling();}
-  else showMsg('msg-tema','? '+j.message,'err');
+  if(res.ok){_temaSha=j.content.sha;showMsg('msg-tema','✅ Tema applicato! Live in ~60s.','ok');startDeployPolling();}
+  else showMsg('msg-tema','❌ '+j.message,'err');
 }
 
 // IMPOSTAZIONI SITO
@@ -1799,17 +1799,16 @@ async function caricaImpostazioni(){
   document.getElementById('cfg-title').value=get('title');
   document.getElementById('cfg-author-name').value=[get('first_name'),get('last_name')].filter(Boolean).join(' ');
   document.getElementById('cfg-baseurl').value=get('baseurl');
-  const footerM=y.match(/^footer_text:\s*>-?\s*\r?\n((?:^[ \t]+.*\r?\n?)*)/m);
-  document.getElementById('cfg-footer-text').value=footerM?footerM[1].split('\n').map(l=>l.trim()).filter(Boolean).join(' '):get('footer_text');
+  document.getElementById('cfg-footer-text').value=get('footer_text');
   document.getElementById('cfg-favicon').value=get('icon').replace(/\s*#.*$/,'').trim();
   // descrizione multiriga
   const descM=y.match(/description:\s*>-\s*\n\s*(.+)/);
   document.getElementById('cfg-description').value=descM?descM[1].trim():get('description');
   document.getElementById('cfg-limite-prodotti').value=getLimiteProdotti();
-  // homepage ? legge da _config.yml il campo cms_homepage (custom)
+  // homepage — legge da _config.yml il campo cms_homepage (custom)
   const hpM=y.match(/cms_homepage:\s*(.+)/);
   await caricaPaginePerlHome(hpM?hpM[1].trim():'');
-  // email + social ? vivono in _data/socials.yml, non in _config.yml
+  // email + social — vivono in _data/socials.yml, non in _config.yml
   const resS=await ghGet('_data/socials.yml');
   if(resS.ok){
     const dS=await resS.json();
@@ -1827,7 +1826,7 @@ async function caricaImpostazioni(){
 
 async function caricaPaginePerlHome(corrente){
   const sel=document.getElementById('cfg-homepage');
-  sel.innerHTML='<option value="">? Seleziona ?</option>';
+  sel.innerHTML='<option value="">— Seleziona —</option>';
   try{
     const res=await ghGet('_pages');
     if(!res.ok)return;
@@ -1843,17 +1842,17 @@ async function caricaPaginePerlHome(corrente){
 }
 
 async function salvaImpostazioni(){
-  if(!tok())return showMsg('msg-cfg','?? Token mancante.','err');
-  showMsg('msg-cfg','? Caricamento config...','');
+  if(!tok())return showMsg('msg-cfg','⚠️ Token mancante.','err');
+  showMsg('msg-cfg','⏳ Caricamento config...','');
   const res=await ghGet('_config.yml');
-  if(!res.ok)return showMsg('msg-cfg','? Impossibile leggere _config.yml','err');
+  if(!res.ok)return showMsg('msg-cfg','❌ Impossibile leggere _config.yml','err');
   const d=await res.json();_configShaImp=d.sha;
   let y=dec(d.content);
 
   // titolo, baseurl (email e social vivono in socials.yml, vedi sotto)
   y=y.replace(/^title:.*$/m,(m)=>{const cm=m.match(/(\s*#.*)$/);return `title: ${document.getElementById('cfg-title').value.trim()}${cm?cm[1]:''}`;});
 
-  // nome autore ? split su primo spazio: first_name + last_name
+  // nome autore — split su primo spazio: first_name + last_name
   const nomeCompleto=document.getElementById('cfg-author-name').value.trim();
   const spaceIdx=nomeCompleto.indexOf(' ');
   const fName=spaceIdx>-1?nomeCompleto.slice(0,spaceIdx):nomeCompleto;
@@ -1865,19 +1864,19 @@ async function salvaImpostazioni(){
   if(y.match(/^baseurl:/m)) y=y.replace(/^baseurl:.*$/m,`baseurl: "${buVal}"`);
   else y=`baseurl: "${buVal}"\n`+y;
 
-  // descrizione ? gestisce sia formato >- multiriga che inline
+  // descrizione — gestisce sia formato >- multiriga che inline
   const desc=document.getElementById('cfg-description').value.trim().replace(/\n/g,' ');
   y=y.replace(/^description:[\s\S]*?(?=^\w)/m, `description: >-\n  ${desc}\n`);
 
   // footer text
   const footerVal=document.getElementById('cfg-footer-text').value.trim();
-  if(y.match(/^footer_text:/m)) y=y.replace(/^footer_text:[\s\S]*?(?=^\w)/m, `footer_text: >-`+String.fromCharCode(10)+`  `+footerVal+String.fromCharCode(10));
-  else y+=`\nfooter_text: >-\n  `+footerVal+`\n`;
+  if(y.match(/^footer_text:/m)) y=y.replace(/^footer_text:.*$/m,`footer_text: "${footerVal}"`);
+  else y+=`\nfooter_text: "${footerVal}"`;
   const faviconVal=document.getElementById('cfg-favicon').value.trim();
   if(y.match(/^icon:/m)) y=y.replace(/^icon:.*$/m,(m)=>{const cm=m.match(/(\s*#.*)$/);return `icon: ${faviconVal}${cm?cm[1]:''}`;});
   else y+=`\nicon: ${faviconVal}`;
 
-  // homepage ? salva path della pagina scelta come cms_homepage
+  // homepage — salva path della pagina scelta come cms_homepage
   const hp=document.getElementById('cfg-homepage').value;
   if(y.match(/^cms_homepage:/m)) y=y.replace(/^cms_homepage:.*$/m,`cms_homepage: ${hp}`);
   else y+=`\ncms_homepage: ${hp}\n`;
@@ -1885,8 +1884,8 @@ async function salvaImpostazioni(){
   // aggiorna index.html con il permalink della pagina scelta come home
   await aggiornaIndexHome(hp);
 
-  // email + social ? vivono in _data/socials.yml, non in _config.yml
-  showMsg('msg-cfg','? Salvataggio social...','');
+  // email + social — vivono in _data/socials.yml, non in _config.yml
+  showMsg('msg-cfg','⏳ Salvataggio social...','');
   const resS=await ghGet('_data/socials.yml');
   if(resS.ok){
     const dS=await resS.json();
@@ -1910,14 +1909,14 @@ async function salvaImpostazioni(){
     if(putS.ok)_socialsShaImp=jS.content.sha;
   }
 
-  showMsg('msg-cfg','? Salvataggio...','');
+  showMsg('msg-cfg','⏳ Salvataggio...','');
   const putRes=await ghPut('_config.yml','Aggiorna impostazioni sito',y,_configShaImp);
   const j=await putRes.json();
   if(putRes.ok){
     _configShaImp=j.content.sha;
-    showMsg('msg-cfg','? Impostazioni salvate! Live in ~60s.','ok');startDeployPolling();
+    showMsg('msg-cfg','✅ Impostazioni salvate! Live in ~60s.','ok');startDeployPolling();
   } else {
-    showMsg('msg-cfg','? '+j.message,'err');
+    showMsg('msg-cfg','❌ '+j.message,'err');
   }
 }
 
@@ -1947,8 +1946,8 @@ const CMS_SOURCE_PATH='admin/index.html';
 const CMS_VERSION_PATH='version.json';
 
 async function controllaAggiornamenti(){
-  showMsg('msg-update','? Controllo in corso...','');
-  // Legge version.json locale ? prima via GitHub API (repo cliente), poi via fetch relativo (GitHub Pages)
+  showMsg('msg-update','⏳ Controllo in corso...','');
+  // Legge version.json locale — prima via GitHub API (repo cliente), poi via fetch relativo (GitHub Pages)
   let verLocale=null;
   const resL=await ghGet(CMS_VERSION_PATH);
   if(resL.ok){
@@ -1962,51 +1961,51 @@ async function controllaAggiornamenti(){
       if(resF.ok) verLocale=await resF.json();
     }catch(e){}
   }
-  if(!verLocale)return showMsg('msg-update','?? Apri il CMS dal tuo sito GitHub Pages per controllare gli aggiornamenti.','err');
-  document.getElementById('ver-locale').textContent=verLocale.version||'?';
+  if(!verLocale)return showMsg('msg-update','⚠️ Apri il CMS dal tuo sito GitHub Pages per controllare gli aggiornamenti.','err');
+  document.getElementById('ver-locale').textContent=verLocale.version||'–';
 
-  // Legge version.json dal repo sorgente (senza token, ? pubblico)
+  // Legge version.json dal repo sorgente (senza token, è pubblico)
   const resR=await fetch(`https://api.github.com/repos/${CMS_SOURCE_REPO}/contents/${CMS_VERSION_PATH}`);
-  if(!resR.ok)return showMsg('msg-update','? Impossibile raggiungere il server di aggiornamento.','err');
+  if(!resR.ok)return showMsg('msg-update','❌ Impossibile raggiungere il server di aggiornamento.','err');
   const dR=await resR.json();
   const verRemota=JSON.parse(dec(dR.content));
-  document.getElementById('ver-remota').textContent=verRemota.version||'?';
+  document.getElementById('ver-remota').textContent=verRemota.version||'–';
 
   if(verRemota.version===verLocale.version){
-    showMsg('msg-update','? Sei gi? alla versione pi? recente!','ok');
+    showMsg('msg-update','✅ Sei già alla versione più recente!','ok');
     document.getElementById('update-card-new').style.display='none';
     document.getElementById('update-badge').style.display='none';
   } else {
     showMsg('msg-update','','');
-    document.getElementById('update-notes').innerHTML=`<strong>Cosa c'? di nuovo:</strong><br>${verRemota.changelog||verRemota.notes||'Miglioramenti generali.'}`;
+    document.getElementById('update-notes').innerHTML=`<strong>Cosa c'è di nuovo:</strong><br>${verRemota.changelog||verRemota.notes||'Miglioramenti generali.'}`;
     document.getElementById('update-card-new').style.display='block';
     document.getElementById('update-badge').style.display='inline-block';
   }
 }
 
 async function eseguiAggiornamento(){
-  if(!tok())return showMsg('msg-update2','?? Token mancante!','err');
+  if(!tok())return showMsg('msg-update2','⚠️ Token mancante!','err');
   document.getElementById('btn-aggiorna').disabled=true;
-  showMsg('msg-update2','? Download aggiornamento...','');
+  showMsg('msg-update2','⏳ Download aggiornamento...','');
 
-  // ?? CRITICO: questo metodo sovrascrive admin/index.html nel repo CLIENTE con la versione dal repo sorgente.
+  // ⚠️ CRITICO: questo metodo sovrascrive admin/index.html nel repo CLIENTE con la versione dal repo sorgente.
   // CMS_SOURCE_REPO deve puntare sempre a cialdecompatibili-netizen/cmspush (repo pubblico).
   // Se si rinomina il file o si sposta la cartella admin/, aggiornare CMS_SOURCE_PATH di conseguenza.
   // Legge il nuovo admin/index.html dal repo sorgente
   const resSrc=await fetch(`https://api.github.com/repos/${CMS_SOURCE_REPO}/contents/${CMS_SOURCE_PATH}`);
-  if(!resSrc.ok){document.getElementById('btn-aggiorna').disabled=false;return showMsg('msg-update2','? Errore download.','err');}
+  if(!resSrc.ok){document.getElementById('btn-aggiorna').disabled=false;return showMsg('msg-update2','❌ Errore download.','err');}
   const dSrc=await resSrc.json();
   const nuovoContenuto=dec(dSrc.content);
 
   // Legge sha del file locale da sovrascrivere
   const resLoc=await ghGet(CMS_SOURCE_PATH);
-  if(!resLoc.ok){document.getElementById('btn-aggiorna').disabled=false;return showMsg('msg-update2','? Errore lettura file locale.','err');}
+  if(!resLoc.ok){document.getElementById('btn-aggiorna').disabled=false;return showMsg('msg-update2','❌ Errore lettura file locale.','err');}
   const dLoc=await resLoc.json();
 
   // Sovrascrive admin/index.html nel repo cliente
-  showMsg('msg-update2','? Installazione...','');
+  showMsg('msg-update2','⏳ Installazione...','');
   const resPut=await ghPut(CMS_SOURCE_PATH,'Aggiornamento CMS',nuovoContenuto,dLoc.sha);
-  if(!resPut.ok){document.getElementById('btn-aggiorna').disabled=false;return showMsg('msg-update2','? Errore installazione.','err');}
+  if(!resPut.ok){document.getElementById('btn-aggiorna').disabled=false;return showMsg('msg-update2','❌ Errore installazione.','err');}
 
   // Aggiorna anche version.json locale
   const resVer=await fetch(`https://api.github.com/repos/${CMS_SOURCE_REPO}/contents/${CMS_VERSION_PATH}`);
@@ -2015,11 +2014,11 @@ async function eseguiAggiornamento(){
   const dVerLoc=await resVerLoc.json();
   await ghPut(CMS_VERSION_PATH,'Aggiorna versione CMS',dec(dVer.content),dVerLoc.sha);
 
-  showMsg('msg-update2','? Aggiornato! La pagina si ricarica in 3 secondi...','ok');
+  showMsg('msg-update2','✅ Aggiornato! La pagina si ricarica in 3 secondi...','ok');
   setTimeout(()=>location.reload(),3000);
 }
 
-// ============ SHOP ? CATEGORIE ============
+// ============ SHOP — CATEGORIE ============
 // SHOP CATEGORIE
 let _shopcatSha=null;
 let _shopcats=[];
@@ -2028,7 +2027,7 @@ async function caricaCatShop(){
   const el=document.getElementById('lista-cat-shop');
   const sel=document.getElementById('prod-categoria');
   if(!tok()){
-    el.innerHTML='<em style="color:#bbb;font-size:13px">Token mancante ? vai in Token per configurarlo.</em>';
+    el.innerHTML='<em style="color:#bbb;font-size:13px">Token mancante — vai in Token per configurarlo.</em>';
     return;
   }
   let res;
@@ -2039,7 +2038,7 @@ async function caricaCatShop(){
   if(!res.ok){
     _shopcats=[];_shopcatSha=null;
     el.innerHTML='<em style="color:#bbb;font-size:13px">Nessuna categoria. Aggiungine una.</em>';
-    sel.innerHTML='<option value="">? Seleziona ?</option>';return;
+    sel.innerHTML='<option value="">— Seleziona —</option>';return;
   }
   const d=await res.json();_shopcatSha=d.sha;
   _shopcats=JSON.parse(dec(d.content));
@@ -2047,10 +2046,10 @@ async function caricaCatShop(){
   el.innerHTML=_shopcats.length?_shopcats.map(c=>`
     <div class="cat-row" style="display:flex;justify-content:space-between;align-items:center">
       <span style="font-size:13px;font-weight:600">${c.nome} <span style="color:#bbb;font-weight:400">(${c.slug})</span></span>
-      <button class="btn btn-danger btn-sm" onclick="eliminaCatShop('${c.slug}')">??</button>
+      <button class="btn btn-danger btn-sm" onclick="eliminaCatShop('${c.slug}')">🗑</button>
     </div>`).join(''):'<em style="color:#bbb;font-size:13px">Nessuna categoria.</em>';
   // select prodotto
-  sel.innerHTML='<option value="">? Seleziona ?</option>'+_shopcats.map(c=>`<option value="${c.slug}">${c.nome}</option>`).join('');
+  sel.innerHTML='<option value="">— Seleziona —</option>'+_shopcats.map(c=>`<option value="${c.slug}">${c.nome}</option>`).join('');
 }
 
 async function salvaCatShop(){
@@ -2066,27 +2065,27 @@ async function salvaCatShop(){
 async function aggiungiCatShop(){
   const nome=document.getElementById('shopcat-nome').value.trim();
   const slug=document.getElementById('shopcat-slug').value.trim();
-  if(!nome||!slug)return showMsg('msg-shopcat','?? Nome e slug obbligatori.','err');
-  if(!tok())return showMsg('msg-shopcat','?? Token mancante.','err');
+  if(!nome||!slug)return showMsg('msg-shopcat','⚠️ Nome e slug obbligatori.','err');
+  if(!tok())return showMsg('msg-shopcat','⚠️ Token mancante.','err');
   _shopcats.push({nome,slug});
   const ok=await salvaCatShop();
   if(ok){
-    showMsg('msg-shopcat','? Categoria aggiunta!','ok');
+    showMsg('msg-shopcat','✅ Categoria aggiunta!','ok');
     document.getElementById('shopcat-nome').value='';
     document.getElementById('shopcat-slug').value='';
     caricaCatShop();
-  } else showMsg('msg-shopcat','? Errore salvataggio.','err');
+  } else showMsg('msg-shopcat','❌ Errore salvataggio.','err');
 }
 
 async function eliminaCatShop(slug){
   if(!confirm('Eliminare la categoria?'))return;
   _shopcats=_shopcats.filter(c=>c.slug!==slug);
   const ok=await salvaCatShop();
-  if(ok){showMsg('msg-shopcat','? Eliminata!','ok');caricaCatShop();startDeployPolling();}
-  else showMsg('msg-shopcat','? Errore.','err');
+  if(ok){showMsg('msg-shopcat','✅ Eliminata!','ok');caricaCatShop();startDeployPolling();}
+  else showMsg('msg-shopcat','❌ Errore.','err');
 }
 
-// ============ SHOP ? PRODOTTI ============
+// ============ SHOP — PRODOTTI ============
 // SHOP PRODOTTI
 let _prodPath=null;
 
@@ -2098,7 +2097,7 @@ function nuovoProdotto(){
   showMsg('msg-prod','','');
 }
 
-// Apre la vista editor per un NUOVO prodotto (bottone "? Nuovo prodotto" nella lista) ? stessa
+// Apre la vista editor per un NUOVO prodotto (bottone "✚ Nuovo prodotto" nella lista) — stessa
 // logica di apriNuovoArticolo(): resetta i campi, nasconde la lista, mostra il form vuoto.
 function apriNuovoProdotto(){
   nuovoProdotto();
@@ -2108,7 +2107,7 @@ function apriNuovoProdotto(){
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
-// Torna alla lista prodotti (bottone "? Torna ai prodotti" nell'editor) ? ricarica la lista
+// Torna alla lista prodotti (bottone "← Torna ai prodotti" nell'editor) — ricarica la lista
 // cosi' eventuali modifiche appena salvate sono subito visibili.
 function tornaListaProdotti(){
   document.getElementById('prod-editor-view').style.display='none';
@@ -2116,7 +2115,7 @@ function tornaListaProdotti(){
   caricaProdotti();
 }
 
-// -- Paginazione lista prodotti ------------------------------------------
+// ── Paginazione lista prodotti ──────────────────────────────────────────
 // Limite configurabile dalla tab Impostazioni (default 50), salvato in localStorage.
 // getLimiteProdotti()/setLimiteProdotti() sono usate anche dal campo in Impostazioni.
 function getLimiteProdotti(){
@@ -2141,7 +2140,7 @@ async function caricaProdotti(){
   _renderListaProdotti(files);
 }
 // Renderizza la lista prodotti CON paginazione. Il limite per pagina viene da getLimiteProdotti()
-// (modificabile in Impostazioni). _prodPaginaCorrente tiene lo stato tra un render e l'altro ?
+// (modificabile in Impostazioni). _prodPaginaCorrente tiene lo stato tra un render e l'altro —
 // vaiAPaginaProdotti(n) lo aggiorna e richiama questa funzione.
 function _renderListaProdotti(files){
   const el=document.getElementById('lista-prodotti');
@@ -2157,19 +2156,19 @@ function _renderListaProdotti(files){
 
   el.innerHTML=paginaProds.map(f=>`
     <div class="list-row">
-      <span style="font-size:13px">?? ${f.name.replace('.md','')}</span>
+      <span style="font-size:13px">🛒 ${f.name.replace('.md','')}</span>
       <div style="display:flex;gap:8px">
-        <button class="btn btn-secondary btn-sm" onclick="modificaProdotto('${f.path}')">?? Modifica</button>
-        <button class="btn btn-danger btn-sm" onclick="eliminaProdotto('${f.path}','${f.sha}')">??</button>
+        <button class="btn btn-secondary btn-sm" onclick="modificaProdotto('${f.path}')">✏️ Modifica</button>
+        <button class="btn btn-danger btn-sm" onclick="eliminaProdotto('${f.path}','${f.sha}')">🗑</button>
       </div>
     </div>`).join('');
 
-  // Frecce paginazione ? mostrate solo se ci sono piu' pagine di quante ne servono per 1 sola vista
+  // Frecce paginazione — mostrate solo se ci sono piu' pagine di quante ne servono per 1 sola vista
   if(totalePagine<=1){pagEl.innerHTML='';return;}
   pagEl.innerHTML=`
-    <button class="btn btn-secondary btn-sm" ${_prodPaginaCorrente<=1?'disabled':''} onclick="vaiAPaginaProdotti(${_prodPaginaCorrente-1})">? Precedente</button>
+    <button class="btn btn-secondary btn-sm" ${_prodPaginaCorrente<=1?'disabled':''} onclick="vaiAPaginaProdotti(${_prodPaginaCorrente-1})">← Precedente</button>
     <span style="font-size:13px;color:#888">Pagina ${_prodPaginaCorrente} di ${totalePagine} (${prods.length} prodotti totali, ${limite}/pagina)</span>
-    <button class="btn btn-secondary btn-sm" ${_prodPaginaCorrente>=totalePagine?'disabled':''} onclick="vaiAPaginaProdotti(${_prodPaginaCorrente+1})">Successiva ?</button>
+    <button class="btn btn-secondary btn-sm" ${_prodPaginaCorrente>=totalePagine?'disabled':''} onclick="vaiAPaginaProdotti(${_prodPaginaCorrente+1})">Successiva →</button>
   `;
 }
 
@@ -2208,9 +2207,9 @@ async function modificaProdotto(path){
 }
 
 async function pubblicaProdotto(){
-  if(!tok())return showMsg('msg-prod','?? Token mancante.','err');
+  if(!tok())return showMsg('msg-prod','⚠️ Token mancante.','err');
   const titolo=document.getElementById('prod-titolo').value.trim();
-  if(!titolo)return showMsg('msg-prod','?? Titolo obbligatorio.','err');
+  if(!titolo)return showMsg('msg-prod','⚠️ Titolo obbligatorio.','err');
   const prezzo=document.getElementById('prod-prezzo').value.trim();
   const stock=document.getElementById('prod-stock').value.trim();
   const sku=document.getElementById('prod-sku').value.trim();
@@ -2218,16 +2217,16 @@ async function pubblicaProdotto(){
   const categoria=document.getElementById('prod-categoria').value;
   const tipo=document.getElementById('prod-tipo').value||'fisico';
   const corpo=document.getElementById('prod-corpo').value.trim();
-  const slug=titolo.toLowerCase().replace(/[???]/g,'a').replace(/[???]/g,'e').replace(/[??]/g,'i').replace(/[??]/g,'o').replace(/[??]/g,'u').replace(/[^a-z0-9\s-]/g,'').trim().replace(/\s+/g,'-');
+  const slug=titolo.toLowerCase().replace(/[àáâ]/g,'a').replace(/[èéê]/g,'e').replace(/[ìí]/g,'i').replace(/[òó]/g,'o').replace(/[ùú]/g,'u').replace(/[^a-z0-9\s-]/g,'').trim().replace(/\s+/g,'-');
   const path=_prodPath||`_products/${slug}.md`;
   let sha=undefined;
   if(_prodPath){const r=await ghGet(_prodPath);if(r.ok){const d=await r.json();sha=d.sha;}}
   const description=document.getElementById('prod-description').value.trim();
   const md=`---\ntitle: "${titolo}"\nprice: ${prezzo||0}\nstock: ${stock||''}\nsku: "${sku}"\ncategory: "${categoria}"\ntipo: "${tipo}"\nimage: "${immagine}"\ndescription: "${description}"\nlayout: product\n---\n${corpo}`;
-  showMsg('msg-prod','? Salvataggio...','');
+  showMsg('msg-prod','⏳ Salvataggio...','');
   const res=await ghPut(path,`Prodotto: ${titolo}`,md,sha);
-  if(res.ok){showMsg('msg-prod','? Prodotto salvato!','ok');startDeployPolling();_prodPath=path;caricaProdotti();}
-  else{const j=await res.json();showMsg('msg-prod','? '+j.message,'err');}
+  if(res.ok){showMsg('msg-prod','✅ Prodotto salvato!','ok');startDeployPolling();_prodPath=path;caricaProdotti();}
+  else{const j=await res.json();showMsg('msg-prod','❌ '+j.message,'err');}
 }
 
 async function eliminaProdotto(path,sha){
@@ -2237,7 +2236,7 @@ async function eliminaProdotto(path,sha){
     method:'DELETE',headers:{'Authorization':`token ${tok()}`,'Content-Type':'application/json'},
     body:JSON.stringify({message:`Elimina prodotto ${path}`,sha})
   });
-  if(res.ok){showMsg('msg-prod','? Eliminato!','ok');caricaProdotti();startDeployPolling();}
+  if(res.ok){showMsg('msg-prod','✅ Eliminato!','ok');caricaProdotti();startDeployPolling();}
 }
 
 // ============ INTEGRAZIONI ============
@@ -2291,20 +2290,20 @@ async function caricaIntegrazioni(){
   ['ga4','gsc','pixel','hotjar'].forEach(k=>_toggleUI(k,_integrazioniStato[k].enabled));
 }
 async function salvaIntegrazione(key){
-  if(!tok())return showMsg('msg-'+key,'?? Token mancante.','err');
+  if(!tok())return showMsg('msg-'+key,'⚠️ Token mancante.','err');
   // Leggi i valori dal form
   if(key==='ga4') _integrazioniStato.ga4.id=document.getElementById('ga4-id').value.trim();
   if(key==='gsc') _integrazioniStato.gsc.verification=document.getElementById('gsc-verification').value.trim();
   if(key==='pixel') _integrazioniStato.pixel.id=document.getElementById('pixel-id').value.trim();
   if(key==='hotjar') _integrazioniStato.hotjar.id=document.getElementById('hotjar-id').value.trim();
-  showMsg('msg-'+key,'? Salvataggio...','');
+  showMsg('msg-'+key,'⏳ Salvataggio...','');
   // Legge _config.yml aggiornato
   const res=await ghGet('_config.yml');
-  if(!res.ok)return showMsg('msg-'+key,'? Errore lettura config.','err');
+  if(!res.ok)return showMsg('msg-'+key,'❌ Errore lettura config.','err');
   const d=await res.json();_integrazioniSha=d.sha;
   let yaml=dec(d.content);
-  // ?? CRITICO: strategia replace blocco integrations nel YAML.
-  // Si rimuove l'intero blocco con regex e si riscrive da zero ? non si fa merge riga per riga.
+  // ⚠️ CRITICO: strategia replace blocco integrations nel YAML.
+  // Si rimuove l'intero blocco con regex e si riscrive da zero — non si fa merge riga per riga.
   // Se si cambia la struttura YAML delle integrazioni, aggiornare sia qui che in _includes/head/custom.html.
   // Rimuovi vecchio blocco integrations se esiste
   yaml=yaml.replace(/\nintegrations:[\s\S]*?(?=\n\w|\n#|$)/,'');
@@ -2315,9 +2314,9 @@ async function salvaIntegrazione(key){
   const putRes=await ghPut('_config.yml',`Integrazioni: aggiorna ${key}`,yaml,_integrazioniSha);
   if(putRes.ok){
     const j=await putRes.json();_integrazioniSha=j.content.sha;
-    showMsg('msg-'+key,'? Salvato! Live in ~60 secondi dopo il deploy.','ok');
+    showMsg('msg-'+key,'✅ Salvato! Live in ~60 secondi dopo il deploy.','ok');
   } else {
-    const j=await putRes.json();showMsg('msg-'+key,'? '+j.message,'err');
+    const j=await putRes.json();showMsg('msg-'+key,'❌ '+j.message,'err');
   }
 }
 
@@ -2336,8 +2335,8 @@ window.onload=function(){
   if(!tok()){document.getElementById('onboarding-overlay').style.display='flex';}
   if(tok()){
     document.getElementById('token-input').value=tok();
-    document.getElementById('token-input').placeholder='? Token presente';
-    // Solo le 2 chiamate per la tab attiva (Articoli) ? tutto il resto carica lazy
+    document.getElementById('token-input').placeholder='✅ Token presente';
+    // Solo le 2 chiamate per la tab attiva (Articoli) — tutto il resto carica lazy
     caricaCategorie();
     caricaLista();
   }
