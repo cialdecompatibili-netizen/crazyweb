@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="it">
 <head>
 <meta charset="UTF-8">
@@ -1154,26 +1154,38 @@ function catGiu(i){if(i===_categorie.length-1)return;var t=_categorie.splice(i,1
 // Per questo qui creiamo SUBITO il file _pages/<slug>.md su GitHub (ghPut senza sha = crea
 // nuovo file), gli assegnamo un nav_order in fondo alla lista, e solo dopo la aggiungiamo a
 // _menuVoci con path e sha veri: cosi' al prossimo Salva Menu funziona come le altre voci.
+// Voci "link libero": salvate in _data/menu_extra.yml, NESSUNA pagina .md creata.
+// URL relativo (/qualcosa/) o assoluto (https://...) verso qualsiasi pagina/sito/articolo.
 async function aggiungiVoce(){
   const t=document.getElementById('menu-nome').value.trim();
   const u=document.getElementById('menu-url').value.trim();
   if(!t||!u)return;
   if(!tok())return showMsg('msg-menu','Token mancante.','err');
-  const slug=t.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'')||'nuova-voce';
-  const path='_pages/'+slug+'.md';
-  const maxOrder=_menuVoci.filter(v=>!v.isHome).reduce((m,v)=>Math.max(m,v.order||0),0);
-  const permalink=u.startsWith('/')?u:'/'+u+'/';
-  const content='---\nlayout: page\ntitle: '+t+'\npermalink: '+permalink+'\nnav: true\nnav_order: '+(maxOrder+1)+'\n---\n';
-  showMsg('msg-menu','Creazione pagina...','');
+  const path='_data/menu_extra.yml';
+  showMsg('msg-menu','Aggiunta voce...','');
   try{
-    const put=await ghPut(path,'Aggiungi voce menu: '+t,content,undefined);
+    const r=await ghGet(path);
+    let sha=undefined, arr=[];
+    if(r.ok){
+      const d=await r.json();
+      sha=d.sha;
+      const raw=dec(d.content);
+      let cur=null;
+      raw.split('\n').forEach(line=>{
+        const mt=line.match(/^-\s*title:\s*(.+)$/);
+        const mu=line.match(/^\s*url:\s*(.+)$/);
+        if(mt){if(cur)arr.push(cur);cur={title:mt[1].trim()};}
+        else if(mu&&cur){cur.url=mu[1].trim();}
+      });
+      if(cur)arr.push(cur);
+    }
+    arr.push({title:t,url:u});
+    const yml=arr.map(v=>'- title: '+v.title+'\n  url: '+v.url).join('\n')+'\n';
+    const put=await ghPut(path,'Aggiungi voce menu (link): '+t,yml,sha);
     const j=await put.json();
-    if(!put.ok){showMsg('msg-menu','Errore creazione pagina: '+(j.message||''),'err');return;}
-    _menuPagineSha[path]=j.content.sha;
-    _menuVoci.push({path,title:t,url:permalink,order:maxOrder+1});
+    if(!put.ok){showMsg('msg-menu','Errore salvataggio: '+(j.message||''),'err');return;}
     document.getElementById('menu-nome').value='';document.getElementById('menu-url').value='';
-    renderMenu();
-    showMsg('msg-menu','Voce creata! Premi Salva Menu per applicare altre modifiche.','ok');
+    showMsg('msg-menu','Voce link aggiunta e pubblicata!','ok');
     startDeployPolling();
   }catch(e){showMsg('msg-menu','Errore: '+e.message,'err');}
 }

@@ -111,6 +111,15 @@
               {% endif %}
             {% endif %}
           {% endfor %}
+          {% if site.data.menu_extra %}
+            {% for item in site.data.menu_extra %}
+              <li class="nav-item">
+                <a class="nav-link" href="{% if item.url contains '://' %}{{ item.url }}{% else %}{{ item.url | relative_url }}{% endif %}">
+                  {{- item.title -}}
+                </a>
+              </li>
+            {% endfor %}
+          {% endif %}
           {% if site.search_enabled %}
             <!-- Search -->
             <li class="nav-item">
