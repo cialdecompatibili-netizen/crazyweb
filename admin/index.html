@@ -400,6 +400,7 @@ textarea.sm{min-height:180px;font-family:'Courier New',monospace;font-size:13px;
         </div>
         <div class="field"><label>Descrizione</label><input type="text" id="cfg-description" placeholder="Una breve descrizione del sito..."></div>
         <div class="field"><label>Testo footer</label><input type="text" id="cfg-footer-text" placeholder="&amp;copy; 2026 Il mio sito"><div class="hint" style="display:block;margin-top:3px">Testo mostrato in fondo al sito. Supporta HTML (es. <code>&amp;copy; 2026 Nome</code>). Lascia vuoto per il default.</div></div>
+        <div class="field"><label>Favicon (icona sito)</label><input type="text" id="cfg-icon" placeholder="es. 🚀 oppure logo.png"><div class="hint" style="display:block;margin-top:3px">Scrivi un'emoji (es. 🚀) oppure il nome di un'immagine gi&agrave; caricata in /assets/img/ (es. logo.png).</div></div>
         <div class="field">
           <label>Base URL</label>
           <input type="text" id="cfg-baseurl" placeholder='Lascia vuoto per sito principale (es. nome.github.io) — oppure /nome-repo per sottocartella'>
@@ -1858,11 +1859,12 @@ async function caricaImpostazioni(){
   const d=await res.json();
   _configShaImp=d.sha;
   const y=dec(d.content);
-  const get=(k,def='')=>{const m=y.match(new RegExp(`^${k}:\\s*(.+)$`,'m'));return m?m[1].trim().replace(/^["']|["']$/g,''):def;};
+  const get=(k,def='')=>{const m=y.match(new RegExp(`^${k}:\\s*(.+)$`,'m'));if(!m)return def;let v=m[1];const hashIdx=v.indexOf(' #');if(hashIdx>=0)v=v.substring(0,hashIdx);return v.trim().replace(/^["']|["']$/g,'')||def;};
   document.getElementById('cfg-title').value=get('title');
   document.getElementById('cfg-email').value=get('email');
   document.getElementById('cfg-baseurl').value=get('baseurl');
   document.getElementById('cfg-footer-text').value=get('footer_text');
+  document.getElementById('cfg-icon').value=get('icon');
   // descrizione multiriga
   const descM=y.match(/description:\s*>-\s*\n\s*(.+)/);
   document.getElementById('cfg-description').value=descM?descM[1].trim():get('description');
@@ -1924,6 +1926,11 @@ async function salvaImpostazioni(){
   const footerVal=document.getElementById('cfg-footer-text').value.trim();
   if(y.match(/^footer_text:/m)) y=y.replace(/^footer_text:.*$/m,`footer_text: "${footerVal}"`);
   else y+=`\nfooter_text: "${footerVal}"`;
+
+  // favicon/icon — preserva eventuale commento inline dopo il valore (es. "# the emoji used...")
+  const iconVal=document.getElementById('cfg-icon').value.trim();
+  if(y.match(/^icon:/m)) y=y.replace(/^icon:\s*[^\n#]*(\s*#.*)?$/m, (m,comment)=>`icon: ${iconVal}${comment||''}`);
+  else y+=`\nicon: ${iconVal}`;
 
   // autore nome, bio, avatar
   y=y.replace(/(author:\s*\n\s*name\s*:\s*)(".+?"|[^\n]+)/,`$1"${document.getElementById('cfg-author-name').value.trim()}"`);
