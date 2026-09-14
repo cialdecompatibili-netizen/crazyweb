@@ -1120,8 +1120,8 @@ function renderMenu(){
         <button class="btn btn-secondary btn-sm" style="padding:1px 7px;font-size:11px;line-height:1" onclick="menuSu(${i})" ${i===0||v.isHome?'disabled':''}>▲</button>
         <button class="btn btn-secondary btn-sm" style="padding:1px 7px;font-size:11px;line-height:1" onclick="menuGiu(${i})" ${i===_menuVoci.length-1||v.isHome?'disabled':''}>▼</button>
       </div>
-      <input type="text" value="${v.isHome?'🏠 ':''}${v.title}" onchange="_menuVoci[${i}].title=this.value.replace('🏠 ','')" placeholder="Nome">
-      <input type="text" value="${v.url}" ${v.isHome?'disabled':''} onchange="_menuVoci[${i}].url=this.value" placeholder="/url/" style="font-size:12px;color:#555">
+      <input type="text" value="${v.isHome?'🏠 ':''}${v.title}" oninput="_menuVoci[${i}].title=this.value.replace('🏠 ','')" placeholder="Nome">
+      <input type="text" value="${v.url}" ${v.isHome?'disabled':''} oninput="_menuVoci[${i}].url=this.value" placeholder="/url/" style="font-size:12px;color:#555">
       ${v.isHome?'':`<button class="btn btn-danger btn-sm" onclick="_menuVoci.splice(${i},1);renderMenu()">🗑</button>`}
     </div>`;
     // Sottomenu (dropdown): ogni voce (tranne Home) può avere sottovoci — se la pagina non è
@@ -1133,8 +1133,8 @@ function renderMenu(){
       childrenHtml=kids.map((c,ci)=>`
       <div class="menu-row" style="margin-left:32px;background:#f0f4ff;border-color:#d0d8ff">
         <span style="font-size:11px;color:#999;width:16px">↳</span>
-        <input type="text" value="${c.title}" onchange="_menuVoci[${i}].children[${ci}].title=this.value" placeholder="Nome sottovoce">
-        <input type="text" value="${c.permalink}" onchange="_menuVoci[${i}].children[${ci}].permalink=this.value" placeholder="/url/" style="font-size:12px;color:#555">
+        <input type="text" value="${c.title}" oninput="_menuVoci[${i}].children[${ci}].title=this.value" placeholder="Nome sottovoce">
+        <input type="text" value="${c.permalink}" oninput="_menuVoci[${i}].children[${ci}].permalink=this.value" placeholder="/url/" style="font-size:12px;color:#555">
         <button class="btn btn-danger btn-sm" onclick="_menuVoci[${i}].children.splice(${ci},1);renderMenu()">🗑</button>
       </div>`).join('')+`
       <div style="margin-left:32px;margin-bottom:8px">
@@ -1148,13 +1148,33 @@ function menuSu(i){if(i===0)return;var t=_menuVoci.splice(i,1)[0];_menuVoci.spli
 function menuGiu(i){if(i===_menuVoci.length-1)return;var t=_menuVoci.splice(i,1)[0];_menuVoci.splice(i+1,0,t);renderMenu();}
 function catSu(i){if(i===0)return;var t=_categorie.splice(i,1)[0];_categorie.splice(i-1,0,t);renderCategorie();renderSelect();}
 function catGiu(i){if(i===_categorie.length-1)return;var t=_categorie.splice(i,1)[0];_categorie.splice(i+1,0,t);renderCategorie();renderSelect();}
-function aggiungiVoce(){
+// CRITICO: una voce nuova aggiunta qui NON esiste come pagina reale su GitHub, quindi non ha
+// uno sha in _menuPagineSha e salvaMenu() la scarterebbe silenziosamente (if(!sha)continue).
+// Per questo qui creiamo SUBITO il file _pages/<slug>.md su GitHub (ghPut senza sha = crea
+// nuovo file), gli assegnamo un nav_order in fondo alla lista, e solo dopo la aggiungiamo a
+// _menuVoci con path e sha veri: cosi' al prossimo Salva Menu funziona come le altre voci.
+async function aggiungiVoce(){
   const t=document.getElementById('menu-nome').value.trim();
   const u=document.getElementById('menu-url').value.trim();
   if(!t||!u)return;
-  _menuVoci.push({title:t,url:u});
-  document.getElementById('menu-nome').value='';document.getElementById('menu-url').value='';
-  renderMenu();
+  if(!tok())return showMsg('msg-menu','Token mancante.','err');
+  const slug=t.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'')||'nuova-voce';
+  const path='_pages/'+slug+'.md';
+  const maxOrder=_menuVoci.filter(v=>!v.isHome).reduce((m,v)=>Math.max(m,v.order||0),0);
+  const permalink=u.startsWith('/')?u:'/'+u+'/';
+  const content='---\nlayout: page\ntitle: '+t+'\npermalink: '+permalink+'\nnav: true\nnav_order: '+(maxOrder+1)+'\n---\n';
+  showMsg('msg-menu','Creazione pagina...','');
+  try{
+    const put=await ghPut(path,'Aggiungi voce menu: '+t,content,undefined);
+    const j=await put.json();
+    if(!put.ok){showMsg('msg-menu','Errore creazione pagina: '+(j.message||''),'err');return;}
+    _menuPagineSha[path]=j.content.sha;
+    _menuVoci.push({path,title:t,url:permalink,order:maxOrder+1});
+    document.getElementById('menu-nome').value='';document.getElementById('menu-url').value='';
+    renderMenu();
+    showMsg('msg-menu','Voce creata! Premi Salva Menu per applicare altre modifiche.','ok');
+    startDeployPolling();
+  }catch(e){showMsg('msg-menu','Errore: '+e.message,'err');}
 }
 // ⚠️ CRITICO: scrive nav_order+title sui frontmatter delle pagine in _pages/, MAI su
 // _data/navigation.yml (al-folio lo ignora, vedi nota su caricaMenu()). Voci senza sha
@@ -1193,6 +1213,7 @@ async function salvaMenu(){
         if(/^children:\s*\n(?:\s+.*\n?)*/m.test(content)) content=content.replace(/^children:\s*\n(?:\s+.*\n?)*/m,childrenYaml+'\n');
         else content=content.replace(/(\n---\n)/,'\n'+childrenYaml+'$1');
       }
+      if(content===dec(d.content))continue; // nessuna modifica reale, evita commit vuoto
       const put=await ghPut(v.path,'Aggiorna menu: '+v.title,content,d.sha);
       const j=await put.json();
       if(put.ok)_menuPagineSha[v.path]=j.content.sha;
