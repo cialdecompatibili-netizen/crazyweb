@@ -3,6 +3,6 @@
     "id": "box1789409807725",
     "nome": "Nuovo box",
     "enabled": true,
-    "html": "<section style=\"padding:40px;text-align:center\">\n  <h2>Nuovo box</h2>\n  <p>Scrivi qui il tuo HTML.</p>\n</section>"
+    "html": "<section style=\"padding:40px;text-align:center\">\n  <h2>Nuovo box</h2>\n  <p>Scrivi qui il tuo HTML.</p>\n  <p>Fallito.</p>\n</section>"
   }
 ]
