@@ -1870,8 +1870,17 @@ async function salvaImpostazioni(){
 
   // footer text
   const footerVal=document.getElementById('cfg-footer-text').value.trim();
-  if(y.match(/^footer_text:/m)) y=y.replace(/^footer_text:.*$/m,`footer_text: "${footerVal}"`);
-  else y+=`\nfooter_text: "${footerVal}"`;
+  {
+    const yLines=y.split(/\r?\n/);let ys=-1;
+    for(let k=0;k<yLines.length;k++){if(/^footer_text:/.test(yLines[k])){ys=k;break;}}
+    if(ys>-1){
+      let ye=ys+1;while(ye<yLines.length&&/^[ \t]/.test(yLines[ye])){ye++;}
+      const newBlock=['footer_text: >-','  '+footerVal];
+      y=yLines.slice(0,ys).concat(newBlock,yLines.slice(ye)).join(String.fromCharCode(13,10));
+    } else {
+      y+='\r\nfooter_text: >-\r\n  '+footerVal;
+    }
+  }
   const faviconVal=document.getElementById('cfg-favicon').value.trim();
   if(y.match(/^icon:/m)) y=y.replace(/^icon:.*$/m,(m)=>{const cm=m.match(/(\s*#.*)$/);return `icon: ${faviconVal}${cm?cm[1]:''}`;});
   else y+=`\nicon: ${faviconVal}`;
