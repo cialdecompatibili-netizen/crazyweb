@@ -8,13 +8,9 @@ dropdown: true
 children:
   - title: Book
     permalink: /books/
+  - title: divider
   - title: Blog
     permalink: /blog/
-  - title: divider
-  - title: sottmenutesting
-    permalink: /testingsottomenu/
-  - title: sub2
-    permalink: /sub/
 ---
 
 test-api-put-20260914165348
