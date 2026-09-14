@@ -1120,8 +1120,8 @@ function renderMenu(){
         <button class="btn btn-secondary btn-sm" style="padding:1px 7px;font-size:11px;line-height:1" onclick="menuSu(${i})" ${i===0||v.isHome?'disabled':''}>▲</button>
         <button class="btn btn-secondary btn-sm" style="padding:1px 7px;font-size:11px;line-height:1" onclick="menuGiu(${i})" ${i===_menuVoci.length-1||v.isHome?'disabled':''}>▼</button>
       </div>
-      <input type="text" value="${v.isHome?'🏠 ':''}${v.title}" onchange="_menuVoci[${i}].title=this.value.replace('🏠 ','')" placeholder="Nome">
-      <input type="text" value="${v.url}" ${v.isHome?'disabled':''} onchange="_menuVoci[${i}].url=this.value" placeholder="/url/" style="font-size:12px;color:#555">
+      <input type="text" value="${v.isHome?'🏠 ':''}${v.title}" oninput="_menuVoci[${i}].title=this.value.replace('🏠 ','')" placeholder="Nome">
+      <input type="text" value="${v.url}" ${v.isHome?'disabled':''} oninput="_menuVoci[${i}].url=this.value" placeholder="/url/" style="font-size:12px;color:#555">
       ${v.isHome?'':`<button class="btn btn-danger btn-sm" onclick="_menuVoci.splice(${i},1);renderMenu()">🗑</button>`}
     </div>`;
     // Sottomenu (dropdown): ogni voce (tranne Home) può avere sottovoci — se la pagina non è
@@ -1133,8 +1133,8 @@ function renderMenu(){
       childrenHtml=kids.map((c,ci)=>`
       <div class="menu-row" style="margin-left:32px;background:#f0f4ff;border-color:#d0d8ff">
         <span style="font-size:11px;color:#999;width:16px">↳</span>
-        <input type="text" value="${c.title}" onchange="_menuVoci[${i}].children[${ci}].title=this.value" placeholder="Nome sottovoce">
-        <input type="text" value="${c.permalink}" onchange="_menuVoci[${i}].children[${ci}].permalink=this.value" placeholder="/url/" style="font-size:12px;color:#555">
+        <input type="text" value="${c.title}" oninput="_menuVoci[${i}].children[${ci}].title=this.value" placeholder="Nome sottovoce">
+        <input type="text" value="${c.permalink}" oninput="_menuVoci[${i}].children[${ci}].permalink=this.value" placeholder="/url/" style="font-size:12px;color:#555">
         <button class="btn btn-danger btn-sm" onclick="_menuVoci[${i}].children.splice(${ci},1);renderMenu()">🗑</button>
       </div>`).join('')+`
       <div style="margin-left:32px;margin-bottom:8px">
@@ -1193,6 +1193,7 @@ async function salvaMenu(){
         if(/^children:\s*\n(?:\s+.*\n?)*/m.test(content)) content=content.replace(/^children:\s*\n(?:\s+.*\n?)*/m,childrenYaml+'\n');
         else content=content.replace(/(\n---\n)/,'\n'+childrenYaml+'$1');
       }
+      if(content===dec(d.content))continue; // nessuna modifica reale, evita commit vuoto
       const put=await ghPut(v.path,'Aggiorna menu: '+v.title,content,d.sha);
       const j=await put.json();
       if(put.ok)_menuPagineSha[v.path]=j.content.sha;
