@@ -399,6 +399,7 @@ textarea.sm{min-height:180px;font-family:'Courier New',monospace;font-size:13px;
           <div class="field"><label>Email</label><input type="text" id="cfg-email" placeholder="tu@email.com"></div>
         </div>
         <div class="field"><label>Descrizione</label><input type="text" id="cfg-description" placeholder="Una breve descrizione del sito..."></div>
+        <div class="field"><label>Nota di contatto</label><input type="text" id="cfg-contact-note" placeholder="es. Puoi anche scrivere un messaggio..."><div class="hint" style="display:block;margin-top:3px">Piccola nota mostrata vicino ai contatti/social.</div></div>
         <div class="field"><label>Testo footer</label><input type="text" id="cfg-footer-text" placeholder="&amp;copy; 2026 Il mio sito"><div class="hint" style="display:block;margin-top:3px">Testo mostrato in fondo al sito. Supporta HTML (es. <code>&amp;copy; 2026 Nome</code>). Lascia vuoto per il default.</div></div>
         <div class="field"><label>Favicon (icona sito)</label><input type="text" id="cfg-favicon" placeholder="⚛️ oppure nome-immagine.png"><div class="hint" style="display:block;margin-top:3px">Puoi usare un'emoji o il nome di un'immagine già caricata nel sito.</div></div>
         <div class="field">
@@ -1788,6 +1789,39 @@ async function salvaTema(){
 let _configShaImp=null;
 
 let _socialsShaImp=null;
+
+// ⚠️ CRITICO: helper generico per campi YAML multiriga (formato "chiave: >" o "chiave: >-").
+// Nato dal bug footer_text (il pannello leggeva solo il carattere ">" letterale invece del
+// blocco vero sotto). Usare SEMPRE questi due invece di regex ad-hoc per qualsiasi nuovo
+// campo multiriga in _config.yml — description, contact_note, footer_text lo usano già.
+// getYamlBlock: trova la riga "chiave:", poi consuma tutte le righe indentate successive
+// (il vero contenuto del blocco), le unisce con spazio. Ritorna '' se la chiave non esiste.
+function getYamlBlock(y,key){
+  const lines=y.split(/\r?\n/);
+  let start=-1;
+  for(let i=0;i<lines.length;i++){if(new RegExp('^'+key+':').test(lines[i])){start=i;break;}}
+  if(start===-1)return '';
+  let end=start+1;
+  const out=[];
+  while(end<lines.length&&/^[ \t]/.test(lines[end])){out.push(lines[end].trim());end++;}
+  return out.join(' ').trim();
+}
+// setYamlBlock: sostituisce l'intero blocco (chiave + righe indentate) con un nuovo blocco
+// ">-" a riga singola. Se la chiave non esiste la aggiunge in fondo. Mai tocca chiavi vicine,
+// anche se il loro nome compare per caso dentro un commento del blocco sostituito.
+function setYamlBlock(y,key,val){
+  const lines=y.split(/\r?\n/);
+  let start=-1;
+  for(let i=0;i<lines.length;i++){if(new RegExp('^'+key+':').test(lines[i])){start=i;break;}}
+  const newBlock=[key+': >-','  '+val];
+  if(start>-1){
+    let end=start+1;
+    while(end<lines.length&&/^[ \t]/.test(lines[end])){end++;}
+    return lines.slice(0,start).concat(newBlock,lines.slice(end)).join('\r\n');
+  }
+  return y+'\r\n'+newBlock.join('\r\n');
+}
+
 async function caricaImpostazioni(){
   if(!tok())return;
   const res=await ghGet('_config.yml');
@@ -1799,11 +1833,12 @@ async function caricaImpostazioni(){
   document.getElementById('cfg-title').value=get('title');
   document.getElementById('cfg-author-name').value=[get('first_name'),get('last_name')].filter(Boolean).join(' ');
   document.getElementById('cfg-baseurl').value=get('baseurl');
-  document.getElementById('cfg-footer-text').value=get('footer_text');
   document.getElementById('cfg-favicon').value=get('icon').replace(/\s*#.*$/,'').trim();
-  // descrizione multiriga
-  const descM=y.match(/description:\s*>-\s*\n\s*(.+)/);
-  document.getElementById('cfg-description').value=descM?descM[1].trim():get('description');
+  // campi multiriga YAML (formato ">" o ">-"): stessa logica robusta per tutti,
+  // legge il vero blocco di testo sotto la chiave, non il solo simbolo ">"
+  document.getElementById('cfg-description').value=getYamlBlock(y,'description')||get('description');
+  document.getElementById('cfg-contact-note').value=getYamlBlock(y,'contact_note')||get('contact_note');
+  document.getElementById('cfg-footer-text').value=getYamlBlock(y,'footer_text')||get('footer_text');
   document.getElementById('cfg-limite-prodotti').value=getLimiteProdotti();
   // homepage — legge da _config.yml il campo cms_homepage (custom)
   const hpM=y.match(/cms_homepage:\s*(.+)/);
@@ -1864,23 +1899,14 @@ async function salvaImpostazioni(){
   if(y.match(/^baseurl:/m)) y=y.replace(/^baseurl:.*$/m,`baseurl: "${buVal}"`);
   else y=`baseurl: "${buVal}"\n`+y;
 
-  // descrizione — gestisce sia formato >- multiriga che inline
+  // campi multiriga YAML — stessa logica robusta e testata per tutti e 3, mai si toccano
+  // a vicenda anche se il nome di uno compare per caso in un commento di un altro
   const desc=document.getElementById('cfg-description').value.trim().replace(/\n/g,' ');
-  y=y.replace(/^description:[\s\S]*?(?=^\w)/m, `description: >-\n  ${desc}\n`);
-
-  // footer text
+  y=setYamlBlock(y,'description',desc);
+  const contactNoteVal=document.getElementById('cfg-contact-note').value.trim().replace(/\n/g,' ');
+  y=setYamlBlock(y,'contact_note',contactNoteVal);
   const footerVal=document.getElementById('cfg-footer-text').value.trim();
-  {
-    const yLines=y.split(/\r?\n/);let ys=-1;
-    for(let k=0;k<yLines.length;k++){if(/^footer_text:/.test(yLines[k])){ys=k;break;}}
-    if(ys>-1){
-      let ye=ys+1;while(ye<yLines.length&&/^[ \t]/.test(yLines[ye])){ye++;}
-      const newBlock=['footer_text: >-','  '+footerVal];
-      y=yLines.slice(0,ys).concat(newBlock,yLines.slice(ye)).join(String.fromCharCode(13,10));
-    } else {
-      y+='\r\nfooter_text: >-\r\n  '+footerVal;
-    }
-  }
+  y=setYamlBlock(y,'footer_text',footerVal);
   const faviconVal=document.getElementById('cfg-favicon').value.trim();
   if(y.match(/^icon:/m)) y=y.replace(/^icon:.*$/m,(m)=>{const cm=m.match(/(\s*#.*)$/);return `icon: ${faviconVal}${cm?cm[1]:''}`;});
   else y+=`\nicon: ${faviconVal}`;

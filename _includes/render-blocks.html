@@ -2,7 +2,11 @@
 {% if blocks_data %}
   {% for block in blocks_data %}
     {% if block.enabled %}
+      {% if block.type == "module" %}
+        {% include dyn/{{ block.module }}.html %}
+      {% else %}
 {{ block.html }}
+      {% endif %}
     {% endif %}
   {% endfor %}
 {% endif %}
