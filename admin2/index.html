@@ -1062,6 +1062,7 @@ async function salvaCategorie(){
 // che cicla su site.pages con nav:true ordinate per nav_order). Ogni voce del menu qui sotto
 // e' una pagina reale in _pages/ — modificarla aggiorna nav_order/title sul file .md stesso.
 let _menuPagineSha={};   // path pagina -> sha (serve per il PUT in salvaMenu)
+let _menuVociRimosse=[]; // path delle voci principali eliminate col 🗑 — vanno disattivate (nav:false) al salvataggio
 async function caricaMenu(){
   const res=await ghGet('_pages');
   if(!res.ok)return showMsg('msg-menu','❌ Errore caricamento _pages.','err');
@@ -1122,7 +1123,7 @@ function renderMenu(){
       </div>
       <input type="text" value="${v.isHome?'🏠 ':''}${v.title}" oninput="_menuVoci[${i}].title=this.value.replace('🏠 ','')" placeholder="Nome">
       <input type="text" value="${v.url}" ${v.isHome?'disabled':''} oninput="_menuVoci[${i}].url=this.value" placeholder="/url/" style="font-size:12px;color:#555">
-      ${v.isHome?'':`<button class="btn btn-danger btn-sm" onclick="_menuVoci.splice(${i},1);renderMenu()">🗑</button>`}
+      ${v.isHome?'':`<button class="btn btn-danger btn-sm" onclick="_menuVociRimosse.push(_menuVoci[${i}].path);_menuVoci.splice(${i},1);renderMenu()">🗑</button>`}
     </div>`;
     // Sottomenu (dropdown): ogni voce (tranne Home) può avere sottovoci — se la pagina non è
     // ancora un dropdown, v.children parte vuoto qui e "+ Sottovoce" lo inizializza al volo.
@@ -1218,6 +1219,23 @@ async function salvaMenu(){
       const j=await put.json();
       if(put.ok)_menuPagineSha[v.path]=j.content.sha;
     }
+    // Voci principali eliminate col 🗑: togliendole da _menuVoci il loop sopra non le tocca
+    // piu', quindi il file .md restava con nav:true e ricompariva nel menu live. Qui si
+    // disattiva davvero la pagina (nav:false) cosi' sparisce sul serio dopo il salvataggio.
+    for(const path of _menuVociRimosse){
+      const sha=_menuPagineSha[path];
+      if(!sha)continue;
+      const r=await ghGet(path);
+      if(!r.ok)continue;
+      const d=await r.json();
+      let content=dec(d.content);
+      if(/^nav:\s*(true|false)/m.test(content)) content=content.replace(/^nav:\s*(true|false)/m,'nav: false');
+      else content=content.replace(/(\n---\n)/,'\nnav: false$1');
+      const put=await ghPut(path,'Rimuovi da menu: '+path,content,d.sha);
+      const j=await put.json();
+      if(put.ok)_menuPagineSha[path]=j.content.sha;
+    }
+    _menuVociRimosse=[];
     showMsg('msg-menu','✅ Menu salvato! Live in ~60s.','ok');
     startDeployPolling();
   }catch(e){showMsg('msg-menu','❌ Errore: '+e.message,'err');}
