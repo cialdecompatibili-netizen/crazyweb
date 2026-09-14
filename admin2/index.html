@@ -1315,6 +1315,33 @@ function insertLinkPag(){
 
 // BLOCCHI (box system, generico per pagina) — stato dell'editor pagina corrente
 let _pagBlocchi=[],_pagBlocchiSha=null,_pagBlocchiFile=null;
+function setPagBoxMode(i,mode){
+  _pagBlocchi[i]._mode=mode;
+  if(mode==='html'){
+    // Visuale -> HTML: leggo il contenuto attuale dal div contenteditable
+    const vis=document.getElementById('pag-box-vis-'+i);
+    if(vis) _pagBlocchi[i].html=vis.innerHTML;
+  }
+  renderPagBlocchi();
+}
+function fmtPagBox(i,cmd){
+  document.getElementById('pag-box-vis-'+i).focus();
+  document.execCommand(cmd,false,null);
+  _pagBlocchi[i].html=document.getElementById('pag-box-vis-'+i).innerHTML;
+}
+function fmtBlockPagBox(i,tag){
+  if(!tag)return;
+  document.getElementById('pag-box-vis-'+i).focus();
+  document.execCommand('formatBlock',false,tag);
+  _pagBlocchi[i].html=document.getElementById('pag-box-vis-'+i).innerHTML;
+}
+function insertLinkPagBox(i){
+  const url=prompt('URL del link:');
+  if(!url)return;
+  document.getElementById('pag-box-vis-'+i).focus();
+  document.execCommand('createLink',false,url);
+  _pagBlocchi[i].html=document.getElementById('pag-box-vis-'+i).innerHTML;
+}
 function renderPagBlocchi(){
   document.getElementById('lista-pag-blocchi').innerHTML=_pagBlocchi.map((b,i)=>`
     <div class="menu-row" style="align-items:flex-start;flex-direction:column;gap:8px">
@@ -1329,7 +1356,30 @@ function renderPagBlocchi(){
         </label>
         <button class="btn btn-danger btn-sm" onclick="if(confirm('Eliminare questo box?')){_pagBlocchi.splice(${i},1);renderPagBlocchi();}">🗑️</button>
       </div>
-      <textarea class="sm" style="width:100%;min-height:120px;font-size:12px" onchange="_pagBlocchi[${i}].html=this.value" placeholder="HTML del box...">${(b.html||'').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</textarea>
+      <div class="editor-toggle" style="margin-bottom:6px">
+        <button class="${(b._mode||'visuale')==='visuale'?'active':''}" onclick="setPagBoxMode(${i},'visuale')" type="button">✏️ Visuale</button>
+        <button class="${(b._mode||'visuale')==='html'?'active':''}" onclick="setPagBoxMode(${i},'html')" type="button">🔣 HTML grezzo</button>
+      </div>
+      <div style="display:${(b._mode||'visuale')==='visuale'?'block':'none'}">
+        <div class="vis-toolbar">
+          <select onchange="fmtBlockPagBox(${i},this.value);this.value=''">
+            <option value="">Paragrafo</option>
+            <option value="h1">Titolo 1</option>
+            <option value="h2">Titolo 2</option>
+            <option value="h3">Titolo 3</option>
+            <option value="p">Testo</option>
+          </select>
+          <button onclick="fmtPagBox(${i},'bold')" title="Grassetto" type="button"><b>B</b></button>
+          <button onclick="fmtPagBox(${i},'italic')" title="Corsivo" type="button"><i>I</i></button>
+          <button onclick="fmtPagBox(${i},'strikeThrough')" title="Barrato" type="button"><s>S</s></button>
+          <button onclick="fmtPagBox(${i},'insertUnorderedList')" title="Lista" type="button">&#8801;</button>
+          <button onclick="fmtPagBox(${i},'insertOrderedList')" title="Lista numerata" type="button">1.</button>
+          <button onclick="insertLinkPagBox(${i})" title="Link" type="button">&#128279;</button>
+          <button onclick="fmtPagBox(${i},'removeFormat')" title="Rimuovi formato" type="button">&#10005;</button>
+        </div>
+        <div class="pag-box-vis" id="pag-box-vis-${i}" contenteditable="true" style="min-height:120px;font-size:14px;line-height:1.7;border:1.5px solid #e8e8e8;border-radius:0 0 7px 7px;padding:10px 12px;background:white;outline:none" oninput="_pagBlocchi[${i}].html=this.innerHTML" onblur="_pagBlocchi[${i}].html=this.innerHTML">${b.html||''}</div>
+      </div>
+      <textarea class="sm" style="width:100%;min-height:120px;font-size:12px;display:${(b._mode||'visuale')==='html'?'block':'none'}" onchange="_pagBlocchi[${i}].html=this.value" placeholder="HTML del box...">${(b.html||'').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</textarea>
     </div>`).join('')||'<span style="color:#bbb;font-size:13px">Nessun box. Aggiungine uno qui sotto.</span>';
 }
 function pagBlockSu(i){if(i===0)return;var t=_pagBlocchi.splice(i,1)[0];_pagBlocchi.splice(i-1,0,t);renderPagBlocchi();}
