@@ -400,6 +400,7 @@ textarea.sm{min-height:180px;font-family:'Courier New',monospace;font-size:13px;
         </div>
         <div class="field"><label>Descrizione</label><input type="text" id="cfg-description" placeholder="Una breve descrizione del sito..."></div>
         <div class="field"><label>Testo footer</label><input type="text" id="cfg-footer-text" placeholder="&amp;copy; 2026 Il mio sito"><div class="hint" style="display:block;margin-top:3px">Testo mostrato in fondo al sito. Supporta HTML (es. <code>&amp;copy; 2026 Nome</code>). Lascia vuoto per il default.</div></div>
+        <div class="field"><label>Favicon (icona sito)</label><input type="text" id="cfg-favicon" placeholder="⚛️ oppure nome-immagine.png"><div class="hint" style="display:block;margin-top:3px">Puoi usare un'emoji o il nome di un'immagine già caricata nel sito.</div></div>
         <div class="field">
           <label>Base URL</label>
           <input type="text" id="cfg-baseurl" placeholder='Lascia vuoto per sito principale (es. nome.github.io) — oppure /nome-repo per sottocartella'>
@@ -1752,6 +1753,7 @@ async function caricaImpostazioni(){
   document.getElementById('cfg-email').value=get('email');
   document.getElementById('cfg-baseurl').value=get('baseurl');
   document.getElementById('cfg-footer-text').value=get('footer_text');
+  document.getElementById('cfg-favicon').value=get('icon').replace(/\s*#.*$/,'').trim();
   // descrizione multiriga
   const descM=y.match(/description:\s*>-\s*\n\s*(.+)/);
   document.getElementById('cfg-description').value=descM?descM[1].trim():get('description');
@@ -1813,6 +1815,9 @@ async function salvaImpostazioni(){
   const footerVal=document.getElementById('cfg-footer-text').value.trim();
   if(y.match(/^footer_text:/m)) y=y.replace(/^footer_text:.*$/m,`footer_text: "${footerVal}"`);
   else y+=`\nfooter_text: "${footerVal}"`;
+  const faviconVal=document.getElementById('cfg-favicon').value.trim();
+  if(y.match(/^icon:/m)) y=y.replace(/^icon:.*$/m,(m)=>{const cm=m.match(/(\s*#.*)$/);return `icon: ${faviconVal}${cm?cm[1]:''}`;});
+  else y+=`\nicon: ${faviconVal}`;
 
   // autore nome, bio, avatar
   y=y.replace(/(author:\s*\n\s*name\s*:\s*)(".+?"|[^\n]+)/,`$1"${document.getElementById('cfg-author-name').value.trim()}"`);
