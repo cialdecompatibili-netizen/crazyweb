@@ -13,7 +13,7 @@ permalink: /
 profile: false
 selected_papers: false
 social: true
-title: Home"
+title: Home
 ---
 
 <div style="text-align:center; max-width:760px; margin:0 auto; line-height:1.8;">
