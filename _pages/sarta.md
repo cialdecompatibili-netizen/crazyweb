@@ -2,6 +2,6 @@
 layout: page
 title: sarta
 permalink: /sarta/
-nav: true
+nav: false
 nav_order: 7
 ---
