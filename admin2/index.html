@@ -410,18 +410,14 @@ textarea.sm{min-height:180px;font-family:'Courier New',monospace;font-size:13px;
 
       <div class="card">
         <div class="card-title">Autore</div>
+        <div class="field"><label>Nome autore</label><input type="text" id="cfg-author-name" placeholder="Mario Rossi"></div>
         <div class="grid2">
-          <div class="field"><label>Nome autore</label><input type="text" id="cfg-author-name" placeholder="Mario Rossi"></div>
-          <div class="field"><label>Avatar (URL immagine)</label><input type="text" id="cfg-avatar" placeholder="/assets/images/bio-photo.jpg"></div>
-        </div>
-        <div class="field"><label>Bio</label><input type="text" id="cfg-bio" placeholder="Una frase su di te..."></div>
-        <div class="grid2">
-          <div class="field"><label>Twitter</label><input type="text" id="cfg-twitter" placeholder="https://twitter.com/..."></div>
-          <div class="field"><label>Instagram</label><input type="text" id="cfg-instagram" placeholder="https://instagram.com/..."></div>
+          <div class="field"><label>Twitter/X (username, senza @)</label><input type="text" id="cfg-twitter" placeholder="crazyweb"></div>
+          <div class="field"><label>Instagram (username)</label><input type="text" id="cfg-instagram" placeholder="crazyweb"></div>
         </div>
         <div class="grid2">
-          <div class="field"><label>GitHub</label><input type="text" id="cfg-github" placeholder="https://github.com/..."></div>
-          <div class="field"><label>Sito web</label><input type="text" id="cfg-website" placeholder="https://..."></div>
+          <div class="field"><label>GitHub (username)</label><input type="text" id="cfg-github" placeholder="cialdecompatibili-netizen"></div>
+          <div class="field"><label>Sito web (URL completo)</label><input type="text" id="cfg-website" placeholder="https://..."></div>
         </div>
       </div>
 
@@ -1738,9 +1734,9 @@ async function salvaTema(){
 }
 
 // IMPOSTAZIONI SITO
-// IMPOSTAZIONI SITO
 let _configShaImp=null;
 
+let _socialsShaImp=null;
 async function caricaImpostazioni(){
   if(!tok())return;
   const res=await ghGet('_config.yml');
@@ -1748,29 +1744,33 @@ async function caricaImpostazioni(){
   const d=await res.json();
   _configShaImp=d.sha;
   const y=dec(d.content);
-  const get=(k,def='')=>{const m=y.match(new RegExp(`^${k}:\\s*(.+)$`,'m'));return m?m[1].trim().replace(/^["']|["']$/g,''):def;};
+  const get=(k,def='')=>{const m=y.match(new RegExp(`^${k}:\\s*(.+)$`,'m'));return m?m[1].replace(/\s*#.*$/,'').trim().replace(/^["']|["']$/g,''):def;};
   document.getElementById('cfg-title').value=get('title');
-  document.getElementById('cfg-email').value=get('email');
+  document.getElementById('cfg-author-name').value=[get('first_name'),get('last_name')].filter(Boolean).join(' ');
   document.getElementById('cfg-baseurl').value=get('baseurl');
   document.getElementById('cfg-footer-text').value=get('footer_text');
   document.getElementById('cfg-favicon').value=get('icon').replace(/\s*#.*$/,'').trim();
   // descrizione multiriga
   const descM=y.match(/description:\s*>-\s*\n\s*(.+)/);
   document.getElementById('cfg-description').value=descM?descM[1].trim():get('description');
-  // autore
-  document.getElementById('cfg-author-name').value=get('  name','');
-  document.getElementById('cfg-bio').value=get('  bio','');
-  document.getElementById('cfg-avatar').value=get('  avatar','');
   document.getElementById('cfg-limite-prodotti').value=getLimiteProdotti();
-  // social — cerca gli url dopo i label
-  const socialMatch=(label)=>{const m=y.match(new RegExp(`label: "${label}"[\\s\\S]*?url: "?([^"\\n]+)"?`));return m?m[1].trim():'';}
-  document.getElementById('cfg-website').value=socialMatch('Website');
-  document.getElementById('cfg-twitter').value=socialMatch('Twitter');
-  document.getElementById('cfg-github').value=socialMatch('GitHub');
-  document.getElementById('cfg-instagram').value=socialMatch('Instagram');
   // homepage — legge da _config.yml il campo cms_homepage (custom)
   const hpM=y.match(/cms_homepage:\s*(.+)/);
   await caricaPaginePerlHome(hpM?hpM[1].trim():'');
+  // email + social — vivono in _data/socials.yml, non in _config.yml
+  const resS=await ghGet('_data/socials.yml');
+  if(resS.ok){
+    const dS=await resS.json();
+    _socialsShaImp=dS.sha;
+    const ys=dec(dS.content);
+    const getS=(k,def='')=>{const m=ys.match(new RegExp(`^${k}:\\s*(.+)$`,'m'));return m?m[1].replace(/\s*#.*$/,'').trim().replace(/^["']|["']$/g,''):def;};
+    document.getElementById('cfg-email').value=getS('email');
+    document.getElementById('cfg-twitter').value=getS('x_username');
+    document.getElementById('cfg-instagram').value=getS('instagram_id');
+    document.getElementById('cfg-github').value=getS('github_username');
+    const urlM=ys.match(/custom_social:[\s\S]*?url:\s*(.+)/);
+    document.getElementById('cfg-website').value=urlM?urlM[1].replace(/\s*#.*$/,'').trim():'';
+  }
 }
 
 async function caricaPaginePerlHome(corrente){
@@ -1798,10 +1798,16 @@ async function salvaImpostazioni(){
   const d=await res.json();_configShaImp=d.sha;
   let y=dec(d.content);
 
-  // titolo, email, baseurl
-  y=y.replace(/^title:.*$/m,`title: ${document.getElementById('cfg-title').value.trim()}`);
-  const emailVal=document.getElementById('cfg-email').value.trim();
-  y=y.replace(/^email:.*$/m,`email: "${emailVal}"`);
+  // titolo, baseurl (email e social vivono in socials.yml, vedi sotto)
+  y=y.replace(/^title:.*$/m,(m)=>{const cm=m.match(/(\s*#.*)$/);return `title: ${document.getElementById('cfg-title').value.trim()}${cm?cm[1]:''}`;});
+
+  // nome autore — split su primo spazio: first_name + last_name
+  const nomeCompleto=document.getElementById('cfg-author-name').value.trim();
+  const spaceIdx=nomeCompleto.indexOf(' ');
+  const fName=spaceIdx>-1?nomeCompleto.slice(0,spaceIdx):nomeCompleto;
+  const lName=spaceIdx>-1?nomeCompleto.slice(spaceIdx+1):'';
+  y=y.replace(/^first_name:.*$/m,`first_name: ${fName}`);
+  y=y.replace(/^last_name:.*$/m,`last_name: ${lName}`);
 
   const buVal=document.getElementById('cfg-baseurl').value.trim();
   if(y.match(/^baseurl:/m)) y=y.replace(/^baseurl:.*$/m,`baseurl: "${buVal}"`);
@@ -1819,20 +1825,6 @@ async function salvaImpostazioni(){
   if(y.match(/^icon:/m)) y=y.replace(/^icon:.*$/m,(m)=>{const cm=m.match(/(\s*#.*)$/);return `icon: ${faviconVal}${cm?cm[1]:''}`;});
   else y+=`\nicon: ${faviconVal}`;
 
-  // autore nome, bio, avatar
-  y=y.replace(/(author:\s*\n\s*name\s*:\s*)(".+?"|[^\n]+)/,`$1"${document.getElementById('cfg-author-name').value.trim()}"`);
-  y=y.replace(/(  avatar\s*:\s*)(".+?"|[^\n]+)/,`$1"${document.getElementById('cfg-avatar').value.trim()}"`);
-  y=y.replace(/(  bio\s*:\s*)(".+?"|[^\n]+)/,`$1"${document.getElementById('cfg-bio').value.trim()}"`);
-
-  // social — sostituisce gli url nei link
-  const setSocial=(label,val)=>{
-    y=y.replace(new RegExp(`(label: "${label}"[\\s\\S]*?url:\\s*)"?[^"\\n]+"?`),'$1"'+val+'"');
-  };
-  setSocial('Website',document.getElementById('cfg-website').value.trim());
-  setSocial('Twitter',document.getElementById('cfg-twitter').value.trim());
-  setSocial('GitHub',document.getElementById('cfg-github').value.trim());
-  setSocial('Instagram',document.getElementById('cfg-instagram').value.trim());
-
   // homepage — salva path della pagina scelta come cms_homepage
   const hp=document.getElementById('cfg-homepage').value;
   if(y.match(/^cms_homepage:/m)) y=y.replace(/^cms_homepage:.*$/m,`cms_homepage: ${hp}`);
@@ -1840,6 +1832,31 @@ async function salvaImpostazioni(){
 
   // aggiorna index.html con il permalink della pagina scelta come home
   await aggiornaIndexHome(hp);
+
+  // email + social — vivono in _data/socials.yml, non in _config.yml
+  showMsg('msg-cfg','⏳ Salvataggio social...','');
+  const resS=await ghGet('_data/socials.yml');
+  if(resS.ok){
+    const dS=await resS.json();
+    let ys=dec(dS.content);
+    const setS=(k,val)=>{
+      const re=new RegExp(`^${k}:.*$`,'m');
+      const line=(m)=>{const cm=m.match(/(\s*#.*)$/);return `${k}: ${val}${cm?cm[1]:''}`;};
+      if(ys.match(re)) ys=ys.replace(re,line);
+      else ys+=`\n${k}: ${val}`;
+    };
+    setS('email',document.getElementById('cfg-email').value.trim());
+    setS('x_username',document.getElementById('cfg-twitter').value.trim());
+    setS('instagram_id',document.getElementById('cfg-instagram').value.trim());
+    setS('github_username',document.getElementById('cfg-github').value.trim());
+    const webVal=document.getElementById('cfg-website').value.trim();
+    if(ys.match(/custom_social:[\s\S]*?url:.*$/m)){
+      ys=ys.replace(/(custom_social:[\s\S]*?url:\s*)(.+)$/m,`$1${webVal}`);
+    }
+    const putS=await ghPut('_data/socials.yml','Aggiorna social/email sito',ys,_socialsShaImp||dS.sha);
+    const jS=await putS.json();
+    if(putS.ok)_socialsShaImp=jS.content.sha;
+  }
 
   showMsg('msg-cfg','⏳ Salvataggio...','');
   const putRes=await ghPut('_config.yml','Aggiorna impostazioni sito',y,_configShaImp);
