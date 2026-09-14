@@ -1,5 +1,5 @@
 ---
-subtitle: Web Agency Roma · dal 2013
+subtitle: ""
 announcements:
   enabled: true
   limit: 5
