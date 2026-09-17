@@ -67,13 +67,13 @@ import subprocess
 import time
 import urllib.request
 
-PROJECT_PATH = r"C:\Users\mirco\Desktop\cmspush2balfolio"
+PROJECT_PATH = r"C:\Users\mirco\Desktop\crazyweb"
 ABOUT_PATH = os.path.join(PROJECT_PATH, "_pages", "about.md")
 POSTS_DIR = os.path.join(PROJECT_PATH, "_posts")
 PROJECTS_DIR = os.path.join(PROJECT_PATH, "_projects")
 PAGES_DIR = os.path.join(PROJECT_PATH, "_pages")
 PROJECTS_PAGE_PATH = os.path.join(PAGES_DIR, "projects.md")
-SITE_URL = "https://cialdecompatibili-netizen.github.io/cmspush2balfolio/"
+SITE_URL = "https://cialdecompatibili-netizen.github.io/crazyweb/"
 
 
 def _read(path):
