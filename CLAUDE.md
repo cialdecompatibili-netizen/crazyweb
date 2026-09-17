@@ -1,5 +1,20 @@
 # CLAUDE.md
 
+## ⚙️ REGOLA GENERALE — riuso codice Python (leggere PRIMA di tutto)
+
+**Usare SEMPRE script Python riutilizzabili invece di riscrivere codice ogni volta.**
+Mai rigenerare da zero lo stesso codice per operazioni ripetitive: creare (o riusare
+se già esiste, tipo `automation\cmspush2balfolio_tools.py`) funzioni/automazioni
+in Python pensate per essere richiamate più volte — questo riduce drasticamente il
+consumo di token e rende il lavoro scalabile.
+
+- Se serve un file temporaneo/di lavoro, creare una cartella `tmp\` dedicata (non
+  sporcare la root del progetto).
+- Preferire SEMPRE fix chirurgici (edit mirati, funzioni parametriche) invece di
+  riscrivere file interi o rigenerare codice identico a ogni richiesta.
+- Obiettivo: ogni automazione scritta va pensata per essere riutilizzabile nelle
+  sessioni successive, non usa-e-getta.
+
 ## 🚩 PROGETTO MIRCO — cmspush2balfolio (leggi questa sezione prima di tutto)
 
 **Cos'è:** sito personale (portfolio/blog) di Mirco, clone al-folio, deploy automatico
